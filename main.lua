@@ -1,6 +1,8 @@
 function love.load()
-    -- score counter
+    -- stat trackers
     score = 0
+    health = 10
+    playing = true
 
     -- custom cursor
     pointer = {}
@@ -32,6 +34,14 @@ function love.update(dt)
             table.remove(listOfBallons, i)
             score = score + 1
         end
+        if v.y + v.sprite:getHeight() < 0 then 
+            health = health - 1
+            table.remove(listOfBallons, i)
+        end
+    end
+    -- quit game if player loses 
+    if health <= 0 then 
+        love.event.quit(0)
     end
 end
 
@@ -44,9 +54,11 @@ function love.draw()
     end
     -- draw the cursor above the ballon
     love.graphics.draw(pointer.sprite, pointer.x, pointer.y)
-    -- draw score
+    -- draw stats
     score_tracker = "Score: " .. score
-    love.graphics.print(score_tracker, font, 10, 10, 0)
+    love.graphics.print(score_tracker, font, 10, 10)
+    health_tracker = "Health: " .. health 
+    love.graphics.print(health_tracker, font, 10, 50)
 end 
 
 -- spawn a ballon on command
