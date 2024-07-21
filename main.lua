@@ -3,6 +3,9 @@ function love.load()
     score = 0
     health = 10
     playing = true
+    max_ammo = 5
+    ammo = max_ammo
+    begin_reload = nil
 
     -- custom cursor
     pointer = {}
@@ -26,6 +29,13 @@ function love.load()
 
     -- chance to spawn a ballon, will increase as time goes on 
     chance = 0.005
+
+    -- create a list of darts 
+    listOfDarts = {}
+    dart_height = 40
+    for i=1,max_ammo do 
+        listOfDarts[i] = create_dart(i)
+    end
 end 
 
 function love.update(dt)
@@ -35,6 +45,7 @@ function love.update(dt)
     pointer.y = mouse_y - pointer.sprite:getHeight() / 2
     love.mouse.setVisible(false)
     -- move the ballon upwards and remove it if it gets hit
+    -- if ballons escape, decrement health and destroy ballon
     for i, v in ipairs(listOfBallons) do 
         v.y = v.y - v.speed * dt
         if love.mouse.isDown(1) and check_pointer(v) then 
@@ -51,9 +62,25 @@ function love.update(dt)
         love.event.quit(0)
     end
     time = love.timer.getTime() - start
+    -- spawn ballons
     spawn_ballon = math.random()
     if spawn_ballon < chance then 
-        -- table.insert(listOfBallons, create_ballon())
+        table.insert(listOfBallons, create_ballon())
+    end
+    -- check if the player is out of darts, and reload if so 
+    if ammo < 0 then 
+        if begin_reload == nil then 
+            begin_reload = love.timer.getTime()
+        elseif love.timer.getTime() - begin_reload >= 1 then 
+            reload_darts()
+        end 
+    end
+end
+
+function love.mousepressed(x, y, button, istouch)
+    if button == 1 and ammo >= 0 then
+        table.remove(listOfDarts, ammo)
+        ammo = ammo - 1
     end
 end
 
@@ -74,6 +101,10 @@ function love.draw()
     -- format time and draw
     time_tracker = string.format("%02.0f:%02.0f", math.floor(time/60), math.floor(time % 60))
     love.graphics.print(time_tracker, font, 335, 10)
+    -- draw the darts
+    for i, v in ipairs(listOfDarts) do 
+        love.graphics.draw(v.sprite, v.x, v.y)
+    end
 end 
 
 -- calculates pointer distance to center and returns true if dist is within radius, returns false otherwise
@@ -87,7 +118,7 @@ function check_pointer(ballon)
     dist_x = x - center_x 
     dist_y = y - center_y
     dist_to_center = math.sqrt(dist_x * dist_x + dist_y * dist_y) 
-    if dist_to_center < radius then 
+    if dist_to_center < radius and ammo >= 0 then 
         return true
     end
     return false
@@ -102,4 +133,22 @@ function create_ballon()
     ballon.speed = 100
     ballon.exists = true
     return ballon
+end
+
+-- generate a dart 
+function create_dart(i)
+    dart = {}
+    dart.x = 0
+    dart.y = i * dart_height
+    dart.sprite = love.graphics.newImage("assets/sprites/dart.png")
+    return dart
+end 
+
+-- reload the darts 
+function reload_darts()
+    for i=1,max_ammo do 
+        listOfDarts[i] = create_dart(i)
+    end
+    ammo = max_ammo
+    begin_reload = nil
 end
