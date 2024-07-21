@@ -19,6 +19,13 @@ function love.load()
 
     -- get font for text 
     font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 30)
+
+    -- get relative game time
+    start = love.timer.getTime()
+    time = love.timer.getTime() - start
+
+    -- chance to spawn a ballon, will increase as time goes on 
+    chance = 0.005
 end 
 
 function love.update(dt)
@@ -43,6 +50,11 @@ function love.update(dt)
     if health <= 0 then 
         love.event.quit(0)
     end
+    time = love.timer.getTime() - start
+    spawn_ballon = math.random()
+    if spawn_ballon < chance then 
+        -- table.insert(listOfBallons, create_ballon())
+    end
 end
 
 function love.draw()
@@ -58,15 +70,11 @@ function love.draw()
     score_tracker = "Score: " .. score
     love.graphics.print(score_tracker, font, 10, 10)
     health_tracker = "Health: " .. health 
-    love.graphics.print(health_tracker, font, 10, 50)
+    love.graphics.print(health_tracker, font, 560, 10)
+    -- format time and draw
+    time_tracker = string.format("%02.0f:%02.0f", math.floor(time/60), math.floor(time % 60))
+    love.graphics.print(time_tracker, font, 335, 10)
 end 
-
--- spawn a ballon on command
-function love.keypressed(key)
-    if key == "space" then
-        table.insert(listOfBallons, create_ballon())
-    end
-end
 
 -- calculates pointer distance to center and returns true if dist is within radius, returns false otherwise
 function check_pointer(ballon)
