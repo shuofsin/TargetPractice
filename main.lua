@@ -44,10 +44,12 @@ function love.load()
 
     -- create reload wheel
     reload_wheel = {}
+    reload_wheel.visible = false
+    reload_wheel.frame_delay = 0.05
     reload_wheel.sprite = love.graphics.newImage("assets/sprites/reload_wheel.png")
     reload_wheel.grid = anim8.newGrid(80, 80, reload_wheel.sprite:getWidth(), reload_wheel.sprite:getHeight())
-    reload_wheel.animation = anim8.newAnimation(reload_wheel.grid('1-33', 1), 0.1)
-    reload_wheel.visible = true
+    reload_wheel.animation = anim8.newAnimation(reload_wheel.grid('1-33', 1), reload_wheel.frame_delay)
+    reload_wheel.time_to_reload = reload_wheel.frame_delay * 33
 end 
 
 function love.update(dt)
@@ -80,14 +82,17 @@ function love.update(dt)
         table.insert(listOfBallons, create_ballon())
     end
     -- check if the player is out of darts, and reload if so 
-    if ammo < 0 then 
+    if ammo <= 0 then 
         if begin_reload == nil then 
             begin_reload = love.timer.getTime()
-        elseif love.timer.getTime() - begin_reload >= 1 then 
+            reload_wheel.visible = true
+        elseif love.timer.getTime() - begin_reload >= reload_wheel.time_to_reload then 
             reload_darts()
-        end
+            reload_wheel.visible = false
+        else 
+            reload_wheel.animation:update(dt)
+        end 
     end
-    reload_wheel.animation:update(dt)
 end
 
 function love.mousepressed(x, y, button, istouch)
@@ -120,7 +125,7 @@ function love.draw()
     end
     -- draw reload wheel 
     if reload_wheel.visible then 
-        reload_wheel.animation:draw(reload_wheel.sprite, 400, 400)
+        reload_wheel.animation:draw(reload_wheel.sprite, 10, 50)
     end
 end 
 
@@ -155,7 +160,7 @@ end
 -- generate a dart 
 function create_dart(i)
     dart = {}
-    dart.x = 0
+    dart.x = 10
     dart.y = i * dart_height
     dart.sprite = love.graphics.newImage("assets/sprites/dart.png")
     return dart
