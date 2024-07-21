@@ -1,4 +1,7 @@
 function love.load()
+    -- score counter
+    score = 0
+
     -- custom cursor
     pointer = {}
     pointer.x = 0
@@ -6,12 +9,14 @@ function love.load()
     pointer.sprite = love.graphics.newImage('assets/sprites/pointer.png')
 
     -- default target, will add more later prob 
-    ballon = {}
-    ballon.x = 400
-    ballon.y = 600
-    ballon.sprite = love.graphics.newImage('assets/sprites/ballon.png')
-    ballon.speed = 100
-    ballon.exists = true
+    listOfBallons = {}
+
+    -- set window size and background
+    love.window.setMode(800, 600)
+    background = love.graphics.newImage("assets/sprites/background.png")
+
+    -- get font for text 
+    font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 30)
 end 
 
 function love.update(dt)
@@ -21,25 +26,38 @@ function love.update(dt)
     pointer.y = mouse_y - pointer.sprite:getHeight() / 2
     love.mouse.setVisible(false)
     -- move the ballon upwards and remove it if it gets hit
-    ballon.y = ballon.y - ballon.speed * dt
-    if love.mouse.isDown(1) and check_pointer() then 
-        ballon.exists = false 
+    for i, v in ipairs(listOfBallons) do 
+        v.y = v.y - v.speed * dt
+        if love.mouse.isDown(1) and check_pointer(v) then 
+            table.remove(listOfBallons, i)
+            score = score + 1
+        end
     end
 end
 
 function love.draw()
-    -- only draw the ballon if it exists
-    if ballon.exists then 
-        love.graphics.draw(ballon.sprite, ballon.x, ballon.y)
+    -- draw background
+    love.graphics.draw(background, 0, 0)
+    -- draw ballons
+    for i, v in ipairs(listOfBallons) do 
+        love.graphics.draw(v.sprite, v.x, v.y)
     end
     -- draw the cursor above the ballon
     love.graphics.draw(pointer.sprite, pointer.x, pointer.y)
-    -- draw target bounts
-    love.graphics.circle("line", ballon.x + ballon.sprite:getWidth() / 2, ballon.y + ballon.sprite:getWidth() / 3, ballon.sprite:getWidth() / 3.5)
+    -- draw score
+    score_tracker = "Score: " .. score
+    love.graphics.print(score_tracker, font, 10, 10, 0)
 end 
 
+-- spawn a ballon on command
+function love.keypressed(key)
+    if key == "space" then
+        table.insert(listOfBallons, create_ballon())
+    end
+end
+
 -- calculates pointer distance to center and returns true if dist is within radius, returns false otherwise
-function check_pointer()
+function check_pointer(ballon)
     local center_x, center_y, radius
     center_x = ballon.x + ballon.sprite:getWidth() / 2
     center_y = ballon.y + ballon.sprite:getWidth() / 3
@@ -54,3 +72,14 @@ function check_pointer()
     end
     return false
 end 
+
+-- generate a ballon 
+function create_ballon()
+    ballon = {}
+    ballon.x = math.random(love.graphics.getWidth())
+    ballon.y = love.graphics.getHeight() + 50
+    ballon.sprite = love.graphics.newImage('assets/sprites/ballon.png')
+    ballon.speed = 100
+    ballon.exists = true
+    return ballon
+end
