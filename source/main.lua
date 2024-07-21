@@ -1,4 +1,9 @@
+-- FIX FILE PATHS FOR ASSETS THANKS 
+
 function love.load()
+    -- imports 
+    anim8 = require "libraries/anim8"
+
     -- stat trackers
     score = 0
     health = 10
@@ -11,7 +16,7 @@ function love.load()
     pointer = {}
     pointer.x = 0
     pointer.y = 0
-    pointer.sprite = love.graphics.newImage('assets/sprites/pointer.png')
+    pointer.sprite = love.graphics.newImage("assets/sprites/pointer.png")
 
     -- default target, will add more later prob 
     listOfBallons = {}
@@ -28,7 +33,7 @@ function love.load()
     time = love.timer.getTime() - start
 
     -- chance to spawn a ballon, will increase as time goes on 
-    chance = 0.005
+    chance = 5
 
     -- create a list of darts 
     listOfDarts = {}
@@ -36,6 +41,13 @@ function love.load()
     for i=1,max_ammo do 
         listOfDarts[i] = create_dart(i)
     end
+
+    -- create reload wheel
+    reload_wheel = {}
+    reload_wheel.sprite = love.graphics.newImage("assets/sprites/reload_wheel.png")
+    reload_wheel.grid = anim8.newGrid(80, 80, reload_wheel.sprite:getWidth(), reload_wheel.sprite:getHeight())
+    reload_wheel.animation = anim8.newAnimation(reload_wheel.grid('1-33', 1), 0.1)
+    reload_wheel.visible = true
 end 
 
 function love.update(dt)
@@ -63,7 +75,7 @@ function love.update(dt)
     end
     time = love.timer.getTime() - start
     -- spawn ballons
-    spawn_ballon = math.random()
+    spawn_ballon = math.random(2000)
     if spawn_ballon < chance then 
         table.insert(listOfBallons, create_ballon())
     end
@@ -73,8 +85,9 @@ function love.update(dt)
             begin_reload = love.timer.getTime()
         elseif love.timer.getTime() - begin_reload >= 1 then 
             reload_darts()
-        end 
+        end
     end
+    reload_wheel.animation:update(dt)
 end
 
 function love.mousepressed(x, y, button, istouch)
@@ -104,6 +117,10 @@ function love.draw()
     -- draw the darts
     for i, v in ipairs(listOfDarts) do 
         love.graphics.draw(v.sprite, v.x, v.y)
+    end
+    -- draw reload wheel 
+    if reload_wheel.visible then 
+        reload_wheel.animation:draw(reload_wheel.sprite, 400, 400)
     end
 end 
 
