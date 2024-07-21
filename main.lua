@@ -21,8 +21,9 @@ function love.load()
     -- default target, will add more later prob 
     listOfBallons = {}
 
-    -- set window size and background
+    -- set window settings and background
     love.window.setMode(800, 600)
+    love.window.setTitle("Target Practice (Pre-Pre-Pre-Alpha)")
     background = love.graphics.newImage("assets/sprites/background.png")
 
     -- get font for text 
