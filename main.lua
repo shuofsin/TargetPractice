@@ -11,6 +11,11 @@ function love.load()
     max_ammo = 5
     ammo = max_ammo
     begin_reload = nil
+    wave = 1
+    wave_active = true
+    wave_length = 31
+    rest_length = 11
+    chance_increase = 1.25
 
     -- custom cursor
     pointer = {}
@@ -59,28 +64,39 @@ function love.update(dt)
     pointer.x = mouse_x - pointer.sprite:getWidth() / 2
     pointer.y = mouse_y - pointer.sprite:getHeight() / 2
     love.mouse.setVisible(false)
-    -- move the ballon upwards and remove it if it gets hit
-    -- if ballons escape, decrement health and destroy ballon
+    -- move the ballon upwards and lose health if it escapes
     for i, v in ipairs(listOfBallons) do 
         v.y = v.y - v.speed * dt
-        if love.mouse.isDown(1) and check_pointer(v) then 
-            table.remove(listOfBallons, i)
-            score = score + 1
-        end
         if v.y + v.sprite:getHeight() < 0 then 
             health = health - 1
             table.remove(listOfBallons, i)
         end
     end
+    -- delete ballons if wave ends
+    if not wave_active then
+        listOfBallons = {}
+    end
     -- quit game if player loses 
     if health <= 0 then 
         love.event.quit(0)
     end
+    -- track timer
     time = love.timer.getTime() - start
+    if time >= wave_length and wave_active then 
+        start = love.timer.getTime()
+        time = start
+        wave = wave + 1
+        wave_active = false
+        chance = chance * chance_increase
+    elseif time >= rest_length and not wave_active then 
+        start = love.timer.getTime()
+        time = start
+        wave_active = true
+    end
     -- spawn ballons
     spawn_ballon = math.random(2000)
-    if spawn_ballon < chance then 
-        table.insert(listOfBallons, create_ballon())
+    if spawn_ballon < chance and wave_active then 
+        table.insert(listOfBallons, 0, create_ballon())
     end
     -- check if the player is out of darts, and reload if so 
     if ammo <= 0 then 
@@ -96,20 +112,31 @@ function love.update(dt)
     end
 end
 
+-- check for ammo and hit the ballon
 function love.mousepressed(x, y, button, istouch)
     if button == 1 and ammo >= 0 then
         table.remove(listOfDarts, ammo)
         ammo = ammo - 1
+        hit_ballon = false
+        for i, v in ipairs(listOfBallons) do
+            if check_pointer(v) and not hit_ballon then 
+                table.remove(listOfBallons, i)
+                score = score + 1
+                hit_ballon = true
+            end
+        end
+        hit_ballon = false
     end
 end
 
 function love.draw()
     -- draw background
     love.graphics.draw(background, 0, 0)
-    -- draw ballons
-    for i, v in ipairs(listOfBallons) do 
+    -- draw ballons, we do it this way to ensure newer ballons are rendered on top
+    for i = #listOfBallons, 1, -1 do 
+        local v = listOfBallons[i]
         love.graphics.draw(v.sprite, v.x, v.y)
-    end
+    end 
     -- draw the cursor above the ballon
     love.graphics.draw(pointer.sprite, pointer.x, pointer.y)
     -- draw stats
@@ -118,8 +145,20 @@ function love.draw()
     health_tracker = "Health: " .. health 
     love.graphics.print(health_tracker, font, 560, 10)
     -- format time and draw
-    time_tracker = string.format("%02.0f:%02.0f", math.floor(time/60), math.floor(time % 60))
-    love.graphics.print(time_tracker, font, 335, 10)
+    if wave_active then 
+        time_tracker = string.format("%02.0f", math.floor(time % 60))
+    else
+        time_tracker = string.format("%02.0f", math.floor(-1 * ((time % 60) - rest_length)))
+    end 
+    love.graphics.print(time_tracker, font, 375, 50)
+    -- draw wave counter 
+    if wave_active then 
+        wave_tracker = string.format("Wave %d", wave)
+        love.graphics.print(wave_tracker, font, 320, 10)
+    else 
+        wave_tracker = "Prepare"
+        love.graphics.print(wave_tracker, font, 310, 10)
+    end
     -- draw the darts
     for i, v in ipairs(listOfDarts) do 
         love.graphics.draw(v.sprite, v.x, v.y)
@@ -150,7 +189,7 @@ end
 -- generate a ballon 
 function create_ballon()
     ballon = {}
-    ballon.x = math.random(love.graphics.getWidth())
+    ballon.x = math.random(50, love.graphics.getWidth() - 50)
     ballon.y = love.graphics.getHeight() + 50
     ballon.sprite = love.graphics.newImage('assets/sprites/ballon.png')
     ballon.speed = 100
