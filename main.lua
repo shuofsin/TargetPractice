@@ -3,6 +3,7 @@
 function love.load()
     -- imports 
     anim8 = require "libraries/anim8"
+    love.graphics.setDefaultFilter("nearest", "nearest")
 
     -- stat trackers
     score = 0
@@ -135,7 +136,7 @@ function love.draw()
     -- draw ballons, we do it this way to ensure newer ballons are rendered on top
     for i = #listOfBallons, 1, -1 do 
         local v = listOfBallons[i]
-        love.graphics.draw(v.sprite, v.x, v.y)
+        love.graphics.draw(v.sprite, v.x, v.y, nil, v.scale)
     end 
     -- draw the cursor above the ballon
     love.graphics.draw(pointer.sprite, pointer.x, pointer.y)
@@ -161,7 +162,7 @@ function love.draw()
     end
     -- draw the darts
     for i, v in ipairs(listOfDarts) do 
-        love.graphics.draw(v.sprite, v.x, v.y)
+        love.graphics.draw(v.sprite, v.x, v.y, nil, v.scale)
     end
     -- draw reload wheel 
     if reload_wheel.visible then 
@@ -172,9 +173,9 @@ end
 -- calculates pointer distance to center and returns true if dist is within radius, returns false otherwise
 function check_pointer(ballon)
     local center_x, center_y, radius
-    center_x = ballon.x + ballon.sprite:getWidth() / 2
-    center_y = ballon.y + ballon.sprite:getWidth() / 3
-    radius = ballon.sprite:getWidth() / 3.5
+    center_x = ballon.x + (ballon.sprite:getWidth() * ballon.scale) / 2
+    center_y = ballon.y + (ballon.sprite:getWidth() * ballon.scale) / 2.5
+    radius = (ballon.sprite:getWidth() * ballon.scale) / 2.5
     
     local x, y = love.mouse.getPosition()
     dist_x = x - center_x 
@@ -189,9 +190,10 @@ end
 -- generate a ballon 
 function create_ballon()
     ballon = {}
+    ballon.scale = 4
     ballon.x = math.random(50, love.graphics.getWidth() - 50)
     ballon.y = love.graphics.getHeight() + 50
-    ballon.sprite = love.graphics.newImage('assets/sprites/ballon.png')
+    ballon.sprite = love.graphics.newImage('assets/sprites/ballon_scaled.png')
     ballon.speed = 100
     ballon.exists = true
     return ballon
@@ -202,7 +204,8 @@ function create_dart(i)
     dart = {}
     dart.x = 10
     dart.y = i * dart_height
-    dart.sprite = love.graphics.newImage("assets/sprites/dart.png")
+    dart.sprite = love.graphics.newImage("assets/sprites/dart_scaled.png")
+    dart.scale = 3
     return dart
 end 
 
