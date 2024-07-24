@@ -22,7 +22,6 @@ function love.load()
     love.window.setMode(800, 600)
     love.window.setTitle("Target Practice (Pre-Pre-Pre-Alpha)")
     background = love.graphics.newImage("assets/sprites/background.png")
-
 end 
 
 function love.update(dt)
