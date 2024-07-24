@@ -2,7 +2,11 @@
 
 Arcade-style game made to get familiar with Love2d engine and learn Lua
 
-### Ideas to Implement
+## To-Do
+- Menu 
+- Scoring save 
+
+### Ideas
 - Sounds
-- Upgrades between waves
-- Different types of ballons
+- More dynamic waves 
+- Rogue-like upgrades 
