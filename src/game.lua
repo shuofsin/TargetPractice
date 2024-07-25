@@ -19,6 +19,9 @@ function game:init(debug)
     -- get relative game time
     game.start = love.timer.getTime()
     game.time = love.timer.getTime() - self.start
+
+    -- store game state 
+    game.state = "menu"
 end 
 
 -- game update
@@ -35,7 +38,7 @@ function game:update(dt)
         self.wave_active = true
     end
     if self.health <= 0 then 
-        love.event.quit(0)
+        self.state = "menu"
     end
 end
 
@@ -68,7 +71,6 @@ end
 -- add score if ballon is hit
 function game:success_check(x, y, button, shoot, pointer, ballons)
     if button == 1 and shoot.current_ammo >= 0 then
-        pointer:play_sound("hit")
         pointer:set_shooting(true)
         local hit_ballon = false
         for i, v in ipairs(ballons.list) do
@@ -76,10 +78,24 @@ function game:success_check(x, y, button, shoot, pointer, ballons)
                 ballons:remove_ballon(i)
                 self.score = self.score + 1
                 hit_ballon = true
-                ballons:play_sound("pop")
             end
         end
         shoot:remove_dart(shoot:get_current_ammo())
         hit_ballon = false
     end
+end
+
+-- get the state
+function game:get_state()
+    return self.state
+end
+
+-- set the state
+function game:set_state(new_state)
+    self.state = new_state 
+end
+
+-- get health
+function game:add_health(val)
+    if val then self.health = self.health + val end
 end

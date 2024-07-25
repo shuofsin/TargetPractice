@@ -12,12 +12,13 @@ function ballons:init(debug)
 end 
 
 -- update ballons 
-function ballons:update(dt, wave_active)
+function ballons:update(dt, wave_active, game)
     -- move the ballon upwards and remove if off-screen
     for i, v in ipairs(self.list) do 
         v.y = v.y - v.speed * dt
-        if v.y + v.sprite:getHeight() < 0 then 
+        if v.y + v.sprite:getHeight() * v.scale < 0 then 
             table.remove(self.list, i)
+            game:add_health(-1)
         end
     end
     -- spawn ballons if wave active 

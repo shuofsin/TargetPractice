@@ -25,7 +25,6 @@ function pointer:update(dt)
     local mouse_x, mouse_y = love.mouse.getPosition()
     self.x = mouse_x - self.sprite_size * self.scale / 2
     self.y = mouse_y - self.sprite_size * self.scale / 2 
-
     -- animations
     --[[ Shooting animation, was kind of distracting so I got rid of it
     if not self.shooting then 
