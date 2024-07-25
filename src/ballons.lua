@@ -2,6 +2,9 @@ ballons = {}
 
 -- initilize list of ballons
 function ballons:init(debug)
+    ballons.sounds = {}
+    ballons.sounds.pop = love.audio.newSource("assets/sounds/ballon_pop.wav", "static")
+    ballons.sounds.pop:setVolume(0.05)
     ballons.chance = 5
     ballons.chance_increase = 1.25
     ballons.list = {} 
@@ -18,7 +21,7 @@ function ballons:update(dt, wave_active)
         end
     end
     -- spawn ballons if wave active 
-    spawn_ballon = math.random(2000)
+    local spawn_ballon = math.random(2000)
     if spawn_ballon < self.chance and wave_active then 
         table.insert(self.list, 0, ballons:create_ballon())
     end
@@ -53,6 +56,12 @@ function ballons:clear()
     self.list = {}
 end 
 
+-- delete a ballon
+function ballons:remove_ballon(i) 
+    table.remove(self.list, i)
+    ballons:play_sound("pop")
+end
+
 -- generate a ballon 
 function ballons:create_ballon()
     ballon = {}
@@ -68,4 +77,9 @@ end
 -- chance parameters for new wave 
 function ballons:wave_update(wave)
     self.chance = self.chance * self.chance_increase
+end
+
+-- play a sound
+function ballons:play_sound(sound)
+    ballons.sounds[sound]:play()
 end

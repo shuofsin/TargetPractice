@@ -8,10 +8,14 @@ function pointer:init(debug)
     pointer.sprite_size = 32
     pointer.sprite = love.graphics.newImage("assets/sprites/pointer_scaled.png")
     pointer.grid = anim8.newGrid(32, 32, self.sprite:getWidth(), self.sprite:getHeight())
-    pointer.animation = anim8.newAnimation(pointer.grid('1-7', 1), 0.05)
+    pointer.animation = anim8.newAnimation(pointer.grid('1-8', 1), 0.05)
     pointer.debug = debug
     pointer.shooting = false
     pointer.isEmpty = false
+    pointer.sounds = {}
+    pointer.sounds.hit = love.audio.newSource("assets/sounds/dart_throw.mp3", "static")
+    pointer.sounds.empty = love.audio.newSource("assets/sounds/empty_throw.mp3", "static")
+    pointer.sounds.empty:setVolume(0.8)
     love.mouse.setVisible(false)
 end
 
@@ -23,6 +27,7 @@ function pointer:update(dt)
     self.y = mouse_y - self.sprite_size * self.scale / 2 
 
     -- animations
+    --[[ Shooting animation, was kind of distracting so I got rid of it
     if not self.shooting then 
         pointer.animation:gotoFrame(1)
     end
@@ -30,6 +35,8 @@ function pointer:update(dt)
     if self.shooting and pointer.animation.position == 7 then 
         self.shooting = false
     end 
+    ]]
+    pointer.animation:gotoFrame(8)
     pointer.animation:update(dt)
 end 
 
@@ -54,3 +61,13 @@ function pointer:check_shot(ballon, ammo)
     end
     return false
 end 
+
+-- plays a sound 
+function pointer:play_sound(sound)
+    self.sounds[sound]:play()
+end 
+
+-- signal that the player is shooting
+function pointer:set_shooting(is_shooting)
+    self.shooting = is_shooting 
+end

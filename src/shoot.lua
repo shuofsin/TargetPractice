@@ -69,3 +69,14 @@ function shoot:reload_darts()
     self.current_ammo = self.max_ammo
     self.begin_reload = nil
 end
+
+-- remove a dart
+function shoot:remove_dart(i)
+    table.remove(self.darts, self.current_ammo)
+    self.current_ammo = self.current_ammo - 1
+end
+
+-- get current ammo
+function shoot:get_current_ammo()
+    return self.current_ammo
+end
