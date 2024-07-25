@@ -1,7 +1,7 @@
 game = {}
 
 -- game init 
-function game:init(debug)
+function game:init(debug, start_state, _ballons)
     game.debug = debug
     
     -- stat trackers
@@ -21,7 +21,10 @@ function game:init(debug)
     game.time = love.timer.getTime() - self.start
 
     -- store game state 
-    game.state = "menu"
+    game.state = start_state
+
+    -- get the ballon object to control the ballons
+    game.ballons = _ballons 
 end 
 
 -- game update
@@ -35,10 +38,11 @@ function game:update(dt)
     elseif self.time >= self.rest_length and not self.wave_active then 
         self.start = love.timer.getTime()
         self.time = self.start
+        self.ballons:wave_update()
         self.wave_active = true
     end
     if self.health <= 0 then 
-        self.state = "menu"
+        self.state = "post_game"
     end
 end
 
@@ -92,8 +96,8 @@ end
 
 -- set the state
 function game:set_state(new_state)
-    self.state = new_state 
-end
+    self.state = new_state
+end 
 
 -- get health
 function game:add_health(val)

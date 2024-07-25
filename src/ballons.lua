@@ -30,10 +30,6 @@ function ballons:update(dt, wave_active, game)
     if not wave_active then 
         self.list = {}
     end 
-    -- increment ballons if wave is over 
-    if not wave_active then 
-        ballons:wave_update(wave)
-    end 
 end 
 
 -- draw ballons

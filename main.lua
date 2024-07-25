@@ -2,9 +2,6 @@ function love.load()
     -- debug, should be true unless
     debug = true
 
-    -- track game state
-    state = "menu"
-
     -- imports 
     anim8 = require "libraries/anim8"
     require("src/ballons")
@@ -12,6 +9,8 @@ function love.load()
     require("src/shoot")
     require("src/game")
     require("src/menu")
+    require("src/main_menu")
+    require("src/post_game_menu")
     
     -- set window and resolution settings
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -23,8 +22,9 @@ function love.load()
     ballons:init(debug) 
     pointer:init(debug)
     shoot:init(debug)
-    game:init(debug)
-    menu:init(debug)
+    game:init(debug, "main", ballons)
+    main_menu:init(debug)
+    post_game_menu:init(debug)
 end 
 
 function love.update(dt)
@@ -37,9 +37,16 @@ function love.update(dt)
         game:update(dt)
     elseif game:get_state() == "exit" then 
         love.event.quit(0)
+    elseif game:get_state() == "main" then 
+        -- debug main menu
+        main_menu:update(dt)
+    elseif game:get_state() == "post_game" then 
+        post_game_menu:update(dt)    
     end 
     -- update pointer
     pointer:update(dt)
+    -- print state
+    print(game:get_state())
 end
 
 function love.draw()
@@ -51,8 +58,10 @@ function love.draw()
         shoot:draw()
         -- draw gui
         game:draw()
-    elseif game:get_state() == "menu" then 
-        menu:draw()
+    elseif game:get_state() == "main" then 
+        main_menu:draw()
+    elseif game:get_state() == "post_game" then 
+        post_game_menu:draw()
     end 
     -- draw the pointer above everything
     pointer:draw()
@@ -62,9 +71,10 @@ end
 function love.mousepressed(x, y, button)
     if game:get_state() == "game" then 
         game:success_check(x, y, button, shoot, pointer, ballons)
-    elseif game:get_state() == "menu" then 
-        menu:goto_game(x, y, button, game)
-        menu:exit_game(x, y, button, game)
-    end
+    elseif game:get_state() == "main" then 
+        main_menu:use_menu(x, y, button, game)
+    elseif game:get_state() == "post_game" then 
+        post_game_menu:use_menu(x, y, button, game)
+    end 
     pointer:play_sound("hit")
 end
