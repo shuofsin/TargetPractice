@@ -23,10 +23,15 @@ function ballon:draw()
     love.graphics.draw(self.sprite, self.x, self.y, nil, self.scale)
 end 
 
-function ballon:delete() 
+function ballon:remove() 
     self.sound:play()
+end
+
+function ballon:destroy() 
+    self.sound:play()
+    return "default"
 end
 
 function ballon:get_value()
     return self.value
-end 
+end

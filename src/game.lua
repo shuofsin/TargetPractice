@@ -6,7 +6,7 @@ function game:init(debug, start_state, _ballons)
     
     -- stat trackers
     game.score = 0
-    game.health = 100000
+    game.health = 10
     game.playing = true
     game.wave = 1
     game.wave_active = true
@@ -80,7 +80,10 @@ function game:success_check(x, y, button, shoot, pointer, ballons)
         for i, v in ipairs(ballons.list) do
             if pointer:check_shot(v, shoot.current_ammo) and not hit_ballon then 
                 self.score = self.score + v:get_value() 
-                ballons:remove_ballon(i)
+                local effect = ballons:destroy_ballon(i)
+                if effect == "health" then 
+                    game:add_health(3)
+                end 
                 hit_ballon = true
             end
         end

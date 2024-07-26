@@ -1,17 +1,22 @@
-blue_ballon = ballon:new(
+health_ballon = ballon:new(
     {
         scale = 4,
         x = (love.graphics.getWidth() / 2),
         y = (love.graphics.getHeight() + 50),
-        speed = 300,
-        sprite_path = 'assets/sprites/blue_ballon.png', 
+        speed = 100,
+        sprite_path = 'assets/sprites/health_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
-        value = 3
+        value = 1
     })
 
-function blue_ballon:new(new)
+function health_ballon:new(new)
     new = new or {}
     setmetatable(new, self)
     self.__index = self 
     return new
+end 
+
+function health_ballon:destroy()
+    self.sound:play()
+    return "health"
 end 
