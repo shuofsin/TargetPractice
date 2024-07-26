@@ -21,7 +21,6 @@ end
 
 function ballon:draw()
     love.graphics.draw(self.sprite, self.x, self.y, nil, self.scale)
-    print("drawing ballon", self.y)
 end 
 
 function ballon:delete() 
