@@ -1,9 +1,9 @@
 function love.load()
-    -- debug, should be true unless
+    -- debug, one day this will be false 
     debug = true
 
     -- imports 
-    anim8 = require "libraries/anim8"
+    anim8 = require("libraries/anim8")
     require("src/ballons")
     require("src/pointer")
     require("src/shoot")
@@ -15,7 +15,7 @@ function love.load()
     -- set window and resolution settings
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.window.setMode(800, 600)
-    love.window.setTitle("Target Practice (Pre-Pre-Pre-Alpha)")
+    love.window.setTitle("Target Practice (Pre-Pre-Alpha)")
     background = love.graphics.newImage("assets/sprites/background.png")
 
     -- init objects 
@@ -45,8 +45,6 @@ function love.update(dt)
     end 
     -- update pointer
     pointer:update(dt)
-    -- print state
-    print(game:get_state())
 end
 
 function love.draw()
