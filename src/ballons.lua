@@ -1,5 +1,6 @@
 ballons = {}
 
+
 -- initilize list of ballons
 function ballons:init(debug)
     -- get the ballon object(s)
@@ -10,14 +11,12 @@ function ballons:init(debug)
     require("src/health_ballon")
 
     ballons.sounds = {}
-    ballons.chance = 5
-    ballons.chance_increase = 1.25
     ballons.list = {} 
     ballons.debug = debug
 end 
 
 -- update ballons 
-function ballons:update(dt, wave_active, game)
+function ballons:update(dt, game)
     -- move the ballon upwards and remove if off-screen
     for i, v in ipairs(self.list) do 
         v:update(dt)
@@ -26,23 +25,11 @@ function ballons:update(dt, wave_active, game)
             game:add_health(-1)
         end
     end
-    -- spawn ballons if wave active 
-    local spawn_ballon = math.random(2000)
-    if spawn_ballon < self.chance and wave_active then 
-        if spawn_ballon / self.chance >= 0.99 then 
-            table.insert(self.list, 0, ballons:create_ballon("health"))
-        elseif spawn_ballon / self.chance >= 0.9 then 
-            table.insert(self.list, 0, ballons:create_ballon("blue"))
-        elseif spawn_ballon / self.chance >= 0.7 then 
-            table.insert(self.list, 0, ballons:create_ballon("green"))
-        else 
-            table.insert(self.list, 0, ballons:create_ballon("red"))
-        end 
-    end
-    -- remove ballons if wave over 
-    if not wave_active then 
-        self.list = {}
-    end 
+end 
+
+-- add ballon to list
+function ballons:add_ballon(b_type)
+    table.insert(self.list, 0, ballons:create_ballon(b_type))
 end 
 
 -- draw ballons
@@ -71,11 +58,6 @@ function ballons:destroy_ballon(i)
     return effect
 end
 
--- chance parameters for new wave 
-function ballons:wave_update(wave)
-    self.chance = self.chance * self.chance_increase
-end
-
 -- generate a ballon 
 function ballons:create_ballon(b_type)
     new_ballon = {}
@@ -91,3 +73,8 @@ function ballons:create_ballon(b_type)
     new_ballon:init() 
     return new_ballon
 end
+
+-- is empty
+function ballons:is_empty() 
+    return self.list == nil
+end 

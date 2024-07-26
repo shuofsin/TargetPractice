@@ -25,26 +25,97 @@ function game:init(debug, start_state, _ballons)
 
     -- get the ballon object to control the ballons
     game.ballons = _ballons 
+
+    -- spawn table
+    game.spawn_chance = 5
+    game.spawn_table = {}
+    game.spawn_table["red"] = 1
+    game.spawn_table["green"] = 1
+    game.spawn_table["blue"] = 1
 end 
 
 -- game update
 function game:update(dt)
+    game:wave_update(dt)
+    if game.wave_active then 
+        game:spawn_ballons(dt) 
+    end
+end
+
+-- reset time 
+function game:reset_time()
+    game.start = love.timer.getTime()
+    game.time = love.timer.getTime() - self.start
+end 
+
+-- spawn ballons
+function game:spawn_ballons(dt)
+    local val = math.random(2000)
+    if val < game.spawn_chance then 
+        game:spawn_random_ballon()
+    end 
+end 
+
+-- spawn random ballon
+function game:spawn_random_ballon()
+    game.ballons:add_ballon(game:select_random_ballon())
+end
+
+-- select a random ballon from the table 
+function game:select_random_ballon()
+    local total_weight = 0 
+    for k, v in pairs(game.spawn_table) do
+        total_weight = total_weight + v
+    end 
+    local b_type = ""
+    local rand_val = math.random(1, total_weight)
+    for k, v in pairs(game.spawn_table) do 
+        rand_val = rand_val - v
+        if rand_val <= 0 then 
+            return k
+        end 
+    end 
+    return "red"
+end 
+
+-- spawn bonus 
+function game:spawn_bonus_ballons()
+    game.ballons:add_ballon("health")
+    print("added bonus")
+    print(game.ballons.list[0])
+end 
+
+-- increase spawn chance
+function game:update_chance()
+    -- to do
+end 
+
+-- wave update 
+function game:wave_update(dt)
     self.time = love.timer.getTime() - self.start
+    ballons:update(dt, self)
+    game:control_waves(dt)
+    if self.health <= 0 then 
+        self.state = "post_game"
+    end
+end 
+
+-- function control waves
+function game:control_waves(dt)
     if self.time >= self.wave_length and self.wave_active then 
         self.start = love.timer.getTime()
         self.time = self.start
         self.wave = self.wave + 1
+        self.ballons:clear()
+        game:spawn_bonus_ballons()
         self.wave_active = false
     elseif self.time >= self.rest_length and not self.wave_active then 
         self.start = love.timer.getTime()
         self.time = self.start
-        self.ballons:wave_update()
+        game:update_chance()
         self.wave_active = true
     end
-    if self.health <= 0 then 
-        self.state = "post_game"
-    end
-end
+end 
 
 -- game draw
 function game:draw()
@@ -56,7 +127,12 @@ function game:draw()
     -- format time and draw
     local time_tracker
     if self.wave_active then 
-        time_tracker = string.format("%02.0f", math.floor(self.time % 60))
+        local clock_time = math.floor(self.time % 60)
+        if clock_time ~= 0 then 
+            time_tracker = string.format("%02.0f", math.floor(self.time % 60))
+        else
+            time_tracker = string.format("Go")
+        end 
     else
         time_tracker = string.format("%02.0f", math.floor(-1 * ((self.time % 60) - self.rest_length)))
     end 
@@ -100,6 +176,7 @@ end
 -- set the state
 function game:set_state(new_state)
     self.state = new_state
+    game:reset_time()
 end 
 
 -- get health

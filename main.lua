@@ -2,6 +2,9 @@ function love.load()
     -- debug, one day this will be false 
     debug = true
 
+    -- randomize 
+    math.randomseed(os.time())
+
     -- imports 
     anim8 = require("libraries/anim8")
     require("src/ballons")
@@ -29,11 +32,9 @@ end
 
 function love.update(dt)
     if game:get_state() == "game" then 
-        -- update ballons
-        ballons:update(dt, game.wave_active, game)
         -- update shooter
         shoot:update(dt)
-        -- quit game if player loses 
+        -- update game
         game:update(dt)
     elseif game:get_state() == "exit" then 
         love.event.quit(0)
