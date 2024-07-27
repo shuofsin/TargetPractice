@@ -21,6 +21,7 @@ function game:init(debug, start_state, _ballons)
     game.time = love.timer.getTime() - self.start
 
     -- store game state 
+    
     game.state = start_state
 
     -- get the ballon object to control the ballons
@@ -81,6 +82,7 @@ end
 -- spawn bonus 
 function game:spawn_bonus_ballons()
     game.ballons:add_ballon("health")
+    game.ballons:add_ballon("point")
 end 
 
 -- increase spawn chance
@@ -159,12 +161,15 @@ function game:success_check(x, y, button, shoot, pointer, ballons)
         local hit_ballon = false
         for i, v in ipairs(ballons.list) do
             if pointer:check_shot(v, shoot.current_ammo) and not hit_ballon then 
-                self.score = self.score + v:get_value() 
+                game:add_score(v:get_value())
                 local effect = ballons:destroy_ballon(i)
                 if effect == "health" then 
                     game:add_health(3)
+                end
+                if not self.wave_active then 
+                    ballons:clear()
                 end 
-                hit_ballon = true
+                hit_ballon = true 
             end
         end
         shoot:remove_dart(shoot:get_current_ammo())
@@ -187,3 +192,8 @@ end
 function game:add_health(val)
     if val then self.health = self.health + val end
 end
+
+-- add score
+function game:add_score(score)
+    if score then self.score = self.score + score end 
+end 

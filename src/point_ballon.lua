@@ -1,33 +1,27 @@
-health_ballon = ballon:new(
+point_ballon = ballon:new(
     {
         scale = 5,
         x = (love.graphics.getWidth() / 2),
         y = (love.graphics.getHeight() + 50),
         speed = 150,
-        sprite_path = 'assets/sprites/health_ballon.png', 
+        sprite_path = 'assets/sprites/point_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
-        value = 1
+        value = 5
     })
 
-function health_ballon:new(new)
+function point_ballon:new(new)
     new = new or {}
     setmetatable(new, self)
     self.__index = self 
     return new
 end 
 
-function health_ballon:update(dt)
-    self.x = love.graphics.getWidth() * 0.75 - self.sprite:getWidth() * self.scale / 2
+function point_ballon:update(dt)
+    self.x = love.graphics.getWidth() * 0.25 - self.sprite:getWidth() * self.scale / 2
     self.y = self.y - self.speed * dt
     if self.speed > 0 and self.y < love.graphics.getWidth() / 2 - 200 then 
         self.speed = -100
     elseif self.speed < 0 and self.y > love.graphics.getWidth() / 2 - 100 then 
         self.speed = 100
     end 
-end 
-
-
-function health_ballon:destroy()
-    self.sound:play()
-    return "health"
 end 
