@@ -7,7 +7,7 @@ Arcade-style game made to get familiar with Love2d engine and learn Lua
 - Add more bonus ballons
 - Adjust difficulty scaling 
 
-### Backlog 
+## Backlog 
 - High scores
 - Options menu
 - Window resizing 

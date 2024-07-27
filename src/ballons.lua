@@ -31,7 +31,6 @@ end
 
 -- add ballon to list
 function ballons:add_ballon(b_type)
-    print(b_type)
     if b_type == "health" or b_type == "point" or b_type == "reload_boost" then 
         self.list[#self.list + 1] = ballons:create_ballon(b_type)
     else 

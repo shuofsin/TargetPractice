@@ -19,7 +19,6 @@ function menu:draw()
     for k, v in pairs(self.buttons) do 
         love.graphics.draw(v.sprite, v.x, v.y, nil, v.scale)
     end 
-    -- menu:draw_play_button()
 end 
 
 -- enter the game 
