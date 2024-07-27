@@ -29,9 +29,9 @@ function game:init(debug, start_state, _ballons)
     -- spawn table
     game.spawn_chance = 5
     game.spawn_table = {}
-    game.spawn_table["red"] = 1
-    game.spawn_table["green"] = 1
-    game.spawn_table["blue"] = 1
+    game.spawn_table["red"] = 5
+    game.spawn_table["green"] = 0
+    game.spawn_table["blue"] = 0
 end 
 
 -- game update
@@ -81,13 +81,17 @@ end
 -- spawn bonus 
 function game:spawn_bonus_ballons()
     game.ballons:add_ballon("health")
-    print("added bonus")
-    print(game.ballons.list[0])
 end 
 
 -- increase spawn chance
 function game:update_chance()
-    -- to do
+    if self.wave > 2 then 
+        game.spawn_table["blue"] = game.spawn_table["blue"] + 1
+    end
+    if self.wave > 1 then 
+        game.spawn_table["green"] = game.spawn_table["green"] + 1
+    end
+    game.spawn_table["red"] = game.spawn_table["red"] + 1    
 end 
 
 -- wave update 

@@ -29,11 +29,15 @@ end
 
 -- add ballon to list
 function ballons:add_ballon(b_type)
-    table.insert(self.list, 0, ballons:create_ballon(b_type))
+    if b_type == "health" then 
+        self.list[#self.list + 1] = ballons:create_ballon(b_type)
+    else 
+        table.insert(self.list, 0, ballons:create_ballon(b_type))
+    end 
 end 
 
 -- draw ballons
-function ballons:draw() 
+function ballons:draw()
     for i = #self.list, 1, -1 do 
         local v = self.list[i]
         love.graphics.draw(v.sprite, v.x, v.y, nil, v.scale)
