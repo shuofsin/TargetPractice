@@ -3,9 +3,15 @@
 Arcade-style game made to get familiar with Love2d engine and learn Lua
 
 ## To-Do
-- Save scores
 - Add more ballon types
+- Add more bonus ballons
+- Adjust difficulty scaling 
 
-### Ideas
-- More dynamic waves 
-- Rogue-like upgrades 
+### Backlog 
+- High scores
+- Options menu
+- Window resizing 
+- Sound design 
+- Music 
+- Convert to browser 
+- More background stats
