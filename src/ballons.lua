@@ -10,6 +10,7 @@ function ballons:init(debug)
     require("src/green_ballon")
     require("src/health_ballon")
     require("src/point_ballon")
+    require("src/reload_boost_ballon")
 
     ballons.sounds = {}
     ballons.list = {} 
@@ -30,7 +31,8 @@ end
 
 -- add ballon to list
 function ballons:add_ballon(b_type)
-    if b_type == "health" or b_type == "point" then 
+    print(b_type)
+    if b_type == "health" or b_type == "point" or b_type == "reload_boost" then 
         self.list[#self.list + 1] = ballons:create_ballon(b_type)
     else 
         table.insert(self.list, 0, ballons:create_ballon(b_type))
@@ -76,6 +78,8 @@ function ballons:create_ballon(b_type)
         new_ballon = health_ballon:new()
     elseif b_type == "point" then 
         new_ballon = point_ballon:new()
+    elseif b_type == "reload_boost" then 
+        new_ballon = reload_boost_ballon:new()
     end 
     new_ballon:init() 
     return new_ballon

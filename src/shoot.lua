@@ -80,3 +80,9 @@ end
 function shoot:get_current_ammo()
     return self.current_ammo
 end
+
+function shoot:boost_reload(boost_percent)
+    self.reload_wheel.frame_delay = self.reload_wheel.frame_delay * boost_percent
+    self.reload_wheel.animation = anim8.newAnimation(self.reload_wheel.grid('1-33', 1), self.reload_wheel.frame_delay)
+    self.reload_wheel.time_to_reload = self.reload_wheel.frame_delay * 33
+end 
