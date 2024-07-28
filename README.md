@@ -8,10 +8,10 @@ Arcade-style game made to get familiar with Love2d engine and learn Lua
 - Adjust difficulty scaling 
 
 ## Backlog 
-- High scores
 - Options menu
 - Window resizing 
 - Sound design 
-- Music 
+- Music
 - Convert to browser 
 - More background stats
+ 

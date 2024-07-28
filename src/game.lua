@@ -6,7 +6,8 @@ function game:init(debug, start_state, _ballons)
     
     -- stat trackers
     game.score = 0
-    game.health = 1
+    game.starting_health = 1
+    game.health = game.starting_health
     game.playing = true
     game.wave = 1
     game.wave_active = true
@@ -28,7 +29,7 @@ function game:init(debug, start_state, _ballons)
     game.ballons = _ballons 
 
     -- spawn table
-    game.spawn_chance = 5
+    game.spawn_chance = 20
     game.spawn_table = {}
     game.spawn_table["red"] = 5
     game.spawn_table["green"] = 0
@@ -99,6 +100,7 @@ function game:update_chance()
         game.spawn_table["green"] = game.spawn_table["green"] + 1
     end
     game.spawn_table["red"] = game.spawn_table["red"] + 1    
+    game.spawn_chance = game.spawn_chance * 1.05
 end 
 
 -- wave update 
@@ -107,9 +109,29 @@ function game:wave_update(dt)
     ballons:update(dt, self)
     game:control_waves(dt)
     if self.health <= 0 then 
-        game:save_score()
+        game:reset()
+        self.ballons:clear()
         self.state = "post_game"
     end
+end 
+
+-- reset game values
+function game:reset()
+    -- stat trackers
+    game.score = 0
+    game.health = self.starting_health
+    game.playing = true
+    game.wave = 1
+    game.wave_active = true
+
+    -- get relative game time
+    game.start = love.timer.getTime()
+    game.time = love.timer.getTime() - self.start
+
+    game.spawn_table = {}
+    game.spawn_table["red"] = 5
+    game.spawn_table["green"] = 0
+    game.spawn_table["blue"] = 0
 end 
 
 -- function control waves
@@ -170,7 +192,7 @@ function game:success_check(x, y, button, shoot, pointer, ballons)
                 game:add_score(v:get_value())
                 local effect = ballons:destroy_ballon(i)
                 if effect == "health" then 
-                    game:add_health(3)
+                    game:add_health(1)
                 end
                 if effect == "reload_boost" then
                     shoot:boost_reload(0.65)
@@ -210,10 +232,15 @@ function game:add_score(score)
     if score then self.score = self.score + score end 
 end 
 
+-- add score
+function game:get_score(score)
+    return self.score
+end 
+
 -- save score
-function game:save_score()
+function game:save_score(name)
     local file, err = io.open("scores.txt", 'a')
-    local score_ = "\n" .. self.score
+    local score_ = name .. "#" .. self.score .. "\n"
     if file then 
         file:write(score_)
         file:close()

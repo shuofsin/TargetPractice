@@ -39,7 +39,7 @@ end
 
 -- create menu button
 function menu:create_button(state_name, x, y, sprite_path, render_scale)
-    button = {}
+    local button = {}
     button.state = state_name
     button.sprite = love.graphics.newImage(sprite_path)
     button.scale = render_scale

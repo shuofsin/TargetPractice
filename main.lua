@@ -26,23 +26,21 @@ function love.load()
     pointer:init(debug)
     shoot:init(debug)
     game:init(debug, "main", ballons)
+    post_game_menu:init(debug, game)
     main_menu:init(debug)
-    post_game_menu:init(debug)
 end 
 
 function love.update(dt)
     if game:get_state() == "game" then 
+        background = love.graphics.newImage("assets/sprites/background.png")
         -- update shooter
         shoot:update(dt)
         -- update game
         game:update(dt)
     elseif game:get_state() == "exit" then 
         love.event.quit(0)
-    elseif game:get_state() == "main" then 
-        -- debug main menu
-        main_menu:update(dt)
     elseif game:get_state() == "post_game" then 
-        post_game_menu:update(dt)    
+        background = love.graphics.newImage("assets/sprites/background_post.png")  
     end 
     -- update pointer
     pointer:update(dt)

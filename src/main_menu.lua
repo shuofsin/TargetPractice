@@ -12,11 +12,17 @@ function main_menu:init(debug)
     main_menu.title.y = 10
 
     -- buttons
-    main_menu.buttons.play = menu:create_button("game", love.graphics.getWidth() / 2, love.graphics.getHeight() / 4, "assets/sprites/play.png", 1.3)
-    main_menu.buttons.exit = menu:create_button("exit", love.graphics.getWidth() / 2, love.graphics.getHeight() / 2.5, "assets/sprites/exit.png", 1.3)
+    main_menu.buttons = {}
+    main_menu.buttons.play = main_menu:create_button("game", love.graphics.getWidth() / 2, love.graphics.getHeight() * 0.25, "assets/sprites/play.png", 1.3)
+    main_menu.buttons.exit = main_menu:create_button("exit", love.graphics.getWidth() / 2, love.graphics.getHeight() * 0.4, "assets/sprites/exit.png", 1.3)
+
+    main_menu.text = ""
+    main_menu.font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 30)
 end 
 
 function main_menu:draw()
-    menu:draw()
+    for k, v in pairs(self.buttons) do 
+        love.graphics.draw(v.sprite, v.x, v.y, nil, v.scale)
+    end 
     love.graphics.draw(self.title.sprite, self.title.x, self.title.y, nil, self.title.scale)
 end 
