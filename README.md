@@ -5,6 +5,7 @@ Arcade-style game made to get familiar with Love2d engine and learn Lua
 ## To-Do
 - Add more ballon types
 - Add more bonus ballons
+- Fix cursor animation
 
 ## Backlog 
 - Options menu
@@ -14,3 +15,7 @@ Arcade-style game made to get familiar with Love2d engine and learn Lua
 - Convert to browser 
 - More background stats
 - Balance tweaks
+
+### Current feedback 
+- Too difficult 
+- More animations 
