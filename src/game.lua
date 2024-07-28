@@ -6,7 +6,7 @@ function game:init(debug, start_state, _ballons)
     
     -- stat trackers
     game.score = 0
-    game.health = 10
+    game.health = 1
     game.playing = true
     game.wave = 1
     game.wave_active = true
@@ -107,6 +107,7 @@ function game:wave_update(dt)
     ballons:update(dt, self)
     game:control_waves(dt)
     if self.health <= 0 then 
+        game:save_score()
         self.state = "post_game"
     end
 end 
@@ -207,4 +208,16 @@ end
 -- add score
 function game:add_score(score)
     if score then self.score = self.score + score end 
+end 
+
+-- save score
+function game:save_score()
+    local file, err = io.open("scores.txt", 'a')
+    local score_ = "\n" .. self.score
+    if file then 
+        file:write(score_)
+        file:close()
+    else
+        print("error: ", err)
+    end 
 end 
