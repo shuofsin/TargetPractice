@@ -7,7 +7,6 @@ function post_game_menu:init(debug, game)
     menu:init(debug)
 
     -- buttons
-    print(v)
     post_game_menu.buttons.play = post_game_menu:create_button("game", love.graphics.getWidth() / 2, love.graphics.getHeight() * 0.75, "assets/sprites/play.png", 1.3)
     post_game_menu.buttons.exit = post_game_menu:create_button("exit", love.graphics.getWidth() / 2, love.graphics.getHeight() * 0.9, "assets/sprites/exit.png", 1.3)
 
