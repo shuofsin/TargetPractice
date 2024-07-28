@@ -30,7 +30,7 @@ function post_game_menu:draw()
         love.graphics.draw(v.sprite, v.x, v.y, nil, v.scale)
     end 
     love.graphics.printf("Enter name:", post_game_menu.font, 0, 70, love.graphics.getWidth(), "center")
-    love.graphics.printf(("Final Score: " .. post_game_menu.game:get_score()), post_game_menu.font_title, 0, 10, love.graphics.getWidth(), "center")
+    love.graphics.printf(("Final Score: " .. post_game_menu.game:get_prev_score()), post_game_menu.font_title, 0, 10, love.graphics.getWidth(), "center")
     love.graphics.printf(post_game_menu.text, post_game_menu.font, 0, love.graphics.getHeight() * 0.2, love.graphics.getWidth(), "center")
 end 
 

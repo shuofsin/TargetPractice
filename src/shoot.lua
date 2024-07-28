@@ -29,6 +29,7 @@ function shoot:update(dt, time)
         if self.begin_reload == nil then 
             self.begin_reload = love.timer.getTime()
             self.reload_wheel.visible = true
+            self.reload_wheel.animation:gotoFrame(1)
         elseif love.timer.getTime() - self.begin_reload >= self.reload_wheel.time_to_reload then 
             shoot:reload_darts()
             self.reload_wheel.visible = false

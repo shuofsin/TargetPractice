@@ -6,6 +6,7 @@ function game:init(debug, start_state, _ballons)
     
     -- stat trackers
     game.score = 0
+    game.prev_score = game.score
     game.starting_health = 1
     game.health = game.starting_health
     game.playing = true
@@ -29,7 +30,7 @@ function game:init(debug, start_state, _ballons)
     game.ballons = _ballons 
 
     -- spawn table
-    game.spawn_chance = 20
+    game.spawn_chance = 30
     game.spawn_table = {}
     game.spawn_table["red"] = 5
     game.spawn_table["green"] = 0
@@ -118,6 +119,7 @@ end
 -- reset game values
 function game:reset()
     -- stat trackers
+    game.prev_score = game.score
     game.score = 0
     game.health = self.starting_health
     game.playing = true
@@ -237,10 +239,14 @@ function game:get_score(score)
     return self.score
 end 
 
+function game:get_prev_score(score)
+    return self.prev_score
+end 
+
 -- save score
 function game:save_score(name)
     local file, err = io.open("scores.txt", 'a')
-    local score_ = name .. "#" .. self.score .. "\n"
+    local score_ = name .. "#" .. self.prev_score .. "\n"
     if file then 
         file:write(score_)
         file:close()
