@@ -81,8 +81,9 @@ end
 
 -- spawn bonus 
 function game:spawn_bonus_ballons()
-    if game.wave % 5 == 0 then
+    if (game.wave - 1) % 5 == 0 then
         game.ballons:add_ballon("reload_boost")
+        game.ballons:add_ballon("ammo_boost")
     else 
         game.ballons:add_ballon("health")
         game.ballons:add_ballon("point")
@@ -171,7 +172,10 @@ function game:success_check(x, y, button, shoot, pointer, ballons)
                     game:add_health(3)
                 end
                 if effect == "reload_boost" then
-                    shoot:boost_reload(0.8)
+                    shoot:boost_reload(0.65)
+                end 
+                if effect == "ammo_boost" then
+                    shoot:ammo_increase(1)
                 end 
                 if not self.wave_active then 
                     ballons:clear()
