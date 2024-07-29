@@ -6,7 +6,8 @@ red_ballon = ballon:new(
         speed = 150,
         sprite_path = 'assets/sprites/red_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
-        value = 1
+        value = 1,
+        color = "red"
     })
 
 function red_ballon:new(new)

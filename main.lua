@@ -14,6 +14,7 @@ function love.load()
     require("src/menu")
     require("src/main_menu")
     require("src/post_game_menu")
+    require("src/pop")
     
     -- set window and resolution settings
     love.graphics.setDefaultFilter("nearest", "nearest")

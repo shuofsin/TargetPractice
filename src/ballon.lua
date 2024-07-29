@@ -35,3 +35,7 @@ end
 function ballon:get_value()
     return self.value
 end
+
+function ballon:get_info()
+    return self.x, self.y, self.scale, self.color
+end 

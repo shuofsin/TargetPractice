@@ -6,7 +6,8 @@ health_ballon = ballon:new(
         speed = 200,
         sprite_path = 'assets/sprites/health_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
-        value = 0
+        value = 0,
+        color = "pink"
     })
 
 function health_ballon:new(new)

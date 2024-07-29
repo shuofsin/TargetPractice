@@ -7,8 +7,6 @@ function pointer:init(debug)
     pointer.scale = 3
     pointer.sprite_size = 32
     pointer.sprite = love.graphics.newImage("assets/sprites/pointer_scaled.png")
-    pointer.grid = anim8.newGrid(32, 32, self.sprite:getWidth(), self.sprite:getHeight())
-    pointer.animation = anim8.newAnimation(pointer.grid('1-8', 1), 0.05)
     pointer.debug = debug
     pointer.shooting = false
     pointer.isEmpty = false
@@ -25,23 +23,11 @@ function pointer:update(dt)
     local mouse_x, mouse_y = love.mouse.getPosition()
     self.x = mouse_x - self.sprite_size * self.scale / 2
     self.y = mouse_y - self.sprite_size * self.scale / 2 
-    -- animations
-    --[[ Shooting animation, was kind of distracting so I got rid of it
-    if not self.shooting then 
-        pointer.animation:gotoFrame(1)
-    end
-
-    if self.shooting and pointer.animation.position == 7 then 
-        self.shooting = false
-    end 
-    ]]
-    pointer.animation:gotoFrame(8)
-    pointer.animation:update(dt)
 end 
 
 -- draw pointer
 function pointer:draw(dt)
-    pointer.animation:draw(self.sprite, self.x, self.y, 0, self.scale)
+    love.graphics.draw(self.sprite, self.x, self.y, 0, self.scale)
 end 
 
 -- calculates pointer distance to center and returns true if dist is within radius, returns false otherwise

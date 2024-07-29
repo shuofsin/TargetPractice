@@ -6,7 +6,8 @@ ammo_boost_ballon = ballon:new(
         speed = 200,
         sprite_path = 'assets/sprites/ammo_boost_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
-        value = 0
+        value = 0,
+        color = "cyan"
     })
 
 function ammo_boost_ballon:new(new)

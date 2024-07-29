@@ -7,7 +7,7 @@ function game:init(debug, start_state, _ballons)
     -- stat trackers
     game.score = 0
     game.prev_score = game.score
-    game.starting_health = 1
+    game.starting_health = 3
     game.health = game.starting_health
     game.playing = true
     game.wave = 1
@@ -30,7 +30,7 @@ function game:init(debug, start_state, _ballons)
     game.ballons = _ballons 
 
     -- spawn table
-    game.spawn_chance = 30
+    game.spawn_chance = 25
     game.spawn_table = {}
     game.spawn_table["red"] = 5
     game.spawn_table["green"] = 0

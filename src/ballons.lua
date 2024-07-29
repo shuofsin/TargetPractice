@@ -12,9 +12,11 @@ function ballons:init(debug)
     require("src/point_ballon")
     require("src/reload_boost_ballon")
     require("src/ammo_boost_ballon")
+    require("src/pop")
 
     ballons.sounds = {}
     ballons.list = {} 
+    ballons.pop_list = {}
     ballons.debug = debug
 end 
 
@@ -28,6 +30,14 @@ function ballons:update(dt, game)
             game:add_health(-1)
         end
     end
+    --
+    for i,v in ipairs(self.pop_list) do 
+        v:update(dt)
+        if v:is_over() then 
+            table.remove(self.pop_list, i)
+            v = nil 
+        end
+    end 
 end 
 
 -- add ballon to list
@@ -41,14 +51,18 @@ end
 
 -- draw ballons
 function ballons:draw()
-    for i = #self.list, 1, -1 do 
-        local v = self.list[i]
-        love.graphics.draw(v.sprite, v.x, v.y, nil, v.scale)
+    -- render pops and ballons based on y order
+    local master_table = ballons:combine_lists(self.list, self.pop_list)
+    for i, v in ipairs(master_table) do 
+        v:draw()
     end 
 end 
 
 -- delete ballons 
 function ballons:clear()
+    for i, v in ipairs(self.list) do 
+        ballons:destroy_ballon(i)
+    end 
     self.list = {}
 end 
 
@@ -60,10 +74,19 @@ end
 
 -- destroy a ballon
 function ballons:destroy_ballon(i)
+    ballons:create_pop(i)
     local effect = self.list[i]:destroy()
     table.remove(self.list, i)
     return effect
 end
+
+function ballons:create_pop(i)
+    local x_, y_, scale_, color_ = self.list[i]:get_info()
+    new_pop = pop:new() 
+    new_pop:init(x_, y_, scale_, color_)
+    print(new_pop.x)
+    self.pop_list[#self.pop_list + 1] = new_pop
+end 
 
 -- generate a ballon 
 function ballons:create_ballon(b_type)
@@ -90,4 +113,17 @@ end
 -- is empty
 function ballons:is_empty() 
     return self.list == nil
+end 
+
+function ballons:combine_lists(t1, t2)
+    new_table = {}
+    for i=1,#t1 do
+        new_table[#new_table+1] = t1[i]
+    end
+    for i=1,#t2 do
+        new_table[#new_table+1] = t2[i]
+    end
+
+    table.sort(new_table, function(a, b) return a.y < b.y end)
+    return new_table
 end 
