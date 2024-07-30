@@ -35,6 +35,17 @@ function game:init(debug, start_state, _ballons)
     game.spawn_table["red"] = 5
     game.spawn_table["green"] = 0
     game.spawn_table["blue"] = 0
+
+    -- buff spawn table 
+    game.buff_table = {}
+    game.buff_table["multishot"] = 1
+    game.buff_table["ammo_boost"] = 2
+    game.buff_table["reload_boost"] = 2
+
+    --
+    game.bonus_table = {}
+    game.bonus_table["health"] = 1
+    game.bonus_table["point"] = 1
 end 
 
 -- game update
@@ -81,15 +92,57 @@ function game:select_random_ballon()
     return "red"
 end 
 
+-- select random buff ballon
+function game:select_random_buff_ballon()
+    local total_weight = 0 
+    for k, v in pairs(game.buff_table) do
+        total_weight = total_weight + v
+    end 
+    local b_type = ""
+    local rand_val = math.random(1, total_weight)
+    for k, v in pairs(game.buff_table) do 
+        rand_val = rand_val - v
+        if rand_val <= 0 then 
+            return k
+        end 
+    end 
+    return "reload_bonus"
+end 
+
+function game:select_random_bonus_ballon()
+    local total_weight = 0 
+    for k, v in pairs(game.bonus_table) do
+        total_weight = total_weight + v
+    end 
+    local b_type = ""
+    local rand_val = math.random(1, total_weight)
+    for k, v in pairs(game.bonus_table) do 
+        rand_val = rand_val - v
+        if rand_val <= 0 then 
+            return k
+        end 
+    end 
+    return "point"
+end 
+
 -- spawn bonus 
 function game:spawn_bonus_ballons()
     if (game.wave - 1) % 5 == 0 then
-        game.ballons:add_ballon("reload_boost")
-        game.ballons:add_ballon("ammo_boost")
+        local b_1 = game:select_random_buff_ballon()
+        local b_2 = game:select_random_buff_ballon()
+        while b_2 == b_1 do
+            b_2 = game:select_random_buff_ballon()
+        end 
+        game.ballons:add_ballon(b_1, true, 0.25)
+        game.ballons:add_ballon(b_2, true, 0.75)
     else 
-        game.ballons:add_ballon("health")
-        game.ballons:add_ballon("point")
-        add_pointer()
+        local b_1 = game:select_random_bonus_ballon()
+        local b_2 = game:select_random_bonus_ballon()
+        while b_2 == b_1 do
+            b_2 = game:select_random_bonus_ballon()
+        end 
+        game.ballons:add_ballon(b_1, true, 0.25)
+        game.ballons:add_ballon(b_2, true, 0.75)
     end
 end 
 
@@ -189,8 +242,8 @@ end
 function game:success_check(x, y, button, shoot, pointers, ballons)
     if button == 1 and shoot.current_ammo >= 0 then
         pointer:set_shooting(true)
-        for i, v in ipairs(ballons.list) do
-            for j, w in ipairs(pointers) do
+        for j, w in ipairs(pointers) do
+            for i, v in ipairs(ballons.list) do
                 if w:check_shot(v, shoot.current_ammo) then 
                     game:add_score(v:get_value())
                     local effect = ballons:destroy_ballon(i)

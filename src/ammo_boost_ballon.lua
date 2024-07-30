@@ -18,7 +18,6 @@ function ammo_boost_ballon:new(new)
 end 
 
 function ammo_boost_ballon:update(dt)
-    self.x = love.graphics.getWidth() * 0.25 - self.sprite:getWidth() * self.scale / 2
     self.y = self.y - self.speed * dt
     if self.speed > 0 and self.y < love.graphics.getWidth() / 2 - 200 then 
         self.speed = -100

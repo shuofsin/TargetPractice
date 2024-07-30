@@ -39,3 +39,7 @@ end
 function ballon:get_info()
     return self.x, self.y, self.scale, self.color
 end 
+
+function ballon:set_x_pos(pos)
+    self.x = love.graphics.getWidth() * pos - self.sprite:getWidth() * self.scale / 2
+end 

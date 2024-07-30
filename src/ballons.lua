@@ -12,6 +12,7 @@ function ballons:init(debug)
     require("src/point_ballon")
     require("src/reload_boost_ballon")
     require("src/ammo_boost_ballon")
+    require("src/multishot_ballon")
     require("src/pop")
 
     ballons.sounds = {}
@@ -41,9 +42,9 @@ function ballons:update(dt, game)
 end 
 
 -- add ballon to list
-function ballons:add_ballon(b_type)
-    if b_type == "health" or b_type == "point" or b_type == "reload_boost" or b_type == "ammo_boost" then 
-        self.list[#self.list + 1] = ballons:create_ballon(b_type)
+function ballons:add_ballon(b_type, is_bonus, pos)
+    if is_bonus then 
+        self.list[#self.list + 1] = ballons:create_ballon(b_type, pos)
     else 
         table.insert(self.list, 0, ballons:create_ballon(b_type))
     end 
@@ -74,7 +75,7 @@ end
 
 -- destroy a ballon
 function ballons:destroy_ballon(i)
-    ballons:create_pop(i)
+    local pop = ballons:create_pop(i)
     local effect = self.list[i]:destroy()
     table.remove(self.list, i)
     return effect
@@ -84,12 +85,12 @@ function ballons:create_pop(i)
     local x_, y_, scale_, color_ = self.list[i]:get_info()
     new_pop = pop:new() 
     new_pop:init(x_, y_, scale_, color_)
-    print(new_pop.x)
     self.pop_list[#self.pop_list + 1] = new_pop
+    return true
 end 
 
 -- generate a ballon 
-function ballons:create_ballon(b_type)
+function ballons:create_ballon(b_type, pos)
     new_ballon = {}
     if b_type == "red" then 
         new_ballon = red_ballon:new()
@@ -105,8 +106,13 @@ function ballons:create_ballon(b_type)
         new_ballon = reload_boost_ballon:new()
     elseif b_type == "ammo_boost" then 
         new_ballon = ammo_boost_ballon:new()
+    elseif b_type == "multishot" then 
+        new_ballon = multishot_ballon:new()
     end 
     new_ballon:init() 
+    if pos then 
+        new_ballon:set_x_pos(pos) 
+    end 
     return new_ballon
 end
 
