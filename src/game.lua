@@ -89,6 +89,7 @@ function game:spawn_bonus_ballons()
     else 
         game.ballons:add_ballon("health")
         game.ballons:add_ballon("point")
+        add_pointer()
     end
 end 
 
@@ -185,31 +186,34 @@ function game:draw()
 end 
 
 -- add score if ballon is hit
-function game:success_check(x, y, button, shoot, pointer, ballons)
+function game:success_check(x, y, button, shoot, pointers, ballons)
     if button == 1 and shoot.current_ammo >= 0 then
         pointer:set_shooting(true)
-        local hit_ballon = false
         for i, v in ipairs(ballons.list) do
-            if pointer:check_shot(v, shoot.current_ammo) and not hit_ballon then 
-                game:add_score(v:get_value())
-                local effect = ballons:destroy_ballon(i)
-                if effect == "health" then 
-                    game:add_health(1)
+            for j, w in ipairs(pointers) do
+                if w:check_shot(v, shoot.current_ammo) then 
+                    game:add_score(v:get_value())
+                    local effect = ballons:destroy_ballon(i)
+                    if effect == "health" then 
+                        game:add_health(1)
+                    end
+                    if effect == "reload_boost" then
+                        shoot:boost_reload(0.65)
+                    end 
+                    if effect == "ammo_boost" then
+                        shoot:ammo_increase(1)
+                    end 
+                    if effect == "multishot" then 
+                        add_pointer()
+                    end 
+                    if not self.wave_active then 
+                        ballons:clear()
+                    end  
                 end
-                if effect == "reload_boost" then
-                    shoot:boost_reload(0.65)
-                end 
-                if effect == "ammo_boost" then
-                    shoot:ammo_increase(1)
-                end 
-                if not self.wave_active then 
-                    ballons:clear()
-                end 
-                hit_ballon = true 
-            end
+            end 
         end
         shoot:remove_dart(shoot:get_current_ammo())
-        hit_ballon = false
+  
     end
 end
 

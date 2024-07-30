@@ -24,7 +24,8 @@ function love.load()
 
     -- init objects 
     ballons:init(debug) 
-    pointer:init(debug)
+    pointers = {}
+    add_pointer()
     shoot:init(debug)
     game:init(debug, "main", ballons)
     post_game_menu:init(debug, game)
@@ -44,7 +45,9 @@ function love.update(dt)
         background = love.graphics.newImage("assets/sprites/background_post.png")  
     end 
     -- update pointer
-    pointer:update(dt)
+    for i, v in ipairs(pointers) do 
+        v:update(dt, i, #pointers)
+    end 
 end
 
 function love.draw()
@@ -62,17 +65,23 @@ function love.draw()
         post_game_menu:draw()
     end 
     -- draw the pointer above everything
-    pointer:draw()
+    for i, v in ipairs(pointers) do 
+        v:draw()
+    end 
 end 
 
 -- shoot! do they score?
 function love.mousepressed(x, y, button)
     if game:get_state() == "game" then 
-        game:success_check(x, y, button, shoot, pointer, ballons)
+        game:success_check(x, y, button, shoot, pointers, ballons)
     elseif game:get_state() == "main" then 
         main_menu:use_menu(x, y, button, game)
     elseif game:get_state() == "post_game" then 
         post_game_menu:use_menu(x, y, button, game)
     end 
-    pointer:play_sound("hit")
+    pointers[1]:play_sound("hit")
 end
+
+function add_pointer() 
+    table.insert(pointers, pointer:init(debug))
+end 

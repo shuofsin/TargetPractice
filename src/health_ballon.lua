@@ -27,7 +27,6 @@ function health_ballon:update(dt)
     end 
 end 
 
-
 function health_ballon:destroy()
     self.sound:play()
     return "health"

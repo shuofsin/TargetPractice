@@ -26,3 +26,8 @@ function point_ballon:update(dt)
         self.speed = 100
     end 
 end 
+
+function point_ballon:destroy()
+    self.sound:play()
+    return "point"
+end 
