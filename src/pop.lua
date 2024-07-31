@@ -7,9 +7,13 @@ function pop:new(new)
     return new
 end 
 
-function pop:init(x_, y_, scale_, color_)
-    self.x = x_
-    self.y = y_
+function pop:init(x_, y_, scale_, color_, num_frames, width)
+    self.x = x_ 
+    self.y = y_ 
+    if num_frames then 
+        self.x = self.x + width * 0.5 * (1 / num_frames)
+        self.y = self.y + width * 0.5 * (1 / num_frames)
+    end 
     self.frame_delay = 0.075
     self.base = {}
     

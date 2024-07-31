@@ -45,10 +45,14 @@ end
 -- calculates pointer distance to center and returns true if dist is within radius, returns false otherwise
 function pointer:check_shot(ballon, ammo)
     local center_x, center_y, radius
-    center_x = ballon.x + (ballon.sprite:getWidth() * ballon.scale) / 2
-    center_y = ballon.y + (ballon.sprite:getWidth() * ballon.scale) / 2.5
-    radius = (ballon.sprite:getWidth() * ballon.scale) / 2.5
-
+    local width = ballon.sprite:getWidth() * ballon.scale
+    if ballon.num_frames then 
+        width = width / ballon.num_frames
+    end 
+    center_x = ballon.x + (width) / 2
+    center_y = ballon.y + (width) / 2.5
+    radius = (width) * 0.4
+    
     local x, y
     x = self.x + self.sprite_size * self.scale / 2
     y = self.y + self.sprite_size * self.scale / 2

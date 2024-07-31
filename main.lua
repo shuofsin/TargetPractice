@@ -28,10 +28,10 @@ function love.load()
     pointers = {}
     add_pointer()
     shoot:init(debug)
+    buff_ui:init(debug)
     game:init(debug, "main", ballons, buff_ui)
     post_game_menu:init(debug, game)
     main_menu:init(debug)
-    buff_ui:init(debug)
 end 
 
 function love.update(dt)

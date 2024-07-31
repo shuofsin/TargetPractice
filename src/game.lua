@@ -12,7 +12,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.playing = true
     game.wave = 1
     game.wave_active = true
-    game.wave_length = 6
+    game.wave_length = 31
     game.rest_length = 11
 
     -- get font for text 
@@ -33,9 +33,10 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- spawn table
     game.spawn_chance = 20
     game.spawn_table = {}
-    game.spawn_table["red"] = 5
+    game.spawn_table["red"] = 0
     game.spawn_table["green"] = 0
     game.spawn_table["blue"] = 0
+    game.spawn_table["portal"] = 1
 
     -- buff spawn table 
     game.buff_table = {}
@@ -130,7 +131,7 @@ end
 
 -- spawn bonus 
 function game:spawn_bonus_ballons()
-    if (game.wave - 1) % 1 == 0 then
+    if (game.wave - 1) % 5 == 0 then
         local b_1 = game:select_random_buff_ballon()
         local b_2 = game:select_random_buff_ballon()
         while b_2 == b_1 do
@@ -191,6 +192,7 @@ function game:reset()
     game.spawn_table["red"] = 5
     game.spawn_table["green"] = 0
     game.spawn_table["blue"] = 0
+    game.spawn_table["portal"] = 0
 end 
 
 -- function control waves

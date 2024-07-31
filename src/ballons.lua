@@ -13,6 +13,7 @@ function ballons:init(debug)
     require("src/reload_boost_ballon")
     require("src/ammo_boost_ballon")
     require("src/multishot_ballon")
+    require("src/portal_ballon")
     require("src/pop")
 
     ballons.sounds = {}
@@ -82,18 +83,19 @@ function ballons:destroy_ballon(i)
 end
 
 function ballons:create_pop(i)
-    local x_, y_, scale_, color_ = self.list[i]:get_info()
+    local x_, y_, scale_, color_, num_frames, width = self.list[i]:get_info()
     new_pop = pop:new() 
-    new_pop:init(x_, y_, scale_, color_)
+    new_pop:init(x_, y_, scale_, color_, num_frames, width)
     self.pop_list[#self.pop_list + 1] = new_pop
     return true
 end 
 
 -- generate a ballon 
-function ballons:create_ballon(b_type, pos)
+function ballons:create_ballon(b_type, x_pos, y_pos)
     new_ballon = {}
     if b_type == "red" then 
         new_ballon = red_ballon:new()
+        print("creating")
     elseif b_type == "blue" then 
         new_ballon = blue_ballon:new() 
     elseif b_type == "green" then 
@@ -108,10 +110,20 @@ function ballons:create_ballon(b_type, pos)
         new_ballon = ammo_boost_ballon:new()
     elseif b_type == "multishot" then 
         new_ballon = multishot_ballon:new()
+    elseif b_type == "portal" then 
+        new_ballon = portal_ballon:new()
+        new_ballon:get_func(ballons)
     end 
     new_ballon:init() 
-    if pos then 
-        new_ballon:set_x_pos(pos) 
+    if x_pos and x_pos < 1 then 
+        new_ballon:set_x_pos_rel(x_pos) 
+    elseif x_pos then  
+        new_ballon:set_x_pos_abs(x_pos) 
+    end 
+    if y_pos and y_pos < 1 then 
+        new_ballon:set_y_pos_rel(x_pos) 
+    elseif y_pos then  
+        new_ballon:set_y_pos_abs(x_pos) 
     end 
     return new_ballon
 end
