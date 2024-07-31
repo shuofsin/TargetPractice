@@ -51,6 +51,11 @@ function ballons:add_ballon(b_type, is_bonus, pos)
     end 
 end 
 
+-- add a new ballon at a position 
+function ballons:add_ballon_at_pos(b_type, x_pos, y_pos)
+    table.insert(self.list, 0, ballons:create_ballon(b_type, x_pos, y_pos))
+end 
+
 -- draw ballons
 function ballons:draw()
     -- render pops and ballons based on y order
@@ -112,7 +117,7 @@ function ballons:create_ballon(b_type, x_pos, y_pos)
         new_ballon = multishot_ballon:new()
     elseif b_type == "portal" then 
         new_ballon = portal_ballon:new()
-        new_ballon:get_func(ballons)
+        new_ballon:get_ballons(self)
     end 
     new_ballon:init() 
     if x_pos and x_pos < 1 then 
@@ -121,9 +126,9 @@ function ballons:create_ballon(b_type, x_pos, y_pos)
         new_ballon:set_x_pos_abs(x_pos) 
     end 
     if y_pos and y_pos < 1 then 
-        new_ballon:set_y_pos_rel(x_pos) 
+        new_ballon:set_y_pos_rel(y_pos) 
     elseif y_pos then  
-        new_ballon:set_y_pos_abs(x_pos) 
+        new_ballon:set_y_pos_abs(y_pos) 
     end 
     return new_ballon
 end

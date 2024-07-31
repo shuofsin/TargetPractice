@@ -9,7 +9,7 @@ portal_ballon = ballon:new(
         value = 4,
         color = "purple",
         num_frames = 16,
-        chance = 50
+        chance = 20
     })
 
 function portal_ballon:new(new)
@@ -33,7 +33,9 @@ function portal_ballon:update(dt)
     self.animation:update(dt)
     local spawn = math.random(2000)
     if spawn < self.chance then 
-        self.ballons:create_ballon("red", self.x, self.y)
+        local spawn_x = self.x + self.sprite:getWidth() * 0.5 * (1 / 15) 
+        local spawn_y = self.y + self.sprite:getWidth() * 0.5 * (1 / 15)
+        self.ballons:add_ballon_at_pos("red", spawn_x, spawn_y)
     end 
 end 
 
@@ -41,6 +43,6 @@ function portal_ballon:draw()
     self.animation:draw(self.sprite, self.x, self.y, nil, self.scale)
 end 
 
-function portal_ballon:get_func(ballons)
+function portal_ballon:get_ballons(ballons)
     self.ballons = ballons
 end 
