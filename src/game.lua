@@ -1,7 +1,7 @@
 game = {}
 
 -- game init 
-function game:init(debug, start_state, _ballons)
+function game:init(debug, start_state, _ballons, _buff_ui)
     game.debug = debug
     
     -- stat trackers
@@ -12,7 +12,7 @@ function game:init(debug, start_state, _ballons)
     game.playing = true
     game.wave = 1
     game.wave_active = true
-    game.wave_length = 31
+    game.wave_length = 6
     game.rest_length = 11
 
     -- get font for text 
@@ -26,11 +26,12 @@ function game:init(debug, start_state, _ballons)
     
     game.state = start_state
 
-    -- get the ballon object to control the ballons
+    -- get the other objects to control the ballons
     game.ballons = _ballons 
+    game.buff_ui = _buff_ui
 
     -- spawn table
-    game.spawn_chance = 25
+    game.spawn_chance = 20
     game.spawn_table = {}
     game.spawn_table["red"] = 5
     game.spawn_table["green"] = 0
@@ -42,10 +43,11 @@ function game:init(debug, start_state, _ballons)
     game.buff_table["ammo_boost"] = 2
     game.buff_table["reload_boost"] = 2
 
-    --
+    -- bonus table
     game.bonus_table = {}
     game.bonus_table["health"] = 1
     game.bonus_table["point"] = 1
+
 end 
 
 -- game update
@@ -54,6 +56,7 @@ function game:update(dt)
     if game.wave_active then 
         game:spawn_ballons(dt) 
     end
+    game.buff_ui:update(dt)
 end
 
 -- reset time 
@@ -127,7 +130,7 @@ end
 
 -- spawn bonus 
 function game:spawn_bonus_ballons()
-    if (game.wave - 1) % 5 == 0 then
+    if (game.wave - 1) % 1 == 0 then
         local b_1 = game:select_random_buff_ballon()
         local b_2 = game:select_random_buff_ballon()
         while b_2 == b_1 do
@@ -236,6 +239,9 @@ function game:draw()
         wave_tracker = "Prepare"
         love.graphics.print(wave_tracker, self.font, 310, 10)
     end
+
+    -- draw buffs
+    self.buff_ui:draw()
 end 
 
 -- add score if ballon is hit
@@ -252,12 +258,15 @@ function game:success_check(x, y, button, shoot, pointers, ballons)
                     end
                     if effect == "reload_boost" then
                         shoot:boost_reload(0.65)
+                        self.buff_ui:add_buff(effect)
                     end 
                     if effect == "ammo_boost" then
                         shoot:ammo_increase(1)
+                        self.buff_ui:add_buff(effect)
                     end 
                     if effect == "multishot" then 
                         add_pointer()
+                        self.buff_ui:add_buff(effect)
                     end 
                     if not self.wave_active then 
                         ballons:clear()

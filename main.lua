@@ -15,6 +15,7 @@ function love.load()
     require("src/main_menu")
     require("src/post_game_menu")
     require("src/pop")
+    require("src/buff_ui")
     
     -- set window and resolution settings
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -27,9 +28,10 @@ function love.load()
     pointers = {}
     add_pointer()
     shoot:init(debug)
-    game:init(debug, "main", ballons)
+    game:init(debug, "main", ballons, buff_ui)
     post_game_menu:init(debug, game)
     main_menu:init(debug)
+    buff_ui:init(debug)
 end 
 
 function love.update(dt)
