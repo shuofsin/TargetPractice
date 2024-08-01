@@ -100,7 +100,6 @@ function ballons:create_ballon(b_type, x_pos, y_pos)
     new_ballon = {}
     if b_type == "red" then 
         new_ballon = red_ballon:new()
-        print("creating")
     elseif b_type == "blue" then 
         new_ballon = blue_ballon:new() 
     elseif b_type == "green" then 

@@ -7,7 +7,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- stat trackers
     game.score = 0
     game.prev_score = game.score
-    game.starting_health = 3
+    game.starting_health = 5
     game.health = game.starting_health
     game.playing = true
     game.wave = 1
@@ -33,10 +33,10 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- spawn table
     game.spawn_chance = 20
     game.spawn_table = {}
-    game.spawn_table["red"] = 0
+    game.spawn_table["red"] = 1
     game.spawn_table["green"] = 0
     game.spawn_table["blue"] = 0
-    game.spawn_table["portal"] = 1
+    game.spawn_table["portal"] = 0
 
     -- buff spawn table 
     game.buff_table = {}
@@ -131,7 +131,7 @@ end
 
 -- spawn bonus 
 function game:spawn_bonus_ballons()
-    if (game.wave - 1) % 5 == 0 then
+    if (game.wave - 1) % 3 == 0 then
         local b_1 = game:select_random_buff_ballon()
         local b_2 = game:select_random_buff_ballon()
         while b_2 == b_1 do
@@ -152,14 +152,24 @@ end
 
 -- increase spawn chance
 function game:update_chance()
-    if self.wave > 2 then 
+    if self.wave == 10 then 
+        game.spawn_table["portal"] = game.spawn_table["portal"] + 1
+    end 
+    if self.wave == 7 then 
         game.spawn_table["blue"] = game.spawn_table["blue"] + 1
     end
-    if self.wave > 1 then 
+    if self.wave == 4 then 
         game.spawn_table["green"] = game.spawn_table["green"] + 1
     end
-    game.spawn_table["red"] = game.spawn_table["red"] + 1    
-    game.spawn_chance = game.spawn_chance * 1.05
+    if (self.wave - 1) % 3 == 0 then 
+        game.spawn_chance = game.spawn_chance * 1.1
+        game.spawn_table["red"] = game.spawn_table["red"] + 1
+    end 
+    print("red: " .. game.spawn_table["red"])
+    print("blue: " .. game.spawn_table["blue"])
+    print("green: " .. game.spawn_table["green"])
+    print("portal: " .. game.spawn_table["portal"])
+    print("overall chance: " .. (game.spawn_chance / 2000))
 end 
 
 -- wave update 
