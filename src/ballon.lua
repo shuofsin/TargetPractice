@@ -1,4 +1,4 @@
-ballon = {scale = 1, x = 0, y = 0, sprite = nil, sprite_path = nil, speed = 0, exists = true, sound = nil, sound_path = nil, value = 1}
+ballon = {scale = 1, x = 0, y = 0, sprite = nil, sprite_path = nil, speed = 0, exists = true, sound = nil, sound_path = nil, value = 1, shielded = false, is_shieldable = true}
 
 -- should never be called! always instance a subtype of ballon
 function ballon:new(new) 
@@ -29,6 +29,7 @@ end
 
 function ballon:destroy() 
     self.sound:play()
+    self = nil
     return "default"
 end
 
@@ -54,4 +55,10 @@ end
 
 function ballon:set_y_pos_abs(pos)
     self.y = pos
+end 
+
+function ballon:get_speed_boost() 
+    local speed_diff = 400 - self.speed 
+    local boost = speed_diff * 0.4
+    self.speed = self.speed + boost
 end 

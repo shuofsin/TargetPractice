@@ -16,6 +16,8 @@ function ballons:init(debug)
     require("src/portal_ballon")
     require("src/ghost_ballon")
     require("src/spiral_ballon")
+    require("src/speed_ballon")
+    require("src/sheild_ballon")
     require("src/pop")
 
     ballons.sounds = {}
@@ -123,9 +125,16 @@ function ballons:create_ballon(b_type, x_pos, y_pos)
         new_ballon = ghost_ballon:new()
     elseif b_type == "spiral" then 
         new_ballon = spiral_ballon:new()
-        new_ballon:init() 
+    elseif b_type == "sheild" then
+        new_ballon = sheild_ballon:new() 
+        new_ballon:get_ballons(self)
+    elseif b_type == "speed" then 
+        new_ballon = speed_ballon:new() 
+        new_ballon:get_ballons(self)
     end 
+
     new_ballon:init() 
+
     if x_pos and x_pos < 1 then 
         new_ballon:set_x_pos_rel(x_pos) 
     elseif x_pos then  
@@ -146,13 +155,40 @@ end
 
 function ballons:combine_lists(t1, t2)
     new_table = {}
-    for i=1,#t1 do
-        new_table[#new_table+1] = t1[i]
+    speed_ballons = {}
+    sheilded = {}
+    not_sheilded = {}
+    for i=1,#t1 do 
+        if t1[i].is_speed_ballon then 
+            speed_ballons[#speed_ballons + 1] = t1[i]
+        elseif t1[i].sheild_ballon then 
+            sheilded[#sheilded+1] = t1[i]
+        else 
+            not_sheilded[#not_sheilded + 1] = t1[i]
+        end
     end
     for i=1,#t2 do
-        new_table[#new_table+1] = t2[i]
+        if t2[i].is_speed_ballon then 
+            speed_ballons[#speed_ballons + 1] = t2[i]
+        elseif t2[i].sheild_ballon then 
+            sheilded[#sheilded+1] = t2[i]
+        else 
+            not_sheilded[#not_sheilded + 1] = t2[i]
+        end 
     end
 
-    table.sort(new_table, function(a, b) return a.y < b.y end)
+    table.sort(speed_ballons, function(a, b) return a.y < b.y end)
+    table.sort(sheilded, function(a, b) return a.y < b.y end)
+    table.sort(not_sheilded, function(a, b) return a.y < b.y end)
+
+    for i=1,#speed_ballons do
+        new_table[#new_table + 1] = speed_ballons[i]
+    end 
+    for i=1,#sheilded do 
+        new_table[#new_table + 1] = sheilded[i]
+    end
+    for i=1,#not_sheilded do 
+        new_table[#new_table + 1] = not_sheilded[i]
+    end
     return new_table
 end 
