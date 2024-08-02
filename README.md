@@ -4,9 +4,6 @@ Arcade-style game made to get familiar with Love2d engine and learn Lua
 
 ## To-Do
 - Add more ballon types
-    - Inter-dimensional ballon 
-    - Spiral ballon
-    - Spawner ballon
     - Support ballons
         - Speed boost
         - Sheilding  
@@ -19,8 +16,6 @@ Arcade-style game made to get familiar with Love2d engine and learn Lua
     - Ballon speed decrease 
     - Score multiplier 
     - Death defiance (once per buff)
-- Add more bonus ballons
-- Adjust multi-shot scaling
 
 ## Backlog 
 - Options menu
