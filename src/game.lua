@@ -33,14 +33,14 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- spawn table
     game.spawn_chance = 20
     game.spawn_table = {}
-    game.spawn_table["red"] = 3
+    game.spawn_table["red"] = 1
     game.spawn_table["green"] = 0
     game.spawn_table["blue"] = 0
     game.spawn_table["portal"] = 0
     game.spawn_table["ghost"] = 0
     game.spawn_table["spiral"] = 0
     game.spawn_table["sheild"] = 0
-    game.spawn_table["speed"] = 1
+    game.spawn_table["speed"] = 0
 
     -- buff spawn table 
     game.buff_table = {}

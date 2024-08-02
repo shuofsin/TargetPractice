@@ -32,7 +32,7 @@ function spiral_ballon:init()
     self.c = {}
     self.c.x = self.x 
     self.c.y = self.y
-    self.spiral_radius = self.sprite:getWidth() * self.scale * 2
+    self.spiral_radius = self.sprite:getWidth() * self.scale * 1.4
     self.y = self.c.y + self.spiral_radius
 end
 
