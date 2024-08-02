@@ -25,7 +25,7 @@ function portal_ballon:init()
     self.grid = anim8.newGrid(48, 48, self.sprite:getWidth(), self.sprite:getHeight())
     self.animation = anim8.newAnimation(self.grid('1-16', 1), 0.1)
     self.sound = love.audio.newSource(self.sound_path, "static")
-    self.x = math.random(50, love.graphics.getWidth() - 50)
+    self.x = math.random(love.graphics.getWidth() * 0.2, love.graphics.getWidth() * 0.8)
     self.sound:setVolume(0.05)
 end
 

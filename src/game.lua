@@ -37,12 +37,14 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.spawn_table["green"] = 0
     game.spawn_table["blue"] = 0
     game.spawn_table["portal"] = 0
+    game.spawn_table["ghost"] = 0
+    game.spawn_table["spiral"] = 0
 
     -- buff spawn table 
     game.buff_table = {}
     game.buff_table["multishot"] = 1
-    game.buff_table["ammo_boost"] = 2
-    game.buff_table["reload_boost"] = 2
+    game.buff_table["ammo_boost"] = 1
+    game.buff_table["reload_boost"] = 1
 
     -- bonus table
     game.bonus_table = {}
@@ -152,8 +154,14 @@ end
 
 -- increase spawn chance
 function game:update_chance()
-    if self.wave == 10 then 
+    if self.wave == 16 then 
         game.spawn_table["portal"] = game.spawn_table["portal"] + 1
+    end
+    if self.wave == 13 then 
+        game.spawn_table["ghost"] = game.spawn_table["ghost"] + 1
+    end 
+    if self.wave == 10 then 
+        game.spawn_table["spiral"] = game.spawn_table["spiral"] + 1
     end 
     if self.wave == 7 then 
         game.spawn_table["blue"] = game.spawn_table["blue"] + 1
@@ -164,12 +172,7 @@ function game:update_chance()
     if (self.wave - 1) % 3 == 0 then 
         game.spawn_chance = game.spawn_chance * 1.1
         game.spawn_table["red"] = game.spawn_table["red"] + 1
-    end 
-    print("red: " .. game.spawn_table["red"])
-    print("blue: " .. game.spawn_table["blue"])
-    print("green: " .. game.spawn_table["green"])
-    print("portal: " .. game.spawn_table["portal"])
-    print("overall chance: " .. (game.spawn_chance / 2000))
+    end
 end 
 
 -- wave update 
@@ -199,10 +202,12 @@ function game:reset()
     game.time = love.timer.getTime() - self.start
 
     game.spawn_table = {}
-    game.spawn_table["red"] = 5
+    game.spawn_table["red"] = 1
     game.spawn_table["green"] = 0
     game.spawn_table["blue"] = 0
     game.spawn_table["portal"] = 0
+    game.spawn_table["ghost"] = 0
+    game.spawn_table["spiral"] = 0
 end 
 
 -- function control waves

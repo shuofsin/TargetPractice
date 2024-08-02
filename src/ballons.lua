@@ -14,6 +14,8 @@ function ballons:init(debug)
     require("src/ammo_boost_ballon")
     require("src/multishot_ballon")
     require("src/portal_ballon")
+    require("src/ghost_ballon")
+    require("src/spiral_ballon")
     require("src/pop")
 
     ballons.sounds = {}
@@ -117,6 +119,11 @@ function ballons:create_ballon(b_type, x_pos, y_pos)
     elseif b_type == "portal" then 
         new_ballon = portal_ballon:new()
         new_ballon:get_ballons(self)
+    elseif b_type == "ghost" then 
+        new_ballon = ghost_ballon:new()
+    elseif b_type == "spiral" then 
+        new_ballon = spiral_ballon:new()
+        new_ballon:init() 
     end 
     new_ballon:init() 
     if x_pos and x_pos < 1 then 
