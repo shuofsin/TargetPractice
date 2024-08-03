@@ -47,7 +47,7 @@ function shoot:draw()
     end
     -- draw reload wheel 
     if self.reload_wheel.visible then 
-        self.reload_wheel.animation:draw(self.reload_wheel.sprite, 10, 50)
+        self.reload_wheel.animation:draw(self.reload_wheel.sprite, 10, love.graphics.getHeight() * 0.15)
     end
 end 
 
@@ -56,7 +56,7 @@ end
 function shoot:create_dart(i)
     dart = {}
     dart.x = 10
-    dart.y = i * self.dart_height
+    dart.y = i * self.dart_height + love.graphics.getHeight() * 0.05
     dart.sprite = love.graphics.newImage("assets/sprites/dart_scaled.png")
     dart.scale = 3
     return dart

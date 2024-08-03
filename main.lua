@@ -16,6 +16,7 @@ function love.load()
     require("src/post_game_menu")
     require("src/pop")
     require("src/buff_ui")
+    require("src/game_ui")
     
     -- set window and resolution settings
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -32,6 +33,7 @@ function love.load()
     game:init(debug, "main", ballons, buff_ui)
     post_game_menu:init(debug, game)
     main_menu:init(debug)
+    game_ui:init(game)
 end 
 
 function love.update(dt)
@@ -60,7 +62,7 @@ function love.draw()
         -- draw shoot UI
         shoot:draw()
         -- draw gui
-        game:draw()
+        game_ui:draw()
     elseif game:get_state() == "main" then 
         main_menu:draw()
     elseif game:get_state() == "post_game" then 

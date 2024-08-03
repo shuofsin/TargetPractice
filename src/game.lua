@@ -30,6 +30,9 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.ballons = _ballons 
     game.buff_ui = _buff_ui
 
+    -- time remaining
+    game.time_remaining = self.time / self.wave_length 
+
     -- spawn table
     game.spawn_chance = 20
     game.spawn_table = {}
@@ -53,6 +56,10 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.bonus_table["health"] = 1
     game.bonus_table["point"] = 1
 
+    -- buff table
+    game.buff_selected = false
+
+    game.buff_msg, game.wait_msg = game:get_rand_msg() 
 end 
 
 -- game update
@@ -144,13 +151,8 @@ function game:spawn_bonus_ballons()
         game.ballons:add_ballon(b_1, true, 0.25)
         game.ballons:add_ballon(b_2, true, 0.75)
     else 
-        local b_1 = game:select_random_bonus_ballon()
-        local b_2 = game:select_random_bonus_ballon()
-        while b_2 == b_1 do
-            b_2 = game:select_random_bonus_ballon()
-        end 
-        game.ballons:add_ballon(b_1, true, 0.25)
-        game.ballons:add_ballon(b_2, true, 0.75)
+        game.ballons:add_ballon("point", true, 0.25)
+        game.ballons:add_ballon("health", true, 0.75)
     end
 end 
 
@@ -225,6 +227,11 @@ end
 
 -- function control waves
 function game:control_waves(dt)
+    if self.wave_active then 
+        self.time_remaining = self.time / self.wave_length 
+    else 
+        self.time_remaining = self.time / self.rest_length
+    end 
     if self.time >= self.wave_length and self.wave_active then 
         self.start = love.timer.getTime()
         self.time = self.start
@@ -232,46 +239,14 @@ function game:control_waves(dt)
         self.ballons:clear()
         game:spawn_bonus_ballons()
         self.wave_active = false
+        self.buff_msg, self.wait_msg = game:get_rand_msg() 
     elseif self.time >= self.rest_length and not self.wave_active then 
         self.start = love.timer.getTime()
         self.time = self.start
         game:update_chance()
         self.wave_active = true
+        self.buff_selected = false
     end
-end 
-
--- game draw
-function game:draw()
-    -- draw stats
-    local score_tracker = "Score: " .. self.score
-    love.graphics.print(score_tracker, self.font, 10, 10)
-    local health_tracker = "Health: " .. self.health 
-    love.graphics.print(health_tracker, self.font, 560, 10)
-    -- format time and draw
-    local time_tracker
-    if self.wave_active then 
-        local clock_time = math.floor(self.time % 60)
-        if clock_time ~= 0 then 
-            time_tracker = string.format("%02.0f", math.floor(self.time % 60))
-        else
-            time_tracker = string.format("Go")
-        end 
-    else
-        time_tracker = string.format("%02.0f", math.floor(-1 * ((self.time % 60) - self.rest_length)))
-    end 
-    love.graphics.print(time_tracker, self.font, 375, 50)
-    -- draw wave counter 
-    local wave_tracker
-    if self.wave_active then 
-        wave_tracker = string.format("Wave %d", self.wave)
-        love.graphics.print(wave_tracker, self.font, 320, 10)
-    else 
-        wave_tracker = "Prepare"
-        love.graphics.print(wave_tracker, self.font, 310, 10)
-    end
-
-    -- draw buffs
-    self.buff_ui:draw()
 end 
 
 -- add score if ballon is hit
@@ -300,6 +275,7 @@ function game:success_check(x, y, button, shoot, pointers, ballons)
                     end 
                     if not self.wave_active then 
                         ballons:clear()
+                        self.buff_selected = true
                     end  
                 end
             end 
@@ -349,4 +325,8 @@ function game:save_score(name)
     else
         print("error: ", err)
     end 
+end 
+
+function game:get_rand_msg() 
+    return math.random(3), math.random(3)
 end 
