@@ -29,5 +29,6 @@ end
 
 function multishot_ballon:destroy()
     self.sound:play()
+    self = nil
     return "multishot"
 end 

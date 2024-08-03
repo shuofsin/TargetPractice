@@ -29,5 +29,6 @@ end
 
 function reload_boost_ballon:destroy()
     self.sound:play()
+    self = nil
     return "reload_boost"
 end 

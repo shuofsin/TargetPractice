@@ -13,8 +13,8 @@ buff_ui = {
 
 function buff_ui:init(debug) 
     self.debug = debug
-    self.start_x = love.graphics.getWidth() * 0.9
-    self.start_y = love.graphics.getHeight() * 0.1
+    self.start_x = love.graphics.getWidth() * 0.91
+    self.start_y = love.graphics.getHeight() * 0.15
 end 
 
 function buff_ui:update(dt)

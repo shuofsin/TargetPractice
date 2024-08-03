@@ -74,6 +74,13 @@ end
 
 function spiral_ballon:draw()
     love.graphics.draw(self.sprite, self.x, self.y, nil, self.scale)
+    if self.effect_sprite then 
+        love.graphics.draw(self.effect_sprite, self.x, self.y, nil, self.scale)
+    end 
+    if self.sheild_ballon then 
+        if not self.sheild_sprite then self.sheild_sprite = love.graphics.newImage('assets/sprites/sheilded_effect.png') end
+        love.graphics.draw(self.sheild_sprite, self.x, self.y, nil, self.scale)
+    end 
 
     --[[
         local center_x, center_y, radius

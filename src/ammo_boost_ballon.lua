@@ -29,5 +29,6 @@ end
 
 function ammo_boost_ballon:destroy()
     self.sound:play()
+    self = nil
     return "ammo_boost"
 end 

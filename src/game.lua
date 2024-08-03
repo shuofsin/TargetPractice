@@ -42,7 +42,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.spawn_table["portal"] = 0
     game.spawn_table["ghost"] = 0
     game.spawn_table["spiral"] = 0
-    game.spawn_table["sheild"] = 0
+    game.spawn_table["sheild"] = 1
     game.spawn_table["speed"] = 0
 
     -- buff spawn table 

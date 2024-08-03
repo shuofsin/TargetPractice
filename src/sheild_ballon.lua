@@ -64,6 +64,9 @@ end
 function sheild_ballon:draw()
     self.effect.animation:draw(self.effect.sprite, self.effect.x, self.effect.y, nil, self.scale * self.effect.rad, self.scale * self.effect.rad)
     self.animation:draw(self.sprite, self.x, self.y, nil, self.scale, self.scale)
+    if self.effect_sprite then 
+        love.graphics.draw(self.effect_sprite, self.x, self.y, nil, self.scale)
+    end 
 end
 
 function sheild_ballon:calc_displace(s_width, s_height, l_width, l_height)

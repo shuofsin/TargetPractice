@@ -28,5 +28,6 @@ end
 
 function health_ballon:destroy()
     self.sound:play()
+    self = nil
     return "health"
 end 
