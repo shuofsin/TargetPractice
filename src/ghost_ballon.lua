@@ -57,8 +57,8 @@ function ghost_ballon:draw()
     if self.effect_sprite then 
         love.graphics.draw(self.effect_sprite, self.x, self.y, nil, self.scale)
     end 
+    if not self.sheild_sprite then self.sheild_sprite = love.graphics.newImage('assets/sprites/sheilded_effect.png') end
     if self.sheild_ballon then 
-        if not self.sheild_sprite then self.sheild_sprite = love.graphics.newImage('assets/sprites/sheilded_effect.png') end
         love.graphics.draw(self.sheild_sprite, self.x, self.y, nil, self.scale)
     end 
     love.graphics.setColor(255, 255, 255, 1)

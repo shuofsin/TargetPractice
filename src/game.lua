@@ -10,7 +10,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.starting_health = 5
     game.health = game.starting_health
     game.playing = true
-    game.wave = 1
+    game.wave = 22
     game.wave_active = true
     game.wave_length = 31
     game.rest_length = 11
@@ -34,7 +34,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.time_remaining = self.time / self.wave_length 
 
     -- spawn table
-    game.spawn_chance = 20
+    game.spawn_chance = 35
     game.spawn_table = {}
     game.spawn_table["red"] = 1
     game.spawn_table["green"] = 0
@@ -42,7 +42,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.spawn_table["portal"] = 0
     game.spawn_table["ghost"] = 0
     game.spawn_table["spiral"] = 0
-    game.spawn_table["sheild"] = 1
+    game.spawn_table["sheild"] = 0
     game.spawn_table["speed"] = 0
 
     -- buff spawn table 
@@ -273,6 +273,7 @@ function game:success_check(x, y, button, shoot, pointers, ballons)
                         add_pointer()
                         self.buff_ui:add_buff(effect)
                     end 
+
                     if not self.wave_active then 
                         ballons:clear()
                         self.buff_selected = true
@@ -281,7 +282,6 @@ function game:success_check(x, y, button, shoot, pointers, ballons)
             end 
         end
         shoot:remove_dart(shoot:get_current_ammo())
-  
     end
 end
 

@@ -9,7 +9,7 @@ sheild_ballon = ballon:new(
         value = 4,
         color = "cyan",
         num_frames = 24,
-        is_shieldable = false
+        is_not_sheildable = true, 
     })
 
 function sheild_ballon:new(new)
@@ -83,8 +83,8 @@ function sheild_ballon:apply_sheild()
     local x = self.x + self.sprite:getHeight() * self.scale / 2
     local y = self.y + self.sprite:getHeight() * self.scale / 2
     local rad = self.effect.sprite:getHeight() * self.scale * self.effect.rad / 2
-    for i,v in ipairs(self.ballons.list) do 
-        if v.is_shieldable then 
+    for i,v in ipairs(self.ballons.list) do  
+        if not v.is_not_sheildable then
             local center_x, center_y, radius
             local width = v.sprite:getWidth() * v.scale
             if v.num_frames then 
@@ -97,6 +97,7 @@ function sheild_ballon:apply_sheild()
                 v.sheild_ballon = self
             else
                 v.sheild_ballon = nil
+                print("unsetting ballon")
             end 
         end 
     end 
