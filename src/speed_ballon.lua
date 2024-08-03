@@ -56,15 +56,12 @@ function speed_ballon:update(dt)
 
     self.effect.x = self.x - e_x 
     self.effect.y = self.y - e_y
+    self:apply_speed() 
 end 
 
 function speed_ballon:draw()
     self.effect.animation:draw(self.effect.sprite, self.effect.x, self.effect.y, nil, self.scale * self.effect.rad, self.scale * self.effect.rad)
     self.animation:draw(self.sprite, self.x, self.y, nil, self.scale, self.scale)
-    if self.is_sheilded then 
-        if not self.sheild_sprite then self.sheild_sprite = love.graphics.newImage('assets/sprites/sheilded_effect.png') end
-        love.graphics.draw(self.sheild_sprite, self.x, self.y, nil, self.scale)
-    end 
 end
 
 function speed_ballon:calc_displace(s_width, s_height, l_width, l_height)
@@ -75,4 +72,25 @@ end
 
 function speed_ballon:get_ballons(ballons_)
     self.ballons = ballons_
+end 
+
+function speed_ballon:apply_speed() 
+    local x = self.x + self.sprite:getHeight() * self.scale / 2
+    local y = self.y + self.sprite:getHeight() * self.scale / 2
+    local rad = self.effect.sprite:getHeight() * self.scale * self.effect.rad / 2
+    for i,v in ipairs(self.ballons.list) do  
+        if not v.is_speed_ballon then
+            local center_x, center_y, radius
+            local width = v.sprite:getWidth() * v.scale
+            if v.num_frames then 
+                width = width / v.num_frames
+            end 
+            center_x = v.x + (width) / 2
+            center_y = v.y + (width) / 2.5
+
+            if center_x < x + rad and center_x > x - rad and center_y < y + rad and center_y > y - rad then 
+               v:get_speed_boost()
+            end
+        end 
+    end 
 end 

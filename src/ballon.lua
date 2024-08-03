@@ -1,4 +1,4 @@
-ballon = {scale = 1, x = 0, y = 0, sprite = nil, sprite_path = nil, speed = 0, exists = true, sound = nil, sound_path = nil, value = 1, is_sheilded = false}
+ballon = {scale = 1, x = 0, y = 0, sprite = nil, sprite_path = nil, speed = 0, exists = true, sound = nil, sound_path = nil, value = 1}
 
 -- should never be called! always instance a subtype of ballon
 function ballon:new(new) 
@@ -21,10 +21,6 @@ end
 
 function ballon:draw()
     love.graphics.draw(self.sprite, self.x, self.y, nil, self.scale)
-    if self.is_sheilded then 
-        if not self.sheild_sprite then self.sheild_sprite = love.graphics.newImage('assets/sprites/sheilded_effect.png') end
-        love.graphics.draw(self.sheild_sprite, self.x, self.y, nil, self.scale)
-    end 
     if self.effect_sprite then 
         love.graphics.draw(self.effect_sprite, self.x, self.y, nil, self.scale)
     end 
@@ -66,7 +62,7 @@ end
 
 function ballon:get_speed_boost() 
     local speed_diff = 400 - self.speed 
-    local boost = speed_diff * 0.4
+    local boost = speed_diff * 0.35
     self.speed = self.speed + boost
     self.effect_sprite = love.graphics.newImage('assets/sprites/speed_boost_effect.png')
 end 

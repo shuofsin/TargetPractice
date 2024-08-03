@@ -10,7 +10,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.starting_health = 5
     game.health = game.starting_health
     game.playing = true
-    game.wave = 22
+    game.wave = 1
     game.wave_active = true
     game.wave_length = 31
     game.rest_length = 11
@@ -36,14 +36,13 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- spawn table
     game.spawn_chance = 35
     game.spawn_table = {}
-    game.spawn_table["red"] = 5
+    game.spawn_table["red"] = 1
     game.spawn_table["green"] = 0
     game.spawn_table["blue"] = 0
     game.spawn_table["portal"] = 0
     game.spawn_table["ghost"] = 0
     game.spawn_table["spiral"] = 0
-    game.spawn_table["sheild"] = 1
-    game.spawn_table["speed"] = 0
+    game.spawn_table["speed"] = 1
 
     -- buff spawn table 
     game.buff_table = {}
@@ -158,9 +157,6 @@ end
 
 -- increase spawn chance
 function game:update_chance()
-    if self.wave == 22 then
-        game.spawn_table["sheild"] = game.spawn_table["sheild"] + 1
-    end
     if self.wave == 19 then 
         game.spawn_table["speed"] = game.spawn_table["speed"] + 1
     end
@@ -220,7 +216,6 @@ function game:reset()
     game.spawn_table["portal"] = 0
     game.spawn_table["ghost"] = 0
     game.spawn_table["spiral"] = 0
-    game.spawn_table["sheild"] = 0
     game.spawn_table["speed"] = 0
 
 end 

@@ -17,12 +17,10 @@ function ballons:init(debug)
     require("src/ghost_ballon")
     require("src/spiral_ballon")
     require("src/speed_ballon")
-    require("src/sheild_ballon")
     require("src/pop")
 
     ballons.sounds = {}
     ballons.list = {} 
-    ballons.sheild_list = {}
     ballons.speed_list = {}
     ballons.pop_list = {}
     ballons.debug = debug
@@ -46,37 +44,6 @@ function ballons:update(dt, game)
             table.remove(self.pop_list, i)
             v = nil 
         end
-    end 
-
-    -- apply buffs to ballons
-    self:apply_buffs()
-end 
-
--- apply buffs
-function ballons:apply_buffs()
-    for i, v in ipairs(self.list) do
-        ballons:apply_sheilded(v)
-    end 
-end 
-
-function ballons:apply_sheilded(ballon) 
-    for i, v in ipairs(self.sheild_list) do 
-        local x = v.x + v.sprite:getHeight() * v.scale / 2
-        local y = v.y + v.sprite:getHeight() * v.scale / 2
-        local rad = v.effect.sprite:getHeight() * v.scale * v.effect.rad / 2
-        if not ballon.is_not_sheildable then 
-            local center_x, center_y
-            local width = ballon.sprite:getWidth() * ballon.scale 
-            if ballon.num_frames then 
-                width = width / ballon.num_frames
-            end 
-            center_x = ballon.x + (width) / 2
-            center_y = ballon.x + (width) / 2.5
-
-            if center_x < x + rad and center_x > x - rad and center_y < y + rad and center_y > y - rad then 
-                v.is_sheilded = true
-            end
-        end 
     end 
 end 
 
@@ -159,12 +126,9 @@ function ballons:create_ballon(b_type, x_pos, y_pos)
         new_ballon = ghost_ballon:new()
     elseif b_type == "spiral" then 
         new_ballon = spiral_ballon:new()
-    elseif b_type == "sheild" then
-        new_ballon = sheild_ballon:new() 
-        self.sheild_list[#self.sheild_list + 1] = new_ballon
     elseif b_type == "speed" then 
         new_ballon = speed_ballon:new() 
-        self.speed_list[#self.speed_list + 1] = new_ballon
+        new_ballon:get_ballons(self)
     end 
 
     new_ballon:init() 
@@ -190,39 +154,30 @@ end
 function ballons:combine_lists(t1, t2)
     new_table = {}
     speed_ballons = {}
-    sheilded = {}
-    not_sheilded = {}
+    not_speed = {} 
     for i=1,#t1 do 
         if t1[i].is_speed_ballon then 
             speed_ballons[#speed_ballons + 1] = t1[i]
-        elseif t1[i].is_sheilded then 
-            sheilded[#sheilded+1] = t1[i]
         else 
-            not_sheilded[#not_sheilded + 1] = t1[i]
+            not_speed[#not_speed + 1] = t1[i]
         end
     end
     for i=1,#t2 do
         if t2[i].is_speed_ballon then 
             speed_ballons[#speed_ballons + 1] = t2[i]
-        elseif t2[i].is_sheilded then 
-            sheilded[#sheilded+1] = t2[i]
         else 
-            not_sheilded[#not_sheilded + 1] = t2[i]
+            not_speed[#not_speed + 1] = t2[i]
         end 
     end
 
     table.sort(speed_ballons, function(a, b) return a.y < b.y end)
-    table.sort(sheilded, function(a, b) return a.y < b.y end)
-    table.sort(not_sheilded, function(a, b) return a.y < b.y end)
+    table.sort(not_speed, function(a, b) return a.y < b.y end)
 
     for i=1,#speed_ballons do
         new_table[#new_table + 1] = speed_ballons[i]
     end 
-    for i=1,#sheilded do 
-        new_table[#new_table + 1] = sheilded[i]
-    end
-    for i=1,#not_sheilded do 
-        new_table[#new_table + 1] = not_sheilded[i]
+    for i=1,#not_speed do 
+        new_table[#new_table + 1] = not_speed[i]
     end
     return new_table
 end 

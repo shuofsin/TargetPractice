@@ -44,11 +44,6 @@ end
 
 -- calculates pointer distance to center and returns true if dist is within radius, returns false otherwise
 function pointer:check_shot(ballon, ammo)
-    if ballon.is_sheilded then 
-        ballon.is_sheilded = false
-        return false 
-    end
-
     local center_x, center_y, radius
     local width = ballon.sprite:getWidth() * ballon.scale
     if ballon.num_frames then 
