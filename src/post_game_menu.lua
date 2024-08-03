@@ -1,8 +1,6 @@
 -- post game menu
 post_game_menu = menu:new() 
 
-
-
 function post_game_menu:init(debug, game)
     menu:init(debug)
 
