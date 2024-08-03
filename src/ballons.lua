@@ -55,11 +55,11 @@ end
 -- apply buffs
 function ballons:apply_buffs()
     for i, v in ipairs(self.list) do
-        v.is_sheilded = ballons:check_sheilded(v)
+        ballons:apply_sheilded(v)
     end 
 end 
 
-function ballons:check_sheilded(ballon) 
+function ballons:apply_sheilded(ballon) 
     for i, v in ipairs(self.sheild_list) do 
         local x = v.x + v.sprite:getHeight() * v.scale / 2
         local y = v.y + v.sprite:getHeight() * v.scale / 2
@@ -74,11 +74,10 @@ function ballons:check_sheilded(ballon)
             center_y = ballon.x + (width) / 2.5
 
             if center_x < x + rad and center_x > x - rad and center_y < y + rad and center_y > y - rad then 
-                return true
+                v.is_sheilded = true
             end
         end 
     end 
-    return false
 end 
 
 -- add ballon to list
