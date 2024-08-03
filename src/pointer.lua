@@ -44,7 +44,7 @@ end
 
 -- calculates pointer distance to center and returns true if dist is within radius, returns false otherwise
 function pointer:check_shot(ballon, ammo)
-    if ballon.sheild_ballon then 
+    if ballon.is_sheilded then 
         return false 
     end
 

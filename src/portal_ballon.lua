@@ -43,12 +43,12 @@ end
 
 function portal_ballon:draw()
     self.animation:draw(self.sprite, self.x, self.y, nil, self.scale)
-    if self.effect_sprite then 
-        love.graphics.draw(self.effect_sprite, self.x, self.y, nil, self.scale)
-    end 
-    if not self.sheild_sprite then self.sheild_sprite = love.graphics.newImage('assets/sprites/sheilded_effect.png') end
-    if self.sheild_ballon then 
+    if self.is_sheilded then 
+        if not self.sheild_sprite then self.sheild_sprite = love.graphics.newImage('assets/sprites/sheilded_effect.png') end
         love.graphics.draw(self.sheild_sprite, self.x, self.y, nil, self.scale)
+    end 
+    if self.effect_sprite then 
+        love.graphics.draw(self.effect_sprite, self.x + self.sprite:getWidth() * 0.5 * (1 / 15) , self.y + self.sprite:getWidth() * 0.5 * (1 / 15), nil, self.scale)
     end 
 end 
 

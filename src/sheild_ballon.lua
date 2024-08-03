@@ -58,7 +58,6 @@ function sheild_ballon:update(dt)
 
     self.effect.x = self.x - e_x 
     self.effect.y = self.y - e_y
-    self:apply_sheild()
 end 
 
 function sheild_ballon:draw()
@@ -79,6 +78,7 @@ function sheild_ballon:get_ballons(ballons_)
     self.ballons = ballons_
 end 
 
+--[[ Depriciated
 function sheild_ballon:apply_sheild() 
     local x = self.x + self.sprite:getHeight() * self.scale / 2
     local y = self.y + self.sprite:getHeight() * self.scale / 2
@@ -102,3 +102,4 @@ function sheild_ballon:apply_sheild()
         end 
     end 
 end 
+]]

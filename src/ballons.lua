@@ -22,6 +22,8 @@ function ballons:init(debug)
 
     ballons.sounds = {}
     ballons.list = {} 
+    ballons.sheild_list = {}
+    ballons.speed_list = {}
     ballons.pop_list = {}
     ballons.debug = debug
 end 
@@ -36,7 +38,8 @@ function ballons:update(dt, game)
             game:add_health(-1)
         end
     end
-    --
+    
+    -- render pops
     for i,v in ipairs(self.pop_list) do 
         v:update(dt)
         if v:is_over() then 
@@ -44,6 +47,38 @@ function ballons:update(dt, game)
             v = nil 
         end
     end 
+
+    -- apply buffs to ballons
+    self:apply_buffs()
+end 
+
+-- apply buffs
+function ballons:apply_buffs()
+    for i, v in ipairs(self.list) do
+        v.is_sheilded = ballons:check_sheilded(v)
+    end 
+end 
+
+function ballons:check_sheilded(ballon) 
+    for i, v in ipairs(self.sheild_list) do 
+        local x = v.x + v.sprite:getHeight() * v.scale / 2
+        local y = v.y + v.sprite:getHeight() * v.scale / 2
+        local rad = v.effect.sprite:getHeight() * v.scale * v.effect.rad / 2
+        if not ballon.is_not_sheildable then 
+            local center_x, center_y
+            local width = ballon.sprite:getWidth() * ballon.scale 
+            if ballon.num_frames then 
+                width = width / ballon.num_frames
+            end 
+            center_x = ballon.x + (width) / 2
+            center_y = ballon.x + (width) / 2.5
+
+            if center_x < x + rad and center_x > x - rad and center_y < y + rad and center_y > y - rad then 
+                return true
+            end
+        end 
+    end 
+    return false
 end 
 
 -- add ballon to list
@@ -127,10 +162,10 @@ function ballons:create_ballon(b_type, x_pos, y_pos)
         new_ballon = spiral_ballon:new()
     elseif b_type == "sheild" then
         new_ballon = sheild_ballon:new() 
-        new_ballon:get_ballons(self)
+        self.sheild_list[#self.sheild_list + 1] = new_ballon
     elseif b_type == "speed" then 
         new_ballon = speed_ballon:new() 
-        new_ballon:get_ballons(self)
+        self.speed_list[#self.speed_list + 1] = new_ballon
     end 
 
     new_ballon:init() 
@@ -161,7 +196,7 @@ function ballons:combine_lists(t1, t2)
     for i=1,#t1 do 
         if t1[i].is_speed_ballon then 
             speed_ballons[#speed_ballons + 1] = t1[i]
-        elseif t1[i].sheild_ballon then 
+        elseif t1[i].is_sheilded then 
             sheilded[#sheilded+1] = t1[i]
         else 
             not_sheilded[#not_sheilded + 1] = t1[i]
@@ -170,7 +205,7 @@ function ballons:combine_lists(t1, t2)
     for i=1,#t2 do
         if t2[i].is_speed_ballon then 
             speed_ballons[#speed_ballons + 1] = t2[i]
-        elseif t2[i].sheild_ballon then 
+        elseif t2[i].is_sheilded then 
             sheilded[#sheilded+1] = t2[i]
         else 
             not_sheilded[#not_sheilded + 1] = t2[i]

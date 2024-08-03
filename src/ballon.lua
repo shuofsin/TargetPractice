@@ -1,4 +1,4 @@
-ballon = {scale = 1, x = 0, y = 0, sprite = nil, sprite_path = nil, speed = 0, exists = true, sound = nil, sound_path = nil, value = 1, shield_ballon = nil}
+ballon = {scale = 1, x = 0, y = 0, sprite = nil, sprite_path = nil, speed = 0, exists = true, sound = nil, sound_path = nil, value = 1, is_sheilded = false}
 
 -- should never be called! always instance a subtype of ballon
 function ballon:new(new) 
@@ -21,12 +21,12 @@ end
 
 function ballon:draw()
     love.graphics.draw(self.sprite, self.x, self.y, nil, self.scale)
+    if self.is_sheilded then 
+        if not self.sheild_sprite then self.sheild_sprite = love.graphics.newImage('assets/sprites/sheilded_effect.png') end
+        love.graphics.draw(self.sheild_sprite, self.x, self.y, nil, self.scale)
+    end 
     if self.effect_sprite then 
         love.graphics.draw(self.effect_sprite, self.x, self.y, nil, self.scale)
-    end 
-    if not self.sheild_sprite then self.sheild_sprite = love.graphics.newImage('assets/sprites/sheilded_effect.png') end
-    if self.sheild_ballon then 
-        love.graphics.draw(self.sheild_sprite, self.x, self.y, nil, self.scale)
     end 
 end 
 
