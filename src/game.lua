@@ -34,7 +34,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.time_remaining = self.time / self.wave_length 
 
     -- spawn table
-    game.spawn_chance = 20
+    game.spawn_chance = 15
     game.spawn_table = {}
     game.spawn_table["red"] = 1
     game.spawn_table["green"] = 0
@@ -268,7 +268,7 @@ function game:success_check(x, y, button, shoot, pointers, ballons)
         for j, w in ipairs(pointers) do
             for i, v in ipairs(ballons.list) do
                 if w:check_shot(v, shoot.current_ammo) then 
-                    game:suceed(v, i, shoot, pointers, ballons)
+                    game:suceed(v, i, shoot, pointers, ballons, true)
                 end
             end 
         end
@@ -276,7 +276,7 @@ function game:success_check(x, y, button, shoot, pointers, ballons)
     end
 end
 
-function game:suceed(v, i, shoot, pointers, ballons) 
+function game:suceed(v, i, shoot, pointers, ballons, gain_charge) 
     game:add_score(math.ceil(v:get_value() * self.score_mult))
     local effect = ballons:destroy_ballon(i)
     if effect == "health" then 
@@ -307,7 +307,7 @@ function game:suceed(v, i, shoot, pointers, ballons)
         self.buff_selected = true
     end  
 
-    if self.charge < self.total_charge then 
+    if self.charge < self.total_charge and gain_charge then 
         self.charge = self.charge + 1
     end 
 end 

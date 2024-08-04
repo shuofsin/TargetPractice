@@ -21,7 +21,7 @@ function love.load()
     
     -- set window and resolution settings
     love.graphics.setDefaultFilter("nearest", "nearest")
-    love.window.setMode(800, 600)
+    love.window.setMode(800, 600, {resizable=true})
     love.window.setTitle("Target Practice (Pre-Pre-Alpha)")
     background = love.graphics.newImage("assets/sprites/background.png")
 
@@ -42,6 +42,8 @@ function love.load()
     pop_up_font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 50 )
     win_w, win_h = love.graphics.getDimensions() 
     win_d = math.sqrt(win_w * win_w + win_h * win_h)
+    s_x = win_w / 800
+    s_y = win_h / 600
 end 
 
 function love.update(dt)
@@ -70,9 +72,14 @@ function love.update(dt)
             start_time = nil
         end 
     end 
+    win_w, win_h = love.graphics.getDimensions() 
+    win_d = math.sqrt(win_w * win_w + win_h * win_h)
+    s_x = win_w / 800
+    s_y = win_h / 600
 end
 
 function love.draw()
+    love.graphics.scale(s_x, s_y)
     love.graphics.draw(background, 0, 0)
     if game:get_state() == "game" then
         -- draw ballons

@@ -82,7 +82,7 @@ function secondary:check_effect()
         dist = math.sqrt(dist_x * dist_x + dist_y * dist_y) 
         local combined_radius = b_r + self.radius 
         if dist < combined_radius then 
-            self.game:suceed(v, i, self.shoot, self.pointer, self.ballons)
+            self.game:suceed(v, i, self.shoot, self.pointer, self.ballons, false)
         end 
     end 
 end 
