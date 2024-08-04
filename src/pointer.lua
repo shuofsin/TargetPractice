@@ -22,7 +22,7 @@ function pointer:init(debug)
     new_pointer.sounds.hit = love.audio.newSource("assets/sounds/dart_throw.mp3", "static")
     new_pointer.sounds.empty = love.audio.newSource("assets/sounds/empty_throw.mp3", "static")
     new_pointer.sounds.empty:setVolume(0.8)
-    love.mouse.setVisible(false)
+    --love.mouse.setVisible(false)
     return new_pointer
 end
 
@@ -73,4 +73,8 @@ end
 -- signal that the player is shooting
 function pointer:set_shooting(is_shooting)
     self.shooting = is_shooting 
+end
+
+function pointer:get_pos()
+    return self.x + self.sprite_size * self.scale / 2, self.y + self.sprite_size * self.scale / 2
 end

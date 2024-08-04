@@ -10,7 +10,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.starting_health = 5
     game.health = game.starting_health
     game.playing = true
-    game.wave = 3
+    game.wave = 1
     game.wave_active = true
     game.wave_length = 31
     game.rest_length = 11
@@ -50,7 +50,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.buff_table["ammo_boost"] = 1
     game.buff_table["reload_boost"] = 1
     game.buff_table["score_mult"] = 1
-    game.buff_table["death_defiance"] = 6
+    game.buff_table["death_defiance"] = 1
 
     -- bonus table
     game.bonus_table = {}

@@ -17,6 +17,7 @@ function love.load()
     require("src/pop")
     require("src/buff_ui")
     require("src/game_ui")
+    require("src/secondary")
     
     -- set window and resolution settings
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -34,6 +35,7 @@ function love.load()
     post_game_menu:init(debug, game)
     main_menu:init(debug)
     game_ui:init(game)
+    secondary:init()
 
     -- pop-up messages?
     pop_up_message = ""
@@ -49,6 +51,8 @@ function love.update(dt)
         shoot:update(dt)
         -- update game
         game:update(dt)
+        -- get secondary ability
+        secondary:update(dt)
     elseif game:get_state() == "exit" then 
         love.event.quit(0)
     elseif game:get_state() == "post_game" then 
@@ -77,6 +81,8 @@ function love.draw()
         shoot:draw()
         -- draw gui
         game_ui:draw()
+        -- get secondary
+        secondary:draw()
         -- print pop-up
         love.graphics.printf(pop_up_message, pop_up_font, 0, win_h * 0.4, win_w, "center")
     elseif game:get_state() == "main" then 
@@ -94,6 +100,7 @@ end
 function love.mousepressed(x, y, button)
     if game:get_state() == "game" then 
         game:success_check(x, y, button, shoot, pointers, ballons)
+        secondary:activate(button)
     elseif game:get_state() == "main" then 
         main_menu:use_menu(x, y, button, game)
     elseif game:get_state() == "post_game" then 

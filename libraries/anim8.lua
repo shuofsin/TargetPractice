@@ -226,7 +226,7 @@ end
 function Animation:update(dt)
   if self.status ~= "playing" then return end
 
-  self.timer = self.timer + dt
+  self.tim  er = self.timer + dt
   local loops = math.floor(self.timer / self.totalDuration)
   if loops ~= 0 then
     self.timer = self.timer - self.totalDuration * loops
