@@ -7,7 +7,6 @@ Arcade-style game made to get familiar with Love2d engine and learn Lua
     - One for final section
     - One for final wave (boss?)
 - Options/Controls menu
-- Improve UI
 - Add right-click ability 
     - Some positive effect 
     - Default can be something small like tiny AOE 
@@ -17,7 +16,6 @@ Arcade-style game made to get familiar with Love2d engine and learn Lua
     - Right-click abilities 
         - Bomb AOE 
         - Instant health bonus
-    - Death defiance (once per buff)
 
 ## Backlog 
 - Window resizing 
