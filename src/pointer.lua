@@ -22,7 +22,7 @@ function pointer:init(debug)
     new_pointer.sounds.hit = love.audio.newSource("assets/sounds/dart_throw.mp3", "static")
     new_pointer.sounds.empty = love.audio.newSource("assets/sounds/empty_throw.mp3", "static")
     new_pointer.sounds.empty:setVolume(0.8)
-    --love.mouse.setVisible(false)
+    love.mouse.setVisible(false)
     return new_pointer
 end
 
@@ -31,7 +31,7 @@ function pointer:update(dt, i, num_pointers)
     -- set the custom cursor to mouse position
     local dist_mult = 0.6
     local mouse_x, mouse_y = love.mouse.getPosition()
-    local total_width = num_pointers * self.sprite:getWidth() * self.scale * dist_mult
+    local total_width = num_pointers * self.sprite:getWidth() * self.scale
     local start = mouse_x - total_width / 2 
     self.x = start + (i - 1) * self.sprite:getWidth() * self.scale * dist_mult
     self.y = mouse_y - self.sprite_size * self.scale / 2 
@@ -59,7 +59,7 @@ function pointer:check_shot(ballon, ammo)
     dist_x = x - center_x 
     dist_y = y - center_y
     dist_to_center = math.sqrt(dist_x * dist_x + dist_y * dist_y) 
-            if dist_to_center < radius and ammo > 0 then
+    if dist_to_center < radius and ammo > 0 then
         return true
     end
     return false

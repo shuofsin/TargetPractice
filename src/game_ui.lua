@@ -6,6 +6,7 @@ function game_ui:init(g_)
     game_ui.health_sprite = love.graphics.newImage('assets/sprites/heart.png')
     game_ui.point_sprite = love.graphics.newImage('assets/sprites/point.png')
     game_ui.font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 40)
+    game_ui.s_font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 20)
     game_ui.health_scale = 3
     game_ui.point_scale = 2.5
     game_ui.bar_length = love.graphics.getWidth() * 0.3
@@ -39,11 +40,31 @@ function game_ui:draw()
     -- end 
     --love.graphics.print(time_tracker, self.game.font, 375, 50)
     love.graphics.setColor(1, (1 - self.game.time_remaining * 0.75), (1 - self.game.time_remaining * 0.75))
-    love.graphics.rectangle("fill", love.graphics.getWidth() * 0.35, love.graphics.getWidth() * 0.06, game_ui.bar_length * (1 - self.game.time_remaining), love.graphics.getHeight() * 0.05)
+    love.graphics.rectangle("fill", love.graphics.getWidth() * 0.35, love.graphics.getHeight() * 0.08, game_ui.bar_length * (1 - self.game.time_remaining), love.graphics.getHeight() * 0.025)
     love.graphics.setColor(0, 0, 0)
-    love.graphics.rectangle("line", love.graphics.getWidth() * 0.35, love.graphics.getWidth() * 0.06, game_ui.bar_length, love.graphics.getHeight() * 0.05)
+    love.graphics.setLineWidth(2)
+    love.graphics.rectangle("line", love.graphics.getWidth() * 0.35, love.graphics.getHeight() * 0.08, game_ui.bar_length, love.graphics.getHeight() * 0.025)
     love.graphics.setColor(1, 1, 1)
-    -- draw wave counter 
+    love.graphics.setLineWidth(1)
+
+    -- draw charge 
+    local total_charge_length = (self.game.total_charge * 2 - 1) * 0.025
+    local charge_bar_start = win_w * 0.5 - win_w * total_charge_length / 2
+    for i=1, self.game.charge do 
+        love.graphics.setColor(love.math.colorFromBytes(233, 208, 149))
+        if self.game.charge == self.game.total_charge then love.graphics.setColor(love.math.colorFromBytes(87, 222, 87)) end
+        love.graphics.rectangle("fill", charge_bar_start + (i - 1) * win_w * 0.05, win_h * 0.125, win_w * 0.025, win_w * 0.025)
+        love.graphics.setColor(1, 1, 1)
+    end 
+    for i=1, self.game.total_charge do 
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.setLineWidth(2)
+        love.graphics.rectangle("line", charge_bar_start + (i - 1) * win_w * 0.05, win_h * 0.125, win_w * 0.025, win_w * 0.025)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.setLineWidth(1)
+    end 
+
+    -- draw title message
     local wave_tracker
     if self.game.wave_active then 
         wave_tracker = string.format("Level %d", self.game.wave)

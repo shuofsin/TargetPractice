@@ -63,6 +63,10 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.buff_selected = false
     game.score_mult = 1
     game.death_defiance = 0
+
+    -- secondary stuff 
+    game.charge = 0
+    game.total_charge = 5
 end 
 
 -- game update
@@ -264,41 +268,49 @@ function game:success_check(x, y, button, shoot, pointers, ballons)
         for j, w in ipairs(pointers) do
             for i, v in ipairs(ballons.list) do
                 if w:check_shot(v, shoot.current_ammo) then 
-                    game:add_score(math.ceil(v:get_value() * self.score_mult))
-                    local effect = ballons:destroy_ballon(i)
-                    if effect == "health" then 
-                        game:add_health(1)
-                    end
-                    if effect == "reload_boost" then
-                        shoot:boost_reload(0.65)
-                        self.buff_ui:add_buff(effect)
-                    end 
-                    if effect == "ammo_boost" then
-                        shoot:ammo_increase(1)
-                        self.buff_ui:add_buff(effect)
-                    end 
-                    if effect == "multishot" then 
-                        add_pointer()
-                        self.buff_ui:add_buff(effect)
-                    end 
-                    if effect == "score_mult" then 
-                        self.score_mult = self.score_mult * 1.2
-                        self.buff_ui:add_buff(effect)
-                    end 
-                    if effect == "death_defiance" then 
-                        self.death_defiance = self.death_defiance + 1
-                        self.buff_ui:add_buff(effect)
-                    end 
-                    if not self.wave_active then 
-                        ballons:clear()
-                        self.buff_selected = true
-                    end  
+                    game:suceed(v, i, shoot, pointers, ballons)
                 end
             end 
         end
         shoot:remove_dart(shoot:get_current_ammo())
     end
 end
+
+function game:suceed(v, i, shoot, pointers, ballons) 
+    game:add_score(math.ceil(v:get_value() * self.score_mult))
+    local effect = ballons:destroy_ballon(i)
+    if effect == "health" then 
+        game:add_health(1)
+    end
+    if effect == "reload_boost" then
+        shoot:boost_reload(0.65)
+        self.buff_ui:add_buff(effect)
+    end 
+    if effect == "ammo_boost" then
+        shoot:ammo_increase(1)
+        self.buff_ui:add_buff(effect)
+    end 
+    if effect == "multishot" then 
+        add_pointer()
+        self.buff_ui:add_buff(effect)
+    end 
+    if effect == "score_mult" then 
+        self.score_mult = self.score_mult * 1.2
+        self.buff_ui:add_buff(effect)
+    end 
+    if effect == "death_defiance" then 
+        self.death_defiance = self.death_defiance + 1
+        self.buff_ui:add_buff(effect)
+    end 
+    if not self.wave_active then 
+        ballons:clear()
+        self.buff_selected = true
+    end  
+
+    if self.charge < self.total_charge then 
+        self.charge = self.charge + 1
+    end 
+end 
 
 -- get the state
 function game:get_state()

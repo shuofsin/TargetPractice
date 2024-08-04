@@ -35,7 +35,7 @@ function love.load()
     post_game_menu:init(debug, game)
     main_menu:init(debug)
     game_ui:init(game)
-    secondary:init()
+    secondary:init(ballons, pointers, shoot, game)
 
     -- pop-up messages?
     pop_up_message = ""
