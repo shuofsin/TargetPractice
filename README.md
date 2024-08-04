@@ -8,9 +8,15 @@ Arcade-style game made to get familiar with Love2d engine and learn Lua
     - One for final wave (boss?)
 - Options/Controls menu
 - Improve UI
+- Add right-click ability 
+    - Some positive effect 
+    - Default can be something small like tiny AOE 
+    - Default should have a small cooldown
+    - Instant reload?
 - Add more buff ballons
-    - Ballon speed decrease 
-    - Score multiplier 
+    - Right-click abilities 
+        - Bomb AOE 
+        - Instant health bonus
     - Death defiance (once per buff)
 
 ## Backlog 

@@ -34,6 +34,12 @@ function love.load()
     post_game_menu:init(debug, game)
     main_menu:init(debug)
     game_ui:init(game)
+
+    -- pop-up messages?
+    pop_up_message = ""
+    pop_up_font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 50 )
+    win_w, win_h = love.graphics.getDimensions() 
+    win_d = math.sqrt(win_w * win_w + win_h * win_h)
 end 
 
 function love.update(dt)
@@ -52,6 +58,14 @@ function love.update(dt)
     for i, v in ipairs(pointers) do 
         v:update(dt, i, #pointers)
     end 
+
+    if pop_up_message ~= "" then 
+        if not start_time then start_time = love.timer.getTime() end
+        if love.timer.getTime() - start_time > 3 then 
+            pop_up_message = ""
+            start_time = nil
+        end 
+    end 
 end
 
 function love.draw()
@@ -63,6 +77,8 @@ function love.draw()
         shoot:draw()
         -- draw gui
         game_ui:draw()
+        -- print pop-up
+        love.graphics.printf(pop_up_message, pop_up_font, 0, win_h * 0.4, win_w, "center")
     elseif game:get_state() == "main" then 
         main_menu:draw()
     elseif game:get_state() == "post_game" then 

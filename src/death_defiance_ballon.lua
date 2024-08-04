@@ -1,0 +1,33 @@
+death_defiance_ballon = ballon:new(
+    {
+        scale = 6,
+        x = (love.graphics.getWidth() / 2),
+        y = (love.graphics.getHeight() + 50),
+        speed = 200,
+        sprite_path = 'assets/sprites/death_defiance_ballon.png', 
+        sound_path = 'assets/sounds/ballon_pop.wav',
+        value = 0,
+        color = "red"
+    })
+
+function death_defiance_ballon:new(new)
+    new = new or {}
+    setmetatable(new, self)
+    self.__index = self 
+    return new
+end 
+
+function death_defiance_ballon:update(dt)
+    self.y = self.y - self.speed * dt
+    if self.speed > 0 and self.y < love.graphics.getWidth() / 2 - 200 then 
+        self.speed = -100
+    elseif self.speed < 0 and self.y > love.graphics.getWidth() / 2 - 100 then 
+        self.speed = 100
+    end 
+end 
+
+function death_defiance_ballon:destroy()
+    self.sound:play()
+    self = nil
+    return "death_defiance"
+end 

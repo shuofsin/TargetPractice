@@ -17,6 +17,8 @@ function ballons:init(debug)
     require("src/ghost_ballon")
     require("src/spiral_ballon")
     require("src/speed_ballon")
+    require("src/score_mult_ballon")
+    require("src/death_defiance_ballon")
     require("src/pop")
 
     ballons.sounds = {}
@@ -129,7 +131,11 @@ function ballons:create_ballon(b_type, x_pos, y_pos)
     elseif b_type == "speed" then 
         new_ballon = speed_ballon:new() 
         new_ballon:get_ballons(self)
-    end 
+    elseif b_type == "score_mult" then 
+        new_ballon = score_mult_ballon:new() 
+    elseif b_type == "death_defiance" then 
+        new_ballon = death_defiance_ballon:new()
+    end
 
     new_ballon:init() 
 

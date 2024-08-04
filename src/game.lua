@@ -10,7 +10,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.starting_health = 5
     game.health = game.starting_health
     game.playing = true
-    game.wave = 1
+    game.wave = 3
     game.wave_active = true
     game.wave_length = 31
     game.rest_length = 11
@@ -34,7 +34,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.time_remaining = self.time / self.wave_length 
 
     -- spawn table
-    game.spawn_chance = 35
+    game.spawn_chance = 20
     game.spawn_table = {}
     game.spawn_table["red"] = 1
     game.spawn_table["green"] = 0
@@ -42,23 +42,27 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.spawn_table["portal"] = 0
     game.spawn_table["ghost"] = 0
     game.spawn_table["spiral"] = 0
-    game.spawn_table["speed"] = 1
+    game.spawn_table["speed"] = 0
 
     -- buff spawn table 
     game.buff_table = {}
     game.buff_table["multishot"] = 1
     game.buff_table["ammo_boost"] = 1
     game.buff_table["reload_boost"] = 1
+    game.buff_table["score_mult"] = 1
+    game.buff_table["death_defiance"] = 6
 
     -- bonus table
     game.bonus_table = {}
     game.bonus_table["health"] = 1
     game.bonus_table["point"] = 1
 
-    -- buff table
-    game.buff_selected = false
-
     game.buff_msg, game.wait_msg = game:get_rand_msg() 
+
+    -- other stuff
+    game.buff_selected = false
+    game.score_mult = 1
+    game.death_defiance = 0
 end 
 
 -- game update
@@ -188,10 +192,17 @@ function game:wave_update(dt)
     self.time = love.timer.getTime() - self.start
     ballons:update(dt, self)
     game:control_waves(dt)
-    if self.health <= 0 then 
-        game:reset()
-        self.ballons:clear()
-        self.state = "post_game"
+    if self.health <= 0 then
+        if self.death_defiance > 0 then 
+            self.health = self.starting_health 
+            self.death_defiance = self.death_defiance - 1
+            self.buff_ui:remove_buff("death_defiance")
+            pop_up_message = "SAVED!"
+        else  
+            game:reset()
+            self.ballons:clear()
+            self.state = "post_game"
+        end 
     end
 end 
 
@@ -218,6 +229,8 @@ function game:reset()
     game.spawn_table["spiral"] = 0
     game.spawn_table["speed"] = 0
 
+    game.score_mult = 1
+    game.death_defiance = 0
 end 
 
 -- function control waves
@@ -251,7 +264,7 @@ function game:success_check(x, y, button, shoot, pointers, ballons)
         for j, w in ipairs(pointers) do
             for i, v in ipairs(ballons.list) do
                 if w:check_shot(v, shoot.current_ammo) then 
-                    game:add_score(v:get_value())
+                    game:add_score(math.ceil(v:get_value() * self.score_mult))
                     local effect = ballons:destroy_ballon(i)
                     if effect == "health" then 
                         game:add_health(1)
@@ -268,7 +281,14 @@ function game:success_check(x, y, button, shoot, pointers, ballons)
                         add_pointer()
                         self.buff_ui:add_buff(effect)
                     end 
-
+                    if effect == "score_mult" then 
+                        self.score_mult = self.score_mult * 1.2
+                        self.buff_ui:add_buff(effect)
+                    end 
+                    if effect == "death_defiance" then 
+                        self.death_defiance = self.death_defiance + 1
+                        self.buff_ui:add_buff(effect)
+                    end 
                     if not self.wave_active then 
                         ballons:clear()
                         self.buff_selected = true

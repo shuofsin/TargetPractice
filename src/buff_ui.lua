@@ -6,7 +6,9 @@ buff_ui = {
     buffs = {
         {buff = "ammo_boost", num = 0, sprite = nil},
         {buff = "reload_boost", num = 0, sprite = nil},
-        {buff = "multishot", num = 0, sprite = nil}
+        {buff = "multishot", num = 0, sprite = nil},
+        {buff = "score_mult", num = 0, sprite = nil},
+        {buff = "death_defiance", num = 0, sprite = nil}
     },
     num_active = 0,
 }
@@ -44,6 +46,14 @@ function buff_ui:add_buff(buff_name)
     for i, v in ipairs(self.buffs) do
         if v.buff == buff_name then 
             v.num = v.num + 1
+        end  
+    end
+end 
+
+function buff_ui:remove_buff(buff_name)
+    for i, v in ipairs(self.buffs) do
+        if v.buff == buff_name then 
+            v.num = v.num - 1
         end  
     end
 end 
