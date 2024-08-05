@@ -5,6 +5,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- few requires
     require("src/sec_explosion")
     require("src/sec_timeslow")
+    require("src/secondary")
 
 
     game.debug = debug
@@ -12,12 +13,12 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- stat trackers
     game.score = 0
     game.prev_score = game.score
-    game.starting_health = 5
+    game.starting_health = 1
     game.health = game.starting_health
     game.playing = true
     game.wave = 1
     game.wave_active = true
-    game.wave_length = 31
+    game.wave_length = 6
     game.rest_length = 11
 
     -- get font for text 
@@ -51,7 +52,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
 
     -- buff spawn table 
     game.buff_table = {}
-    game.buff_table["multishot"] = 1
+    game.buff_table["multishot"] = 12
     game.buff_table["ammo_boost"] = 1
     game.buff_table["reload_boost"] = 1
     game.buff_table["score_mult"] = 1
@@ -163,7 +164,7 @@ end
 
 -- spawn bonus 
 function game:spawn_bonus_ballons()
-    if (game.wave - 1) % 3 == 0 then
+    if (game.wave - 1) % 1 == 0 then
         local b_1 = game:select_random_buff_ballon()
         local b_2 = game:select_random_buff_ballon()
         while b_2 == b_1 do
@@ -247,14 +248,33 @@ function game:reset()
     game.spawn_table["spiral"] = 0
     game.spawn_table["speed"] = 0
 
+    game.buff_table = {}
+    game.buff_table["multishot"] = 1
+    game.buff_table["ammo_boost"] = 1
+    game.buff_table["reload_boost"] = 1
+    game.buff_table["score_mult"] = 1
+    game.buff_table["death_defiance"] = 1
+    game.buff_table["timeslow_sec"] = 1
+    game.buff_table["explosion_sec"] = 1
+
+    -- bonus table
+    game.bonus_table = {}
+    game.bonus_table["health"] = 1
+    game.bonus_table["point"] = 1
+
     -- other stuff
     game.buff_selected = false
     game.score_mult = 1
     game.death_defiance = 0
 
     -- secondary stuff 
+    game.secondary = secondary:init()
     game.charge = 0
     game.total_charge = game.secondary.ability.charge
+
+    -- reset pointers
+    pointers = {}
+    add_pointer()
 end 
 
 -- function control waves

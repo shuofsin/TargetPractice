@@ -4,6 +4,7 @@ function secondary:init(ballons_, pointer_, shoot_, game_)
     require("src/sec_explosion")
     require("src/sec_timeslow")
     self.ability = sec_explosion:init(ballons_, pointer_, shoot_, game_)
+    return self
 end 
 
 function secondary:update(dt)
