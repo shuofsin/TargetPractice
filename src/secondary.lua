@@ -21,3 +21,7 @@ end
 function secondary:reset()
     self:init(self.ability.ballons, self.ability.pointer, self.ability.shoot, self.ability.game)
 end 
+
+function secondary:get_reference() 
+    return self.ability.ballons, self.ability.pointer, self.ability.shoot, self.ability.game
+end 

@@ -55,8 +55,11 @@ end
 function buff_ui:remove_buff(buff_name, total)
     for i, v in ipairs(self.buffs) do
         if v.buff == buff_name then 
-            v.num = v.num - 1
-            if total then v.num = 0 end 
+            if total then 
+                v.num = 0 
+            else 
+                v.num = v.num - 1
+            end 
         end  
     end
 end 
@@ -64,7 +67,7 @@ end
 function buff_ui:remove_sec()
     for i, v in ipairs(self.buffs) do
         if v.is_sec then 
-            self:remove_buff(v.name, true)
+            buff_ui:remove_buff(v.buff, true)
         end 
     end
 end 

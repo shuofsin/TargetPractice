@@ -2,6 +2,11 @@ game = {}
 
 -- game init 
 function game:init(debug, start_state, _ballons, _buff_ui)
+    -- few requires
+    require("src/sec_explosion")
+    require("src/sec_timeslow")
+
+
     game.debug = debug
     
     -- stat trackers
@@ -51,6 +56,8 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.buff_table["reload_boost"] = 1
     game.buff_table["score_mult"] = 1
     game.buff_table["death_defiance"] = 1
+    game.buff_table["timeslow_sec"] = 1
+    game.buff_table["explosion_sec"] = 1
 
     -- bonus table
     game.bonus_table = {}
@@ -69,7 +76,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.total_charge = 5
 end 
 
-function game:set_secondary(secondary)
+function game:get_secondary_init(secondary)
     game.secondary = secondary
     game.total_charge = secondary.ability.charge
     game.buff_ui:remove_sec()
@@ -314,6 +321,32 @@ function game:suceed(v, i, shoot, pointers, ballons, gain_charge)
     if effect == "death_defiance" then 
         self.death_defiance = self.death_defiance + 1
         self.buff_ui:add_buff(effect)
+    end  
+    if effect == "timeslow_sec" then 
+        if self.secondary.ability.name ~= "timeslow_sec" then 
+            local ballons, pointer, shoot, game = self.secondary:get_reference()
+            self.secondary.ability = sec_timeslow:init(ballons, pointer, shoot, game)
+            self.total_charge = self.secondary.ability.charge
+            self.buff_ui:remove_sec()
+            self.buff_ui:add_buff(effect)
+            if self.charge > self.total_charge then self.charge = self.total_charge end
+        else
+            self.secondary.ability:level_up()
+            self.buff_ui:add_buff(effect) 
+        end 
+    end 
+    if effect == "explosion_sec" then 
+        if self.secondary.ability.name ~= "explosion_sec" then 
+            local ballons, pointer, shoot, game = self.secondary:get_reference()
+            self.secondary.ability = sec_explosion:init(ballons, pointer, shoot, game)
+            self.total_charge = self.secondary.ability.charge
+            self.buff_ui:remove_sec()
+            self.buff_ui:add_buff(effect)
+            if self.charge > self.total_charge then self.charge = self.total_charge end
+        else
+            self.secondary.ability:level_up()
+            self.buff_ui:add_buff(effect) 
+        end 
     end 
     if not self.wave_active then 
         ballons:clear()

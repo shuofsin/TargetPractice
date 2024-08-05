@@ -50,7 +50,7 @@ function sec_timeslow:activate(button)
 end 
 
 function sec_timeslow:level_up() 
-    self.duraction = self.duration + 1
+    self.duraction = self.duration + 2
 end 
 
 function sec_timeslow:reset()

@@ -10,7 +10,7 @@ function sec_explosion:init(ballons_, pointer_, shoot_, game_)
     self.num_frames = 13
     self.x = 0
     self.y = 0
-    self.scale = 12
+    self.scale = 8
     self.radius = 0
     self.ballons = ballons_
     self.pointer = pointer_
