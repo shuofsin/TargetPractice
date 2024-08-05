@@ -27,8 +27,8 @@ function love.load()
 
     -- window bullshit 
     gameWidth, gameHeight = 800, 600 
-    local windowWidth, windowHeight = love.window.getDesktopDimensions()
-    push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen=true})
+    local windowWidth, windowHeight = gameWidth, gameHeight
+    push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight)
 
     -- init objects 
     ballons:init(debug) 

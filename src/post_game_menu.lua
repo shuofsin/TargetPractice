@@ -83,18 +83,23 @@ function love.textinput(t)
     end 
 end 
 
-function love.keypressed(key)
-    local utf8 = require("utf8")
-    if key == "backspace" then
-        local byteoffset = utf8.offset(post_game_menu.text, -1)
+function love.keypressed(key, scancode)
+    if game:get_state() == "post_game" then
+        local utf8 = require("utf8")
+        if key == "backspace" then
+            local byteoffset = utf8.offset(post_game_menu.text, -1)
 
-        if byteoffset then
-            post_game_menu.text = string.sub(post_game_menu.text, 1, byteoffset - 1)
+            if byteoffset then
+                post_game_menu.text = string.sub(post_game_menu.text, 1, byteoffset - 1)
+            end
         end
-    end
-    if key == "return" and string.len(post_game_menu.text) > 0 and post_game_menu.text ~= "Score saved!" then 
-        post_game_menu.game:save_score(post_game_menu.text)
-        post_game_menu.text = "Score saved!"
-        post_game_menu:get_scores()
+        if key == "return" and string.len(post_game_menu.text) > 0 and post_game_menu.text ~= "Score saved!" then 
+            post_game_menu.game:save_score(post_game_menu.text)
+            post_game_menu.text = "Score saved!"
+            post_game_menu:get_scores()
+        end
+    end 
+    if scancode == "f" then 
+        push:switchFullscreen(gameWidth, gameHeight)
     end 
 end

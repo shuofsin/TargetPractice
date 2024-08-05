@@ -31,6 +31,12 @@ function pointer:update(dt, i, num_pointers)
     -- set the custom cursor to mouse position
     local dist_mult = 0.6
     local mouse_x, mouse_y = love.mouse.getPosition()
+    if mouse_x > gameWidth then 
+        mouse_x = gameWidth 
+    end 
+    if mouse_y > gameHeight then 
+        mouse_y = gameHeight 
+    end
     local total_width = num_pointers * self.sprite:getWidth() * self.scale
     local start = mouse_x - total_width / 2 
     self.x = start + (i - 1) * self.sprite:getWidth() * self.scale * dist_mult

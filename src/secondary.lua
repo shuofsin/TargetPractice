@@ -70,7 +70,7 @@ function secondary:check_effect()
         local b_x, b_y, b_w
         b_w = v.sprite:getWidth() * v.scale 
         if v.num_frames then 
-            b_w = b_w . v.num_frames
+            b_w = b_w / v.num_frames
         end 
         b_x = v.x + b_w * 0.5
         b_y = v.y + b_w * 0.4
