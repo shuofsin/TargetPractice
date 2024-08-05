@@ -66,3 +66,7 @@ function ballon:get_speed_boost()
     self.speed = self.speed + boost
     self.effect_sprite = love.graphics.newImage('assets/sprites/speed_boost_effect.png')
 end 
+
+function ballon:set_speed_mult(mult)
+    self.speed = self.speed * mult 
+end 

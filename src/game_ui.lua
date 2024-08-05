@@ -10,6 +10,13 @@ function game_ui:init(g_)
     game_ui.health_scale = 3
     game_ui.point_scale = 2.5
     game_ui.bar_length = gameWidth * 0.3
+
+    -- charge bar 
+    game_ui.c_empty_sprite = love.graphics.newImage('assets/sprites/special_symbol_empty.png')
+    game_ui.c_filled_sprite = love.graphics.newImage('assets/sprites/special_symbol_filled.png')
+    game_ui.c_charged_sprite = love.graphics.newImage('assets/sprites/special_symbol_charged.png')
+    game_ui.c_scale = 1
+    game_ui.c_width = game_ui.c_empty_sprite:getWidth() * game_ui.c_scale
 end
 
 function game_ui:draw()
@@ -48,21 +55,20 @@ function game_ui:draw()
     love.graphics.setLineWidth(1)
 
     -- draw charge 
-    local total_charge_length = (self.game.total_charge * 2 - 1) * 0.025
-    local charge_bar_start = gameWidth * 0.5 - gameWidth * total_charge_length / 2
-    for i=1, self.game.charge do 
-        love.graphics.setColor(love.math.colorFromBytes(233, 208, 149))
-        if self.game.charge == self.game.total_charge then love.graphics.setColor(love.math.colorFromBytes(87, 222, 87)) end
-        love.graphics.rectangle("fill", charge_bar_start + (i - 1) * gameWidth * 0.05, gameHeight * 0.125, gameWidth * 0.025, gameWidth * 0.025)
-        love.graphics.setColor(1, 1, 1)
-    end 
+    local total_charge_length = gameWidth * 0.3
+    local charge_bar_start = gameWidth * 0.5 - total_charge_length * 0.5
+    local dist_between_symbols = total_charge_length / (self.game.total_charge - 1)
     for i=1, self.game.total_charge do 
-        love.graphics.setColor(0, 0, 0)
-        love.graphics.setLineWidth(2)
-        love.graphics.rectangle("line", charge_bar_start + (i - 1) * gameWidth * 0.05, gameHeight * 0.125, gameWidth * 0.025, gameWidth * 0.025)
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.setLineWidth(1)
+        love.graphics.draw(self.c_empty_sprite, charge_bar_start + (i - 1) * dist_between_symbols - self.c_width / 2, gameHeight * 0.125, nil, game_ui.c_scale)
     end 
+    for i=1, self.game.charge do 
+        local sprite = self.c_filled_sprite
+        if self.game.charge == self.game.total_charge then 
+            sprite = self.c_charged_sprite
+        end 
+        love.graphics.draw(sprite, charge_bar_start + (i - 1) * dist_between_symbols - self.c_width / 2, gameHeight * 0.125, nil, game_ui.c_scale)
+    end 
+   
 
     -- draw title message
     local wave_tracker

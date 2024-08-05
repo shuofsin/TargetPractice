@@ -34,7 +34,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.time_remaining = self.time / self.wave_length 
 
     -- spawn table
-    game.spawn_chance = 10
+    game.spawn_chance = 20
     game.spawn_table = {}
     game.spawn_table["red"] = 1
     game.spawn_table["green"] = 0
@@ -67,6 +67,13 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- secondary stuff 
     game.charge = 0
     game.total_charge = 5
+end 
+
+function game:set_secondary(secondary)
+    game.secondary = secondary
+    game.total_charge = secondary.ability.charge
+    game.buff_ui:remove_sec()
+    game.buff_ui:add_buff(game.secondary.ability.name)
 end 
 
 -- game update
@@ -233,8 +240,14 @@ function game:reset()
     game.spawn_table["spiral"] = 0
     game.spawn_table["speed"] = 0
 
+    -- other stuff
+    game.buff_selected = false
     game.score_mult = 1
     game.death_defiance = 0
+
+    -- secondary stuff 
+    game.charge = 0
+    game.total_charge = game.secondary.ability.charge
 end 
 
 -- function control waves

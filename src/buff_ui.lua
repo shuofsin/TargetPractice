@@ -8,7 +8,9 @@ buff_ui = {
         {buff = "reload_boost", num = 0, sprite = nil},
         {buff = "multishot", num = 0, sprite = nil},
         {buff = "score_mult", num = 0, sprite = nil},
-        {buff = "death_defiance", num = 0, sprite = nil}
+        {buff = "death_defiance", num = 0, sprite = nil},
+        {buff = "explosion_sec", num = 0, sprite = nil, is_sec = true},
+        {buff = "timeslow_sec", num = 0, sprite = nil, is_sec = true}
     },
     num_active = 0,
 }
@@ -50,10 +52,19 @@ function buff_ui:add_buff(buff_name)
     end
 end 
 
-function buff_ui:remove_buff(buff_name)
+function buff_ui:remove_buff(buff_name, total)
     for i, v in ipairs(self.buffs) do
         if v.buff == buff_name then 
             v.num = v.num - 1
+            if total then v.num = 0 end 
         end  
+    end
+end 
+
+function buff_ui:remove_sec()
+    for i, v in ipairs(self.buffs) do
+        if v.is_sec then 
+            self:remove_buff(v.name, true)
+        end 
     end
 end 

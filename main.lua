@@ -43,6 +43,7 @@ function love.load()
     options_menu:init(debug)
     game_ui:init(game)
     secondary:init(ballons, pointers, shoot, game)
+    game:set_secondary(secondary)
 
     -- pop-up messages?
     pop_up_message = ""
@@ -65,6 +66,9 @@ function love.update(dt)
         love.event.quit(0)
     elseif game:get_state() == "post_game" or game:get_state() == "options" then 
         background = love.graphics.newImage("assets/sprites/background_post.png")  
+    end 
+    if game:get_state() == "post_game" then 
+        secondary:reset()
     end 
     -- update pointer
     for i, v in ipairs(pointers) do 
