@@ -1,8 +1,8 @@
 reload_boost_ballon = ballon:new(
     {
         scale = 6,
-        x = (love.graphics.getWidth() / 2),
-        y = (love.graphics.getHeight() + 50),
+        x = (gameWidth / 2),
+        y = (gameHeight + 50),
         speed = 200,
         sprite_path = 'assets/sprites/reload_boost_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
@@ -19,10 +19,11 @@ end
 
 function reload_boost_ballon:update(dt)
     self.y = self.y - self.speed * dt
-    if self.speed > 0 and self.y < love.graphics.getWidth() / 2 - 200 then 
+    if self.speed > 0 and self.y < gameWidth / 2 - 200 then 
         self.speed = -100
-    elseif self.speed < 0 and self.y > love.graphics.getWidth() / 2 - 100 then 
+    elseif self.speed < 0 and self.y > gameWidth / 2 - 100 then 
         self.speed = 100
+        
     end 
 end 
 

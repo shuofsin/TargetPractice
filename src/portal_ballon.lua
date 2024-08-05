@@ -1,8 +1,8 @@
 portal_ballon = ballon:new(
     {
         scale = 4,
-        x = (love.graphics.getWidth() / 2),
-        y = (love.graphics.getHeight() + 50),
+        x = (gameWidth / 2),
+        y = (gameHeight + 50),
         speed = 100,
         sprite_path = 'assets/sprites/portal_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
@@ -25,7 +25,7 @@ function portal_ballon:init()
     self.grid = anim8.newGrid(48, 48, self.sprite:getWidth(), self.sprite:getHeight())
     self.animation = anim8.newAnimation(self.grid('1-16', 1), 0.1)
     self.sound = love.audio.newSource(self.sound_path, "static")
-    self.x = math.random(love.graphics.getWidth() * 0.2, love.graphics.getWidth() * 0.8)
+    self.x = math.random(gameWidth * 0.2, gameWidth * 0.8)
     self.sound:setVolume(0.05)
 end
 

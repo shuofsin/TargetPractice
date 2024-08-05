@@ -1,8 +1,8 @@
 blue_ballon = ballon:new(
     {
         scale = 4,
-        x = (love.graphics.getWidth() / 2),
-        y = (love.graphics.getHeight() + 50),
+        x = (gameWidth / 2),
+        y = (gameHeight + 50),
         speed = 400,
         sprite_path = 'assets/sprites/blue_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',

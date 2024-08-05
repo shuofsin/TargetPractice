@@ -7,6 +7,7 @@ function love.load()
 
     -- imports 
     anim8 = require("libraries/anim8")
+    push = require("libraries/push")
     require("src/ballons")
     require("src/pointer")
     require("src/shoot")
@@ -21,9 +22,13 @@ function love.load()
     
     -- set window and resolution settings
     love.graphics.setDefaultFilter("nearest", "nearest")
-    love.window.setMode(800, 600, {resizable=true})
     love.window.setTitle("Target Practice (Pre-Pre-Alpha)")
     background = love.graphics.newImage("assets/sprites/background.png")
+
+    -- window bullshit 
+    gameWidth, gameHeight = 800, 600 
+    local windowWidth, windowHeight = love.window.getDesktopDimensions()
+    push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen=true})
 
     -- init objects 
     ballons:init(debug) 
@@ -40,10 +45,6 @@ function love.load()
     -- pop-up messages?
     pop_up_message = ""
     pop_up_font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 50 )
-    win_w, win_h = love.graphics.getDimensions() 
-    win_d = math.sqrt(win_w * win_w + win_h * win_h)
-    s_x = win_w / 800
-    s_y = win_h / 600
 end 
 
 function love.update(dt)
@@ -72,14 +73,10 @@ function love.update(dt)
             start_time = nil
         end 
     end 
-    win_w, win_h = love.graphics.getDimensions() 
-    win_d = math.sqrt(win_w * win_w + win_h * win_h)
-    s_x = win_w / 800
-    s_y = win_h / 600
 end
 
 function love.draw()
-    love.graphics.scale(s_x, s_y)
+    push:start()
     love.graphics.draw(background, 0, 0)
     if game:get_state() == "game" then
         -- draw ballons
@@ -91,7 +88,7 @@ function love.draw()
         -- get secondary
         secondary:draw()
         -- print pop-up
-        love.graphics.printf(pop_up_message, pop_up_font, 0, win_h * 0.4, win_w, "center")
+        love.graphics.printf(pop_up_message, pop_up_font, 0, gameHeight * 0.4, gameWidth, "center")
     elseif game:get_state() == "main" then 
         main_menu:draw()
     elseif game:get_state() == "post_game" then 
@@ -101,6 +98,7 @@ function love.draw()
     for i, v in ipairs(pointers) do 
         v:draw()
     end 
+    push:finish()
 end 
 
 -- shoot! do they score?

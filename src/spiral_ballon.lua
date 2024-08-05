@@ -1,8 +1,8 @@
 spiral_ballon = ballon:new(
     {
         scale = 4,
-        x = (love.graphics.getWidth() / 2),
-        y = (love.graphics.getHeight() + 50),
+        x = (gameWidth / 2),
+        y = (gameHeight + 50),
         speed = 150,
         sprite_path = 'assets/sprites/spiral_ballon-no_anim.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
@@ -28,7 +28,7 @@ function spiral_ballon:init()
     ]]
     self.sound = love.audio.newSource(self.sound_path, "static")
     self.sound:setVolume(0.05)
-    self.x = math.random(love.graphics.getWidth() * 0.3, love.graphics.getWidth() * 0.6)
+    self.x = math.random(gameWidth * 0.3, gameWidth * 0.6)
     self.c = {}
     self.c.x = self.x 
     self.c.y = self.y

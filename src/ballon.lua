@@ -11,7 +11,7 @@ end
 function ballon:init() 
     self.sprite = love.graphics.newImage(self.sprite_path)
     self.sound = love.audio.newSource(self.sound_path, "static")
-    self.x = math.random(50, love.graphics.getWidth() - 50)
+    self.x = math.random(50, gameWidth - 50)
     self.sound:setVolume(0.05)
 end
 
@@ -45,11 +45,11 @@ function ballon:get_info()
 end 
 
 function ballon:set_x_pos_rel(pos)
-    self.x = love.graphics.getWidth() * pos - self.sprite:getWidth() * self.scale / 2
+    self.x = gameWidth * pos - self.sprite:getWidth() * self.scale / 2
 end 
 
 function ballon:set_y_pos_rel(pos)
-    self.y = love.graphics.getHeight() * pos - self.sprite:getHeight() * self.scale / 2
+    self.y = gameHeight * pos - self.sprite:getHeight() * self.scale / 2
 end 
 
 function ballon:set_x_pos_abs(pos)

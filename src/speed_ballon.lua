@@ -1,8 +1,8 @@
 speed_ballon = ballon:new(
     {
         scale = 4,
-        x = (love.graphics.getWidth() / 2),
-        y = (love.graphics.getHeight() * 1.5),
+        x = (gameWidth / 2),
+        y = (gameHeight * 1.5),
         speed = 100,
         sprite_path = 'assets/sprites/speed_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
@@ -20,7 +20,7 @@ function speed_ballon:new(new)
 end 
 
 function speed_ballon:init() 
-    self.x = math.random(love.graphics.getWidth() * 0.2, love.graphics.getWidth() * 0.8)
+    self.x = math.random(gameWidth * 0.2, gameWidth * 0.8)
 
     self.sprite = love.graphics.newImage(self.sprite_path)
     self.grid = anim8.newGrid(32, 32, self.sprite:getWidth(), self.sprite:getHeight())
