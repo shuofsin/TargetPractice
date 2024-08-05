@@ -34,7 +34,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.time_remaining = self.time / self.wave_length 
 
     -- spawn table
-    game.spawn_chance = 15
+    game.spawn_chance = 10
     game.spawn_table = {}
     game.spawn_table["red"] = 1
     game.spawn_table["green"] = 0

@@ -19,6 +19,7 @@ function love.load()
     require("src/buff_ui")
     require("src/game_ui")
     require("src/secondary")
+    require("src/options_menu")
     
     -- set window and resolution settings
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -39,6 +40,7 @@ function love.load()
     game:init(debug, "main", ballons, buff_ui)
     post_game_menu:init(debug, game)
     main_menu:init(debug)
+    options_menu:init(debug)
     game_ui:init(game)
     secondary:init(ballons, pointers, shoot, game)
 
@@ -48,6 +50,9 @@ function love.load()
 end 
 
 function love.update(dt)
+    if game:get_state() == "main" then 
+        background = love.graphics.newImage("assets/sprites/background.png")
+    end 
     if game:get_state() == "game" then 
         background = love.graphics.newImage("assets/sprites/background.png")
         -- update shooter
@@ -58,7 +63,7 @@ function love.update(dt)
         secondary:update(dt)
     elseif game:get_state() == "exit" then 
         love.event.quit(0)
-    elseif game:get_state() == "post_game" then 
+    elseif game:get_state() == "post_game" or game:get_state() == "options" then 
         background = love.graphics.newImage("assets/sprites/background_post.png")  
     end 
     -- update pointer
@@ -93,6 +98,8 @@ function love.draw()
         main_menu:draw()
     elseif game:get_state() == "post_game" then 
         post_game_menu:draw()
+    elseif game:get_state() == "options" then 
+        options_menu:draw()
     end 
     -- draw the pointer above everything
     for i, v in ipairs(pointers) do 
@@ -110,6 +117,8 @@ function love.mousepressed(x, y, button)
         main_menu:use_menu(x, y, button, game)
     elseif game:get_state() == "post_game" then 
         post_game_menu:use_menu(x, y, button, game)
+    elseif game:get_state() == "options" then 
+        options_menu:use_menu(x, y, button, game)
     end 
     pointers[1]:play_sound("hit")
 end

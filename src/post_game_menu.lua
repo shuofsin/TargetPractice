@@ -5,8 +5,9 @@ function post_game_menu:init(debug, game)
     menu:init(debug)
 
     -- buttons
+    post_game_menu.buttons = {} 
     post_game_menu.buttons.play = post_game_menu:create_button("game", gameWidth / 2, gameHeight * 0.75, "assets/sprites/play.png", 1.3)
-    post_game_menu.buttons.exit = post_game_menu:create_button("exit", gameWidth / 2, gameHeight * 0.9, "assets/sprites/exit.png", 1.3)
+    post_game_menu.buttons.back = post_game_menu:create_button("main", gameWidth / 2, gameHeight * 0.9, "assets/sprites/back.png", 1.3)
 
     -- font
     post_game_menu.font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 30)
@@ -98,8 +99,5 @@ function love.keypressed(key, scancode)
             post_game_menu.text = "Score saved!"
             post_game_menu:get_scores()
         end
-    end 
-    if scancode == "f" then 
-        push:switchFullscreen(gameWidth, gameHeight)
     end 
 end

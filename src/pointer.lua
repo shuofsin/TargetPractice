@@ -13,7 +13,7 @@ function pointer:init(debug)
     new_pointer.x = 0 
     new_pointer.y = 0
     new_pointer.scale = 3
-    new_pointer.sprite_size = 32
+    new_pointer.sprite_size = 16
     new_pointer.sprite = love.graphics.newImage("assets/sprites/pointer_scaled.png")
     new_pointer.debug = debug
     new_pointer.shooting = false
@@ -37,9 +37,9 @@ function pointer:update(dt, i, num_pointers)
     if mouse_y > gameHeight then 
         mouse_y = gameHeight 
     end
-    local total_width = num_pointers * self.sprite:getWidth() * self.scale
-    local start = mouse_x - total_width / 2 
-    self.x = start + (i - 1) * self.sprite:getWidth() * self.scale * dist_mult
+    local total_width = num_pointers * self.sprite:getWidth() * self.scale + (num_pointers - 1) * self.sprite:getWidth() * self.scale * dist_mult
+    local start = mouse_x - total_width / 2
+    self.x = start + (i - 1) * self.sprite:getWidth() * self.scale + (i - 1) * self.sprite:getWidth() * self.scale * dist_mult
     self.y = mouse_y - self.sprite_size * self.scale / 2 
 end 
 
