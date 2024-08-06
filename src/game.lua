@@ -5,8 +5,8 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- few requires
     require("src/sec_explosion")
     require("src/sec_timeslow")
+    require("src/sec_blackhole")
     require("src/secondary")
-
 
     game.debug = debug
     
@@ -198,7 +198,7 @@ end
 
 -- spawn bonus 
 function game:spawn_bonus_ballons()
-    if (game.wave - 1) % 3 == 0 then
+    if (game.wave - 1) % 1 == 0 then
         local b_1 = game:select_random_buff_ballon()
         local b_2 = game:select_random_buff_ballon()
         while b_2 == b_1 do
@@ -411,7 +411,7 @@ function game:suceed(v, i, shoot, pointers, ballons, gain_charge)
     if effect == "blackhole_sec" then 
         if self.secondary.ability.name ~= "blackhole_sec" then 
             local ballons, pointer, shoot, game = self.secondary:get_reference()
-            self.secondary.ability = blackhole_sec:init(ballons, pointer, shoot, game)
+            self.secondary.ability = sec_blackhole:init(ballons, pointer, shoot, game)
             self.total_charge = self.secondary.ability.charge
             self.buff_ui:remove_sec()
             self.buff_ui:add_buff(effect)

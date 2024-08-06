@@ -21,6 +21,7 @@ function ballons:init(debug)
     require("src/death_defiance_ballon")
     require("src/timeslow_sec_ballon")
     require("src/explosion_sec_ballon")
+    require("src/blackhole_sec_ballon")
     require("src/pop")
 
     ballons.sounds = {}

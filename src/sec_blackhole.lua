@@ -10,7 +10,7 @@ function sec_blackhole:init(ballons_, pointer_, shoot_, game_)
     self.num_frames = 12
     self.x = 0
     self.y = 0
-    self.scale = 8
+    self.scale = 12
     self.radius = 0
     self.ballons = ballons_
     self.pointer = pointer_
@@ -88,7 +88,7 @@ function sec_blackhole:check_effect(dt)
         dist_x = b_x - center_x
         dist_y = b_y - center_y 
         dist = math.sqrt(dist_x * dist_x + dist_y * dist_y) 
-        local combined_radius = b_r + width / 2
+        local combined_radius = b_r + width / 4
         if dist < combined_radius then 
             self:pull_ballon(dist_x, dist_y, v, dt)
         end 
@@ -101,9 +101,9 @@ function sec_blackhole:pull_ballon(dist_x, dist_y, ballon, dt)
 end 
 
 function sec_blackhole:level_up() 
-    -- todo
+    self.duration = self.duration + 2
 end 
 
 function sec_blackhole:reset()
-    -- todo
+    self.duration = 3 
 end 
