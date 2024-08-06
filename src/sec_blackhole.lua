@@ -97,7 +97,7 @@ end
 
 function sec_blackhole:pull_ballon(dist_x, dist_y, ballon, dt)
     ballon.x = ballon.x - self.g * dist_x
-    ballon.y = ballon.y - self.g * dist_y * 7 
+    ballon.y = ballon.y - self.g * dist_y * 6
 end 
 
 function sec_blackhole:level_up() 
