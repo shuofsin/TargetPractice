@@ -3,6 +3,7 @@
 Arcade-style game made to get familiar with Love2d engine and learn Lua
 
 ## To-Do
+- Guide menu
 - Needs two more special ballons I think 
     - One for final section
     - One for final wave (boss?)

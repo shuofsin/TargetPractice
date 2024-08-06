@@ -18,7 +18,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.playing = true
     game.wave = 1
     game.wave_active = true
-    game.wave_length = 6
+    game.wave_length = 31
     game.rest_length = 11
 
     -- get font for text 
@@ -295,6 +295,7 @@ function game:control_waves(dt)
     elseif self.time >= self.rest_length and not self.wave_active then 
         self.start = love.timer.getTime()
         self.time = self.start
+        game.ballons:clear()
         game:update_chance()
         self.wave_active = true
         self.buff_selected = false
