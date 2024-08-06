@@ -94,6 +94,9 @@ function love.draw()
     push:start()
     love.graphics.draw(background, 0, 0)
     if game:get_state() == "game" then
+        if secondary.ability.name == "blackhole_sec" then 
+            secondary:draw()
+        end 
         -- draw ballons
         ballons:draw()
         -- draw shoot UI
@@ -101,9 +104,11 @@ function love.draw()
         -- draw gui
         game_ui:draw()
         -- get secondary
-        secondary:draw()
+        if secondary.ability.name ~= "blackhole_sec" then secondary:draw() end 
         -- print pop-up
         love.graphics.printf(pop_up_message, pop_up_font, 0, gameHeight * 0.4, gameWidth, "center")
+        -- game paused function 
+        game:draw()
     elseif game:get_state() == "main" then 
         main_menu:draw()
     elseif game:get_state() == "post_game" then 
@@ -125,6 +130,7 @@ function love.mousepressed(x, y, button)
     if game:get_state() == "game" then 
         game:success_check(x, y, button, shoot, pointers, ballons)
         secondary:activate(button)
+        game:goToMenu(x, y, button)
     elseif game:get_state() == "main" then 
         main_menu:use_menu(x, y, button, game)
     elseif game:get_state() == "post_game" then 

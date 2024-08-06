@@ -1,13 +1,13 @@
-sec_explosion = {}
+sec_blackhole = {}
 
-function sec_explosion:init(ballons_, pointer_, shoot_, game_) 
-    self.name = "explosion_sec"
-    self.charge = 5
-    self.sprite = love.graphics.newImage("assets/sprites/secondary_explosion.png") 
-    self.grid = anim8.newGrid(32, 32, self.sprite:getWidth(), self.sprite:getHeight())
-    self.animation = anim8.newAnimation(self.grid('1-13', 1), 0.02)
+function sec_blackhole:init(ballons_, pointer_, shoot_, game_) 
+    self.name = "blackhole_sec"
+    self.charge = 10
+    self.sprite = love.graphics.newImage("assets/sprites/blackhole.png") 
+    self.grid = anim8.newGrid(48, 48, self.sprite:getWidth(), self.sprite:getHeight())
+    self.animation = anim8.newAnimation(self.grid('1-12', 1), 0.075)
     self.active = false
-    self.num_frames = 13
+    self.num_frames = 12
     self.x = 0
     self.y = 0
     self.scale = 8
@@ -16,40 +16,48 @@ function sec_explosion:init(ballons_, pointer_, shoot_, game_)
     self.pointer = pointer_
     self.shoot = shoot_
     self.game = game_
+    self.timer = nil
+    self.duration = 3
+    self.g = 0.01
     return self
 end 
 
-function sec_explosion:update(dt)
+function sec_blackhole:update(dt)
     if self.active then 
         self.animation:update(dt) 
-        local frame = self.animation.position
-        self.radius = (frame + 1) * self.scale
-        if frame == 13 then 
+        self:check_effect(dt)
+        if not self.timer then 
+            self.timer = love.timer.getTime() 
+        elseif love.timer.getTime() - self.timer > self.duration then 
             self.active = false
+            self.timer = nil
         end 
-        self:check_effect()
     else 
         self.animation:gotoFrame('1')
         if not self.animation.timer then 
-            self.animation = anim8.newAnimation(self.grid('1-13', 1), 0.025)
+            self.animation = anim8.newAnimation(self.grid('1-12', 1), 0.075)
         end 
     end 
 end 
 
-function sec_explosion:draw()
+function sec_blackhole:draw()
     if self.active then 
         self.animation:draw(self.sprite, self.x, self.y, nil, self.scale)
+        local width = self.sprite:getWidth() * self.scale * (1 / self.num_frames)
+        local height = self.sprite:getHeight() * self.scale
+        local center_x = self.x + width / 2
+        local center_y = self.y + height / 2
     end 
 end 
 
-function sec_explosion:set_pos(x, y)
+function sec_blackhole:set_pos(x, y)
     local width = self.sprite:getWidth() * self.scale * (1 / self.num_frames)
     local height = self.sprite:getHeight() * self.scale
     self.x = x - width / 2
     self.y = y - height / 2
 end 
 
-function sec_explosion:activate(button)
+function sec_blackhole:activate(button)
     if button == 2 and not self.active then 
         if self.game.charge == self.game.total_charge then 
             self.game.charge = 0
@@ -61,7 +69,7 @@ function sec_explosion:activate(button)
 end 
 
 -- calculates pointer distance to center and returns true if dist is within radius, returns false otherwise
-function sec_explosion:check_effect()
+function sec_blackhole:check_effect(dt)
     local width = self.sprite:getWidth() * self.scale * (1 / self.num_frames)
     local height = self.sprite:getHeight() * self.scale
     local center_x = self.x + width / 2
@@ -80,18 +88,22 @@ function sec_explosion:check_effect()
         dist_x = b_x - center_x
         dist_y = b_y - center_y 
         dist = math.sqrt(dist_x * dist_x + dist_y * dist_y) 
-        local combined_radius = b_r + self.radius 
+        local combined_radius = b_r + width / 2
         if dist < combined_radius then 
-            self.game:suceed(v, i, self.shoot, self.pointer, self.ballons, false)
+            self:pull_ballon(dist_x, dist_y, v, dt)
         end 
     end 
 end 
 
-function sec_explosion:level_up() 
-    self.scale = math.floor(self.scale * 1.5)
+function sec_blackhole:pull_ballon(dist_x, dist_y, ballon, dt)
+    ballon.x = ballon.x - self.g * dist_x
+    ballon.y = ballon.y - self.g * dist_y * 7 
 end 
 
-function sec_explosion:reset()
-    self.active = false
-    self.scale = 12
+function sec_blackhole:level_up() 
+    -- todo
+end 
+
+function sec_blackhole:reset()
+    -- todo
 end 

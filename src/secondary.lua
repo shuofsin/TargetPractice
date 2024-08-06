@@ -3,6 +3,7 @@ secondary = {}
 function secondary:init(ballons_, pointer_, shoot_, game_) 
     require("src/sec_explosion")
     require("src/sec_timeslow")
+    require("src/sec_blackhole")
     self.ability = sec_explosion:init(ballons_, pointer_, shoot_, game_)
     return self
 end 
@@ -16,7 +17,7 @@ function secondary:draw()
 end 
 
 function secondary:activate(button)
-    self.ability:activate(button)
+    if not self.ability.game.paused then self.ability:activate(button) end 
 end 
 
 function secondary:reset()

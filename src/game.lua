@@ -13,7 +13,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- stat trackers
     game.score = 0
     game.prev_score = game.score
-    game.starting_health = 1
+    game.starting_health = 3
     game.health = game.starting_health
     game.playing = true
     game.wave = 1
@@ -23,6 +23,8 @@ function game:init(debug, start_state, _ballons, _buff_ui)
 
     -- get font for text 
     game.font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 30)
+    game.paused_font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 70)
+
 
     -- get relative game time
     game.start = love.timer.getTime()
@@ -52,13 +54,14 @@ function game:init(debug, start_state, _ballons, _buff_ui)
 
     -- buff spawn table 
     game.buff_table = {}
-    game.buff_table["multishot"] = 12
+    game.buff_table["multishot"] = 1
     game.buff_table["ammo_boost"] = 1
     game.buff_table["reload_boost"] = 1
     game.buff_table["score_mult"] = 1
     game.buff_table["death_defiance"] = 1
     game.buff_table["timeslow_sec"] = 1
     game.buff_table["explosion_sec"] = 1
+    game.buff_table["blackhole_sec"] = 1
 
     -- bonus table
     game.bonus_table = {}
@@ -75,6 +78,8 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- secondary stuff 
     game.charge = 0
     game.total_charge = 5
+
+    game.paused = false
 end 
 
 function game:get_secondary_init(secondary)
@@ -86,12 +91,41 @@ end
 
 -- game update
 function game:update(dt)
-    game:wave_update(dt)
-    if game.wave_active then 
-        game:spawn_ballons(dt) 
-    end
-    game.buff_ui:update(dt)
+    if not game.paused then 
+        game:wave_update(dt)
+        if game.wave_active then 
+            game:spawn_ballons(dt) 
+        end
+        game.buff_ui:update(dt)
+    else 
+        game.start = game.start + dt
+        game.time = game.time + dt
+    end 
 end
+
+function game:draw() 
+    if game.paused then 
+        love.graphics.setColor(0, 0, 0, 0.5)
+        love.graphics.rectangle("fill", 0, 0, gameWidth, gameHeight)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.printf("Paused", self.paused_font, 0, gameHeight * 0.4, gameWidth, "center")
+        love.graphics.printf("Give up", self.font, 0, gameHeight * 0.6, gameWidth, "center")
+    end 
+end 
+
+function game:goToMenu(x, y, button)
+    if button == 1 and game.paused then 
+        local min_x, min_y, max_x, max_y
+        min_x = gameWidth * 0.4
+        min_y = gameHeight * 0.6
+        max_x = gameWidth * 0.4 + gameWidth * 0.2
+        max_y = gameHeight * 0.6 + gameHeight * 0.05
+        if x > min_x and x < max_x and y > min_y and y < max_y then 
+            self:set_state("main")
+            self:reset()
+        end
+    end 
+end 
 
 -- reset time 
 function game:reset_time()
@@ -164,7 +198,7 @@ end
 
 -- spawn bonus 
 function game:spawn_bonus_ballons()
-    if (game.wave - 1) % 1 == 0 then
+    if (game.wave - 1) % 3 == 0 then
         local b_1 = game:select_random_buff_ballon()
         local b_2 = game:select_random_buff_ballon()
         while b_2 == b_1 do
@@ -256,6 +290,7 @@ function game:reset()
     game.buff_table["death_defiance"] = 1
     game.buff_table["timeslow_sec"] = 1
     game.buff_table["explosion_sec"] = 1
+    game.buff_table["blackhole_sec"] = 1
 
     -- bonus table
     game.bonus_table = {}
@@ -268,13 +303,16 @@ function game:reset()
     game.death_defiance = 0
 
     -- secondary stuff 
-    game.secondary = secondary:init()
+    game.secondary = secondary:init(ballons, pointers, shoot, game)
     game.charge = 0
     game.total_charge = game.secondary.ability.charge
 
     -- reset pointers
     pointers = {}
     add_pointer()
+    game.paused = false
+    game.ballons:clear()
+    game.buff_ui:clear()
 end 
 
 -- function control waves
@@ -304,7 +342,7 @@ end
 
 -- add score if ballon is hit
 function game:success_check(x, y, button, shoot, pointers, ballons)
-    if button == 1 and shoot.current_ammo >= 0 then
+    if button == 1 and shoot.current_ammo >= 0 and not game.paused then
         pointer:set_shooting(true)
         for j, w in ipairs(pointers) do
             for i, v in ipairs(ballons.list) do
@@ -333,6 +371,7 @@ function game:suceed(v, i, shoot, pointers, ballons, gain_charge)
     end 
     if effect == "multishot" then 
         add_pointer()
+        add_pointer()
         self.buff_ui:add_buff(effect)
     end 
     if effect == "score_mult" then 
@@ -360,6 +399,19 @@ function game:suceed(v, i, shoot, pointers, ballons, gain_charge)
         if self.secondary.ability.name ~= "explosion_sec" then 
             local ballons, pointer, shoot, game = self.secondary:get_reference()
             self.secondary.ability = sec_explosion:init(ballons, pointer, shoot, game)
+            self.total_charge = self.secondary.ability.charge
+            self.buff_ui:remove_sec()
+            self.buff_ui:add_buff(effect)
+            if self.charge > self.total_charge then self.charge = self.total_charge end
+        else
+            self.secondary.ability:level_up()
+            self.buff_ui:add_buff(effect) 
+        end 
+    end 
+    if effect == "blackhole_sec" then 
+        if self.secondary.ability.name ~= "blackhole_sec" then 
+            local ballons, pointer, shoot, game = self.secondary:get_reference()
+            self.secondary.ability = blackhole_sec:init(ballons, pointer, shoot, game)
             self.total_charge = self.secondary.ability.charge
             self.buff_ui:remove_sec()
             self.buff_ui:add_buff(effect)

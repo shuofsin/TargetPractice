@@ -30,11 +30,14 @@ function shoot:update(dt, time)
             self.begin_reload = love.timer.getTime()
             self.reload_wheel.visible = true
             self.reload_wheel.animation:gotoFrame(1)
-        elseif love.timer.getTime() - self.begin_reload >= self.reload_wheel.time_to_reload then 
+        elseif love.timer.getTime() - self.begin_reload >= self.reload_wheel.time_to_reload and not game.paused then 
             shoot:reload_darts()
             self.reload_wheel.visible = false
-        else 
+        elseif not game.paused then 
             self.reload_wheel.animation:update(dt)
+        end 
+        if game.paused then 
+            self.begin_reload = self.begin_reload + dt
         end 
     end
 end

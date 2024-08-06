@@ -29,7 +29,7 @@ end
 -- update pointer 
 function pointer:update(dt, i, num_pointers)
     -- set the custom cursor to mouse position
-    local dist_mult = 0.6
+    local dist_mult = 0.3
     local mouse_x, mouse_y = love.mouse.getPosition()
     if mouse_x > gameWidth then 
         mouse_x = gameWidth 

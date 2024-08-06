@@ -10,7 +10,8 @@ buff_ui = {
         {buff = "score_mult", num = 0, sprite = nil},
         {buff = "death_defiance", num = 0, sprite = nil},
         {buff = "explosion_sec", num = 0, sprite = nil, is_sec = true},
-        {buff = "timeslow_sec", num = 0, sprite = nil, is_sec = true}
+        {buff = "timeslow_sec", num = 0, sprite = nil, is_sec = true},
+        {buff = "blackhole_sec", num = 0, sprite = nil, is_sec = true}
     },
     num_active = 0,
 }
@@ -70,4 +71,10 @@ function buff_ui:remove_sec()
             buff_ui:remove_buff(v.buff, true)
         end 
     end
+end 
+
+function buff_ui:clear()
+    for i, v in ipairs(self.buffs) do 
+        self:remove_buff(v.buff, true)
+    end 
 end 

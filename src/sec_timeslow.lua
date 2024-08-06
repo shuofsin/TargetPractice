@@ -21,13 +21,15 @@ function sec_timeslow:update(dt)
         end  
         if not self.timer then 
             self.timer = love.timer.getTime() 
-        elseif love.timer.getTime() - self.timer  >= self.duration then 
+        elseif love.timer.getTime() - self.timer  >= self.duration and not self.game.paused then 
             self.active = false 
             self.timer = nil
             for i, v in ipairs(self.ballons.list) do
                 if v.sped_up then v:set_speed_mult(1 / self.speed_mult) end
                 v.sped_up = false
             end 
+        elseif self.game.paused then 
+            self.timer = self.timer + dt
         end 
     end
 end 

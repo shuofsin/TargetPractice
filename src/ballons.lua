@@ -141,6 +141,8 @@ function ballons:create_ballon(b_type, x_pos, y_pos)
         new_ballon = explosion_sec_ballon:new() 
     elseif b_type == "timeslow_sec" then 
         new_ballon = timeslow_sec_ballon:new() 
+    elseif b_type == "blackhole_sec" then 
+        new_ballon = blackhole_sec_ballon:new()
     end 
 
     new_ballon:init() 
