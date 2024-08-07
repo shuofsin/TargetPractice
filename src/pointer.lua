@@ -20,10 +20,10 @@ function pointer:init(debug)
     new_pointer.isEmpty = false
     new_pointer.sounds = {}
     new_pointer.sounds.hit = love.audio.newSource("assets/sounds/dart_throw.mp3", "static")
+    new_pointer.sounds.hit:setPitch(1.5)
+    new_pointer.sounds.hit:setVolume(0.1)
     new_pointer.sounds.select = love.audio.newSource("assets/sounds/select.mp3", "static")
     new_pointer.sounds.select:setVolume(0.5)
-    new_pointer.sounds.empty = love.audio.newSource("assets/sounds/empty_throw.mp3", "static")
-    new_pointer.sounds.empty:setVolume(0.5)
     love.mouse.setVisible(false)
     return new_pointer
 end
@@ -43,6 +43,9 @@ function pointer:update(dt, i, num_pointers)
     local start = mouse_x - total_width / 2
     self.x = start + (i - 1) * self.sprite:getWidth() * self.scale + (i - 1) * self.sprite:getWidth() * self.scale * dist_mult
     self.y = mouse_y - self.sprite_size * self.scale / 2 
+    if num_pointers > 1 and i ~= (math.ceil(num_pointers / 2)) then 
+        self.sprite = love.graphics.newImage("assets/sprites/pointer_multi.png")
+    end 
 end 
 
 -- draw pointer
@@ -78,9 +81,7 @@ function pointer:play_sound(shoot, sound)
     if not sound then 
         if shoot.current_ammo >= 0 then 
             self.sounds.hit:play()
-        else 
-            self.sounds.empty:play()
-        end 
+        end
     else 
         self.sounds[sound]:play()
     end 

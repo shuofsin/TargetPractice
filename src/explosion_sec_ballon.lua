@@ -5,7 +5,7 @@ explosion_sec_ballon = ballon:new(
         y = (gameHeight + 50),
         speed = 200,
         sprite_path = 'assets/sprites/explosion_sec_ballon.png', 
-        sound_path = 'assets/sounds/power_up.wav',
+        sound_path = 'assets/sounds/ballon_pop.wav',
         value = 0,
         color = "yellow"
     })

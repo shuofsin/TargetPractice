@@ -20,6 +20,10 @@ function shoot:init(debug)
     for i=1,self.max_ammo do 
         self.darts[i] = shoot:create_dart(i)
     end
+
+    shoot.reload_sound = love.audio.newSource('assets/sounds/reload.mp3', 'static')
+    shoot.reload_sound:setPitch(2.25)
+    shoot.reload_sound:setVolume(0.8)
 end 
 
 -- update shoot 
@@ -30,9 +34,12 @@ function shoot:update(dt, time)
             self.begin_reload = love.timer.getTime()
             self.reload_wheel.visible = true
             self.reload_wheel.animation:gotoFrame(1)
+            self.reload_sound:play()
         elseif love.timer.getTime() - self.begin_reload >= self.reload_wheel.time_to_reload and not game.paused then 
             shoot:reload_darts()
             self.reload_wheel.visible = false
+            self.reload_sound:pause()
+            self.reload_sound:seek(0)
         elseif not game.paused then 
             self.reload_wheel.animation:update(dt)
         end 
@@ -89,6 +96,7 @@ function shoot:boost_reload(boost_percent)
     self.reload_wheel.frame_delay = self.reload_wheel.frame_delay * boost_percent
     self.reload_wheel.animation = anim8.newAnimation(self.reload_wheel.grid('1-33', 1), self.reload_wheel.frame_delay)
     self.reload_wheel.time_to_reload = self.reload_wheel.frame_delay * 33
+    self.reload_sound:setPitch(self.reload_sound:getPitch() * (1 / boost_percent))
 end 
 
 function shoot:ammo_increase(val)

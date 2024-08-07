@@ -16,8 +16,8 @@ function sec_explosion:init(ballons_, pointer_, shoot_, game_)
     self.pointer = pointer_
     self.shoot = shoot_
     self.game = game_
-    self.sound = love.audio.newSource("assets/sounds/boom-2-103151.mp3", "static")
-    self.sound:setPitch(2.5)
+    self.sound = love.audio.newSource("assets/sounds/explosive.mp3", "static")
+    self.sound:setPitch(1.5)
     self.sound:setVolume(0.4)
     return self
 end 

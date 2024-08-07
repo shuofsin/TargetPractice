@@ -7,14 +7,18 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.sounds.point = love.audio.newSource("assets/sounds/coin.wav", "static")
     game.sounds.point:setVolume(0.6)
 
+    game.sounds.charge = love.audio.newSource("assets/sounds/charge.mp3", "static")
+    game.sounds.charge:setVolume(0.1)
+    game.sounds.charge:setPitch(0.8)
+
     game.sounds.gameover = love.audio.newSource("assets/sounds/lose-game.mp3", "static")
     game.sounds.gameover:setPitch(0.7)
     game.sounds.gameover:setVolume(0.8)
 
     game.sounds.restover = love.audio.newSource("assets/sounds/rest-over.mp3", "static")
-    game.sounds.restover:setVolume(0.7)
+    game.sounds.restover:setVolume(0.4)
     game.sounds.waveover = love.audio.newSource("assets/sounds/wave-over.mp3", "static")
-    game.sounds.waveover:setVolume(0.5)
+    game.sounds.waveover:setVolume(0.4)
     
     -- few requires
     require("src/sec_explosion")
@@ -285,7 +289,6 @@ function game:wave_update(dt)
     self.time = love.timer.getTime() - self.start
     ballons:update(dt, self)
     game:control_waves(dt)
-    print(self.time)
     if self.health <= 0 then
         if self.death_defiance > 0 then 
             self.health = self.starting_health 
@@ -385,10 +388,8 @@ function game:control_waves(dt)
         self.wave_active = true
         self.buff_selected = false
         self:set_pointers(self.num_pointers)
-    end
-    if self.time >= (self.rest_length - 3) and not self.wave_active then 
+    elseif self.time >= (self.rest_length - 3) and not self.wave_active then 
         self.sounds.restover:play()
-        print("playing sound")
     end 
 end 
 
@@ -494,9 +495,7 @@ function game:suceed(v, i, shoot, pointers, ballons, gain_charge)
     if self.charge < self.total_charge and gain_charge then 
         self.charge = self.charge + 1
         if self.charge == self.total_charge then 
-            if score > 0 then 
-                game.sounds.point:play()
-            end 
+            self.sounds.charge:play()
         end 
     end 
 end 

@@ -19,7 +19,7 @@ function sec_blackhole:init(ballons_, pointer_, shoot_, game_)
     self.timer = nil
     self.duration = 3
     self.g = 0.5
-    self.sound = love.audio.newSource("assets/sounds/hull-breach-32844.mp3", "static")
+    self.sound = love.audio.newSource("assets/sounds/blackhole.mp3", "static")
     self.sound:setPitch(2)
     self.sound:setVolume(0.1)
     return self

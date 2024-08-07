@@ -10,7 +10,7 @@ function sec_timeslow:init(ballons_, pointer_, shoot_, game_)
     self.game = game_
     self.duration = 2
     self.speed_mult = 0.5
-    self.sound = love.audio.newSource("assets/sounds/power_up.wav", "static")
+    self.sound = love.audio.newSource("assets/sounds/timeslow.wav", "static")
     self.sound:setVolume(0.5)
     return self
 end 
