@@ -140,7 +140,6 @@ function love.mousepressed(x, y, button)
     elseif game:get_state() == "guide" then 
         guide_menu:use_menu(x, y, button, game)
     end 
-    pointers[1]:play_sound("hit")
 end
 
 function add_pointer() 

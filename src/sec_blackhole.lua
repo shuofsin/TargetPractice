@@ -19,6 +19,9 @@ function sec_blackhole:init(ballons_, pointer_, shoot_, game_)
     self.timer = nil
     self.duration = 3
     self.g = 0.5
+    self.sound = love.audio.newSource("assets/sounds/hull-breach-32844.mp3", "static")
+    self.sound:setPitch(2)
+    self.sound:setVolume(0.1)
     return self
 end 
 
@@ -31,6 +34,8 @@ function sec_blackhole:update(dt)
         elseif love.timer.getTime() - self.timer > self.duration then 
             self.active = false
             self.timer = nil
+            self.sound:seek(0)
+            self.sound:pause()
         end 
     else 
         self.animation:gotoFrame('1')
@@ -64,6 +69,7 @@ function sec_blackhole:activate(button)
             local x, y = love.mouse.getPosition()
             self:set_pos(x, y)
             self.active = true
+            self.sound:play()
         end
     end 
 end 

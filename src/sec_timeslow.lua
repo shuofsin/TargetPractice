@@ -10,6 +10,8 @@ function sec_timeslow:init(ballons_, pointer_, shoot_, game_)
     self.game = game_
     self.duration = 2
     self.speed_mult = 0.5
+    self.sound = love.audio.newSource("assets/sounds/power_up.wav", "static")
+    self.sound:setVolume(0.5)
     return self
 end 
 
@@ -28,6 +30,8 @@ function sec_timeslow:update(dt)
                 if v.sped_up then v:set_speed_mult(1 / self.speed_mult) end
                 v.sped_up = false
             end 
+            self.sound:setPitch(1)
+            self.sound:play()
         elseif self.game.paused then 
             self.timer = self.timer + dt
         end 
@@ -47,6 +51,8 @@ function sec_timeslow:activate(button)
         if self.game.charge == self.game.total_charge then 
             self.game.charge = 0
             self.active = true
+            self.sound:setPitch(0.5)
+            self.sound:play()
         end
     end 
 end 

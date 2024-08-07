@@ -2,6 +2,11 @@ game = {}
 
 -- game init 
 function game:init(debug, start_state, _ballons, _buff_ui)
+    -- sounds 
+    game.sounds = {}
+    game.sounds.point = love.audio.newSource("assets/sounds/coin.wav", "static")
+    game.sounds.point:setVolume(0.4)
+    
     -- few requires
     require("src/sec_explosion")
     require("src/sec_timeslow")
@@ -382,6 +387,7 @@ end
 function game:success_check(x, y, button, shoot, pointers, ballons)
     if button == 1 and shoot.current_ammo >= 0 and not game.paused then
         pointer:set_shooting(true)
+        pointers[1]:play_sound("hit")
         for j, w in ipairs(pointers) do
             for i, v in ipairs(ballons.list) do
                 if w:check_shot(v, shoot.current_ammo) then 
@@ -390,12 +396,15 @@ function game:success_check(x, y, button, shoot, pointers, ballons)
             end 
         end
         shoot:remove_dart(shoot:get_current_ammo())
-    end
+    elseif not (shoot.current_ammo >= 0) then 
+        pointers[1]:play_sound("empty")
+    end 
 end
 
 function game:suceed(v, i, shoot, pointers, ballons, gain_charge) 
     local x,y,width,height = v:getInfo()
-    game:add_score(math.ceil(v:get_value() * self.score_mult))
+    local score = math.ceil(v:get_value() * self.score_mult)
+    game:add_score(score)
     local effect = ballons:destroy_ballon(i)
     if effect == "health" then 
         game:add_health(1)
@@ -466,6 +475,11 @@ function game:suceed(v, i, shoot, pointers, ballons, gain_charge)
 
     if self.charge < self.total_charge and gain_charge then 
         self.charge = self.charge + 1
+        if self.charge == self.total_charge then 
+            if score > 0 then 
+                game.sounds.point:play()
+            end 
+        end 
     end 
 end 
 

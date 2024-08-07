@@ -21,7 +21,7 @@ function pointer:init(debug)
     new_pointer.sounds = {}
     new_pointer.sounds.hit = love.audio.newSource("assets/sounds/dart_throw.mp3", "static")
     new_pointer.sounds.empty = love.audio.newSource("assets/sounds/empty_throw.mp3", "static")
-    new_pointer.sounds.empty:setVolume(0.8)
+    new_pointer.sounds.empty:setVolume(0.4)
     love.mouse.setVisible(false)
     return new_pointer
 end

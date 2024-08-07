@@ -16,6 +16,8 @@ function sec_explosion:init(ballons_, pointer_, shoot_, game_)
     self.pointer = pointer_
     self.shoot = shoot_
     self.game = game_
+    self.sound = love.audio.newSource("assets/sounds/boom-2-103151.mp3", "static")
+    self.sound:setPitch(2)
     return self
 end 
 
@@ -55,6 +57,7 @@ function sec_explosion:activate(button)
             self.game.charge = 0
             local x, y = love.mouse.getPosition()
             self:set_pos(x, y)
+            self.sound:play() 
             self.active = true
         end
     end 
