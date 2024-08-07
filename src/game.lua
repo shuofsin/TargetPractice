@@ -275,8 +275,10 @@ function game:update_chance()
     end 
     if self.wave == 9 then
         for k,v in pairs(self.spawn_table) do
-            self.spawn_table[k] = self.spawn_table[k] + 1
+            self.spawn_table[k] = self.spawn_table[k] + 3
         end
+        self.spawn_table["health"] = self.spawn_table["health"] + 1
+        self.spawn_table["point"] = self.spawn_table["point"] + 1
         self.buff_table["death_defiance"] = self.buff_table["death_defiance"] + 1
     end 
     if self.wave > 7 then
