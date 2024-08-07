@@ -2,7 +2,7 @@ sec_blackhole = {}
 
 function sec_blackhole:init(ballons_, pointer_, shoot_, game_) 
     self.name = "blackhole_sec"
-    self.charge = 5
+    self.charge = 10
     self.sprite = love.graphics.newImage("assets/sprites/blackhole.png") 
     self.grid = anim8.newGrid(48, 48, self.sprite:getWidth(), self.sprite:getHeight())
     self.animation = anim8.newAnimation(self.grid('1-12', 1), 0.075)

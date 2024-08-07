@@ -30,8 +30,10 @@ function ballon:remove()
     self.sound:play()
 end
 
-function ballon:destroy() 
+function ballon:destroy()
+    self.sound:setPitch(1.15) 
     self.sound:play()
+    print("playing sound")
     self = nil
     return "default"
 end

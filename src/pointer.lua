@@ -20,8 +20,10 @@ function pointer:init(debug)
     new_pointer.isEmpty = false
     new_pointer.sounds = {}
     new_pointer.sounds.hit = love.audio.newSource("assets/sounds/dart_throw.mp3", "static")
+    new_pointer.sounds.select = love.audio.newSource("assets/sounds/select.mp3", "static")
+    new_pointer.sounds.select:setVolume(0.5)
     new_pointer.sounds.empty = love.audio.newSource("assets/sounds/empty_throw.mp3", "static")
-    new_pointer.sounds.empty:setVolume(0.4)
+    new_pointer.sounds.empty:setVolume(0.5)
     love.mouse.setVisible(false)
     return new_pointer
 end
@@ -72,8 +74,16 @@ function pointer:check_shot(ballon, ammo)
 end 
 
 -- plays a sound 
-function pointer:play_sound(sound)
-    self.sounds[sound]:play()
+function pointer:play_sound(shoot, sound)
+    if not sound then 
+        if shoot.current_ammo >= 0 then 
+            self.sounds.hit:play()
+        else 
+            self.sounds.empty:play()
+        end 
+    else 
+        self.sounds[sound]:play()
+    end 
 end 
 
 -- signal that the player is shooting

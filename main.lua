@@ -131,15 +131,35 @@ function love.mousepressed(x, y, button)
         game:success_check(x, y, button, shoot, pointers, ballons)
         secondary:activate(button)
         game:goToMenu(x, y, button)
+        if button == 1 then 
+            if not game.paused then 
+                pointers[1]:play_sound(shoot)
+            else 
+                pointers[1]:play_sound(shoot, "select")
+            end 
+        end 
     elseif game:get_state() == "main" then 
         main_menu:use_menu(x, y, button, game)
+        if button == 1 then 
+            pointers[1]:play_sound(shoot, "select")
+        end 
     elseif game:get_state() == "post_game" then 
         post_game_menu:use_menu(x, y, button, game)
+        if button == 1 then 
+            pointers[1]:play_sound(shoot, "select")
+        end 
     elseif game:get_state() == "options" then 
         options_menu:use_menu(x, y, button, game)
+        if button == 1 then 
+            pointers[1]:play_sound(shoot, "select")
+        end 
     elseif game:get_state() == "guide" then 
         guide_menu:use_menu(x, y, button, game)
+        if button == 1 then 
+            pointers[1]:play_sound(shoot, "select")
+        end 
     end 
+   
 end
 
 function add_pointer() 

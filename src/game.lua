@@ -5,7 +5,16 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- sounds 
     game.sounds = {}
     game.sounds.point = love.audio.newSource("assets/sounds/coin.wav", "static")
-    game.sounds.point:setVolume(0.4)
+    game.sounds.point:setVolume(0.6)
+
+    game.sounds.gameover = love.audio.newSource("assets/sounds/lose-game.mp3", "static")
+    game.sounds.gameover:setPitch(0.7)
+    game.sounds.gameover:setVolume(0.8)
+
+    game.sounds.restover = love.audio.newSource("assets/sounds/rest-over.mp3", "static")
+    game.sounds.restover:setVolume(0.7)
+    game.sounds.waveover = love.audio.newSource("assets/sounds/wave-over.mp3", "static")
+    game.sounds.waveover:setVolume(0.5)
     
     -- few requires
     require("src/sec_explosion")
@@ -276,6 +285,7 @@ function game:wave_update(dt)
     self.time = love.timer.getTime() - self.start
     ballons:update(dt, self)
     game:control_waves(dt)
+    print(self.time)
     if self.health <= 0 then
         if self.death_defiance > 0 then 
             self.health = self.starting_health 
@@ -283,6 +293,7 @@ function game:wave_update(dt)
             self.buff_ui:remove_buff("death_defiance")
             pop_up_message = "SAVED!"
         else  
+            self.sounds.gameover:play()
             game:reset()
             self.ballons:clear()
             self.state = "post_game"
@@ -365,6 +376,7 @@ function game:control_waves(dt)
         self.wave_active = false
         self.buff_msg, self.wait_msg = game:get_rand_msg() 
         self:set_pointers(1)
+        self.sounds.waveover:play()
     elseif self.time >= self.rest_length and not self.wave_active then 
         self.start = love.timer.getTime()
         self.time = self.start
@@ -374,6 +386,10 @@ function game:control_waves(dt)
         self.buff_selected = false
         self:set_pointers(self.num_pointers)
     end
+    if self.time >= (self.rest_length - 3) and not self.wave_active then 
+        self.sounds.restover:play()
+        print("playing sound")
+    end 
 end 
 
 function game:set_pointers(num)
@@ -387,7 +403,6 @@ end
 function game:success_check(x, y, button, shoot, pointers, ballons)
     if button == 1 and shoot.current_ammo >= 0 and not game.paused then
         pointer:set_shooting(true)
-        pointers[1]:play_sound("hit")
         for j, w in ipairs(pointers) do
             for i, v in ipairs(ballons.list) do
                 if w:check_shot(v, shoot.current_ammo) then 
@@ -396,16 +411,19 @@ function game:success_check(x, y, button, shoot, pointers, ballons)
             end 
         end
         shoot:remove_dart(shoot:get_current_ammo())
-    elseif not (shoot.current_ammo >= 0) then 
-        pointers[1]:play_sound("empty")
-    end 
+    end
 end
 
 function game:suceed(v, i, shoot, pointers, ballons, gain_charge) 
     local x,y,width,height = v:getInfo()
     local score = math.ceil(v:get_value() * self.score_mult)
-    game:add_score(score)
+    if v:get_value() > 0 then game:add_score(score) end 
     local effect = ballons:destroy_ballon(i)
+    if score > 0 then 
+        local point = love.audio.newSource('assets/sounds/coin.wav', 'static')
+        point:setVolume(0.1)
+        point:play()
+    end 
     if effect == "health" then 
         game:add_health(1)
     end

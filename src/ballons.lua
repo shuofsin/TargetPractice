@@ -40,6 +40,9 @@ function ballons:update(dt, game)
         if v.y + v.sprite:getHeight() * v.scale < 0 then 
             ballons:remove_ballon(i)
             game:add_health(-1)
+            local lose_health = love.audio.newSource("assets/sounds/lose-health.mp3", "static")
+            lose_health:setVolume(0.3)
+            lose_health:play()
         end
     end
     
