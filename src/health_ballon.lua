@@ -1,9 +1,9 @@
 health_ballon = ballon:new(
     {
         scale = 5,
-        x = (gameWidth / 2),
+        x = math.random(gameWidth * 0.2, gameWidth * 0.8),
         y = (gameHeight + 50),
-        speed = 200,
+        speed = 400,
         sprite_path = 'assets/sprites/health_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
         value = 0,
@@ -19,11 +19,6 @@ end
 
 function health_ballon:update(dt)
     self.y = self.y - self.speed * dt
-    if self.speed > 0 and self.y < gameWidth / 2 - 200 then 
-        self.speed = -100
-    elseif self.speed < 0 and self.y > gameWidth / 2 - 100 then 
-        self.speed = 100
-    end 
 end 
 
 function health_ballon:destroy()

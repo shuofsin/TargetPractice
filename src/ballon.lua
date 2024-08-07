@@ -70,3 +70,7 @@ end
 function ballon:set_speed_mult(mult)
     self.speed = self.speed * mult 
 end 
+
+function ballon:getInfo() 
+    return self.x, self.y, self.sprite:getWidth() * self.scale, self.sprite:getHeight() * self.scale
+end 

@@ -22,6 +22,7 @@ function ballons:init(debug)
     require("src/timeslow_sec_ballon")
     require("src/explosion_sec_ballon")
     require("src/blackhole_sec_ballon")
+    require("src/child_ballon")
     require("src/pop")
 
     ballons.sounds = {}
@@ -144,6 +145,8 @@ function ballons:create_ballon(b_type, x_pos, y_pos)
         new_ballon = timeslow_sec_ballon:new() 
     elseif b_type == "blackhole_sec" then 
         new_ballon = blackhole_sec_ballon:new()
+    elseif b_type == "child" then 
+        new_ballon = child_ballon:new()
     end 
 
     new_ballon:init() 
@@ -152,11 +155,13 @@ function ballons:create_ballon(b_type, x_pos, y_pos)
         new_ballon:set_x_pos_rel(x_pos) 
     elseif x_pos then  
         new_ballon:set_x_pos_abs(x_pos) 
+        print("abs")
     end 
     if y_pos and y_pos < 1 then 
         new_ballon:set_y_pos_rel(y_pos) 
     elseif y_pos then  
         new_ballon:set_y_pos_abs(y_pos) 
+        print("abs y")
     end 
     return new_ballon
 end
