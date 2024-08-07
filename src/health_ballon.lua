@@ -5,7 +5,7 @@ health_ballon = ballon:new(
         y = (gameHeight + 50),
         speed = 400,
         sprite_path = 'assets/sprites/health_ballon.png', 
-        sound_path = 'assets/sounds/coin.mp3',
+        sound_path = 'assets/sounds/ballon_pop.wav',
         value = 0,
         color = "pink"
     })
