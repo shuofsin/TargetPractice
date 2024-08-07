@@ -2,7 +2,7 @@ sec_blackhole = {}
 
 function sec_blackhole:init(ballons_, pointer_, shoot_, game_) 
     self.name = "blackhole_sec"
-    self.charge = 10
+    self.charge = 5
     self.sprite = love.graphics.newImage("assets/sprites/blackhole.png") 
     self.grid = anim8.newGrid(48, 48, self.sprite:getWidth(), self.sprite:getHeight())
     self.animation = anim8.newAnimation(self.grid('1-12', 1), 0.075)
@@ -18,7 +18,7 @@ function sec_blackhole:init(ballons_, pointer_, shoot_, game_)
     self.game = game_
     self.timer = nil
     self.duration = 3
-    self.g = 0.01
+    self.g = 0.5
     return self
 end 
 
@@ -96,8 +96,8 @@ function sec_blackhole:check_effect(dt)
 end 
 
 function sec_blackhole:pull_ballon(dist_x, dist_y, ballon, dt)
-    ballon.x = ballon.x - self.g * dist_x
-    ballon.y = ballon.y - self.g * dist_y * 6
+    ballon.x = ballon.x - self.g * dist_x * dt
+    ballon.y = ballon.y - self.g * dist_y * 6 * dt
 end 
 
 function sec_blackhole:level_up() 

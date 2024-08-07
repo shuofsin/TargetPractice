@@ -43,9 +43,9 @@ function ghost_ballon:update(dt)
         self.dir = self.dir * -1 
     end 
     if self.y < gameWidth * 0.3 then 
-        self.opacity = self.opacity + 1
+        self.opacity = self.opacity + 100 * dt
     elseif self.y < gameWidth * 1 then 
-        self.opacity = self.opacity - 1
+        self.opacity = self.opacity - 100 * dt
     end 
     if self.opacity < 0 then self.opacity = 0 end 
     if self.opacity > 100 then self.opacity = 100 end

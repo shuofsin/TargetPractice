@@ -10,7 +10,7 @@ spiral_ballon = ballon:new(
         color = "purple",
         num_frames = 1,
         rot = 0,
-        rot_speed = 1, 
+        rot_speed = 100, 
     })
 
 function spiral_ballon:new(new)
@@ -34,6 +34,8 @@ function spiral_ballon:init()
     self.c.y = self.y
     self.spiral_radius = self.sprite:getWidth() * self.scale * 1.4
     self.y = self.c.y + self.spiral_radius
+    local temp = math.random(2)
+    if temp == 1 then self.rot_speed = -100 else self.rot_speed = 100 end 
 end
 
 function spiral_ballon:update(dt) 
@@ -65,7 +67,7 @@ function spiral_ballon:update(dt)
     self.c.y = self.c.y - self.speed * dt
 
     -- increment rotation. We increment by a number of degrees
-    self.rot = self.rot + (2 * math.pi / 360) * self.rot_speed
+    self.rot = self.rot + (2 * math.pi / 360) * self.rot_speed * dt
 
     -- set the physical ballon position
     self.x = self.c.x + self.spiral_radius * math.cos(self.rot)

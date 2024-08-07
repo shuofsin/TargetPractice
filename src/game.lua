@@ -77,8 +77,9 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     -- secondary stuff 
     game.charge = 0
     game.total_charge = 5
-
+    game.num_pointers = 1
     game.paused = false
+
 end 
 
 function game:get_secondary_init(secondary)
@@ -197,18 +198,28 @@ end
 
 -- spawn bonus 
 function game:spawn_bonus_ballons()
-    local b_1 = game:select_random_buff_ballon()
-    local b_2 = game:select_random_buff_ballon()
-    local b_3 = game:select_random_buff_ballon() 
-    while b_2 == b_1 do
-        b_2 = game:select_random_buff_ballon()
+    if game.wave < 9 then 
+        local b_1 = game:select_random_buff_ballon()
+        local b_2 = game:select_random_buff_ballon()
+        while b_2 == b_1 do
+            b_2 = game:select_random_buff_ballon()
+        end 
+        game.ballons:add_ballon(b_1, true, 0.25)
+        game.ballons:add_ballon(b_2, true, 0.75)
+    else 
+        local b_1 = game:select_random_buff_ballon()
+        local b_2 = game:select_random_buff_ballon()
+        local b_3 = game:select_random_buff_ballon() 
+        while b_2 == b_1 do
+            b_2 = game:select_random_buff_ballon()
+        end 
+        while b_3 == b_1 or b_3 == b_2 do
+            b_3 = game:select_random_buff_ballon()
+        end 
+        game.ballons:add_ballon(b_1, true, 0.2)
+        game.ballons:add_ballon(b_2, true, 0.5)
+        game.ballons:add_ballon(b_3, true, 0.8)
     end 
-    while b_3 == b_1 or b_3 == b_2 do
-        b_3 = game:select_random_buff_ballon()
-    end 
-    game.ballons:add_ballon(b_1, true, 0.2)
-    game.ballons:add_ballon(b_2, true, 0.5)
-    game.ballons:add_ballon(b_3, true, 0.8)
 end 
 
 -- increase spawn chance
@@ -245,7 +256,7 @@ function game:update_chance()
         self.spawn_table["red"] = self.spawn_table["red"] + 1
     end 
     if self.wave == 9 then
-        for k,v in pairs(self.spawn_table) then 
+        for k,v in pairs(self.spawn_table) do
             self.spawn_table[k] = self.spawn_table[k] + 1
         end
         self.buff_table["death_defiance"] = self.buff_table["death_defiance"] + 1
@@ -330,6 +341,7 @@ function game:reset()
     game.paused = false
     game.ballons:clear()
     game.buff_ui:clear()
+    game.num_pointers = 1
 end 
 
 -- function control waves
@@ -347,6 +359,7 @@ function game:control_waves(dt)
         game:spawn_bonus_ballons()
         self.wave_active = false
         self.buff_msg, self.wait_msg = game:get_rand_msg() 
+        self:set_pointers(1)
     elseif self.time >= self.rest_length and not self.wave_active then 
         self.start = love.timer.getTime()
         self.time = self.start
@@ -354,7 +367,15 @@ function game:control_waves(dt)
         game:update_chance()
         self.wave_active = true
         self.buff_selected = false
+        self:set_pointers(self.num_pointers)
     end
+end 
+
+function game:set_pointers(num)
+    pointers = {}
+    for i=1,num do
+        add_pointer()
+    end 
 end 
 
 -- add score if ballon is hit
@@ -384,13 +405,12 @@ function game:suceed(v, i, shoot, pointers, ballons, gain_charge)
         self.buff_ui:add_buff(effect)
     end 
     if effect == "ammo_boost" then
-        shoot:ammo_increase(1)
+        shoot:ammo_increase(2)
         self.buff_ui:add_buff(effect)
     end 
     if effect == "multishot" then 
-        add_pointer()
-        add_pointer()
         self.buff_ui:add_buff(effect)
+        self.num_pointers = self.num_pointers + 2
     end 
     if effect == "score_mult" then 
         self.score_mult = self.score_mult * 1.2

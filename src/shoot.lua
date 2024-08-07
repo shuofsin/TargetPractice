@@ -16,7 +16,7 @@ function shoot:init(debug)
     shoot.reload_wheel.time_to_reload = self.reload_wheel.frame_delay * 33
     -- create a list of darts 
     shoot.darts = {}
-    shoot.dart_height = 40
+    shoot.dart_height = 25
     for i=1,self.max_ammo do 
         self.darts[i] = shoot:create_dart(i)
     end
@@ -50,7 +50,7 @@ function shoot:draw()
     end
     -- draw reload wheel 
     if self.reload_wheel.visible then 
-        self.reload_wheel.animation:draw(self.reload_wheel.sprite, 10, gameHeight * 0.15)
+        self.reload_wheel.animation:draw(self.reload_wheel.sprite, 10, gameHeight * 0.15, nil, 0.75)
     end
 end 
 
@@ -59,9 +59,9 @@ end
 function shoot:create_dart(i)
     dart = {}
     dart.x = 10
-    dart.y = i * self.dart_height + gameHeight * 0.05
+    dart.y = i * self.dart_height + gameHeight * 0.08
     dart.sprite = love.graphics.newImage("assets/sprites/dart_scaled.png")
-    dart.scale = 3
+    dart.scale = 2
     return dart
 end 
 
