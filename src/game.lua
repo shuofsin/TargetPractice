@@ -34,7 +34,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.starting_health = 3
     game.health = game.starting_health
     game.playing = true
-    game.wave = 8
+    game.wave = 1
     game.wave_active = true
     game.wave_length = 61
     game.rest_length = 11
@@ -60,7 +60,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.time_remaining = self.time / self.wave_length 
 
     -- spawn table
-    game.spawn_chance = 20
+    game.spawn_chance = 25
     game.spawn_table = {}
     game.spawn_table["red"] = 1
     game.spawn_table["green"] = 0
@@ -81,9 +81,9 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.buff_table["reload_boost"] = 1
     game.buff_table["score_mult"] = 1
     game.buff_table["death_defiance"] = 0
-    game.buff_table["timeslow_sec"] = 0
-    game.buff_table["explosion_sec"] = 0
-    game.buff_table["blackhole_sec"] = 0
+    game.buff_table["timeslow_sec"] = 1
+    game.buff_table["explosion_sec"] = 1
+    game.buff_table["blackhole_sec"] = 1
 
     game.buff_msg, game.wait_msg = game:get_rand_msg() 
 
@@ -246,19 +246,16 @@ function game:update_chance()
         self.spawn_table["red"] = self.spawn_table["red"] + 1
     end 
     if self.wave == 3 then 
-        self.spawn_table["child"] = self.spawn_table["child"] + 1
         self.spawn_table["red"] = self.spawn_table["red"] + 1
-        self.buff_table["explosion_sec"] = self.buff_table["explosion_sec"] + 1
+        self.spawn_table["spiral"] = self.spawn_table["spiral"] + 1
     end 
     if self.wave == 4 then 
-        self.spawn_table["spiral"] = self.spawn_table["spiral"] + 1
+        self.spawn_table["child"] = self.spawn_table["child"] + 1
         self.spawn_table["red"] = self.spawn_table["red"] + 1
     end 
     if self.wave == 5 then 
         self.spawn_table["red"] = self.spawn_table["red"] + 1
-        self.buff_table["timeslow_sec"] = self.buff_table["timeslow_sec"] + 1
         self.spawn_table["blue"] = self.spawn_table["blue"] + 1
-
     end 
     if self.wave == 6 then 
         self.spawn_table["ghost"] = self.spawn_table["ghost"] + 1
@@ -267,7 +264,6 @@ function game:update_chance()
     if self.wave == 7 then 
         self.spawn_table["portal"] = self.spawn_table["portal"] + 1
         self.spawn_table["green"] = self.spawn_table["green"] + 1
-        self.buff_table["blackhole_sec"] = self.buff_table["blackhole_sec"] + 1
     end 
     if self.wave == 8 then 
         self.spawn_table["speed"] = self.spawn_table["speed"] + 1
@@ -275,13 +271,13 @@ function game:update_chance()
     end 
     if self.wave == 9 then
         for k,v in pairs(self.spawn_table) do
-            self.spawn_table[k] = self.spawn_table[k] + 50
+            self.spawn_table[k] = self.spawn_table[k] + 35
         end
         self.buff_table["death_defiance"] = self.buff_table["death_defiance"] + 1
         self.wave_length = 121
     end 
-    if self.wave > 7 then
-        self.spawn_chance = self.spawn_chance * 1.1
+    if self.wave >= 5 then
+        self.spawn_chance = self.spawn_chance * 1.25
     end 
 
     if self.wave % 4 == 0 then
@@ -346,9 +342,9 @@ function game:reset()
     game.buff_table["reload_boost"] = 1
     game.buff_table["score_mult"] = 1
     game.buff_table["death_defiance"] = 0
-    game.buff_table["timeslow_sec"] = 0
-    game.buff_table["explosion_sec"] = 0
-    game.buff_table["blackhole_sec"] = 0
+    game.buff_table["timeslow_sec"] = 1
+    game.buff_table["explosion_sec"] = 1
+    game.buff_table["blackhole_sec"] = 1
     
 
     -- other stuff

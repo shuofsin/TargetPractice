@@ -21,6 +21,7 @@ function love.load()
     require("src/secondary")
     require("src/options_menu")
     require("src/guide_menu")
+    require("src/score_menu")
     
     -- set window and resolution settings
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -46,7 +47,7 @@ function love.load()
     game_ui:init(game)
     secondary:init(ballons, pointers, shoot, game)
     game:get_secondary_init(secondary)
-
+    score_menu:init(debug, game)
 
     -- pop-up messages?
     pop_up_message = ""
@@ -54,6 +55,7 @@ function love.load()
 
     -- music
     music = {}
+    music_volume = 0.02
     music.main = love.audio.newSource('assets/music/main-menu-music.mp3', 'stream')
     music.options = love.audio.newSource('assets/music/options-music.mp3', 'stream')
     music.guide = love.audio.newSource('assets/music/guide-music.mp3', 'stream')
@@ -61,10 +63,11 @@ function love.load()
     music.gameTwo = love.audio.newSource('assets/music/game-music-2.mp3', 'stream')
     music.gameThree = love.audio.newSource('assets/music/game-music-1.mp3', 'stream')
     music.pause = love.audio.newSource('assets/music/pause-music.mp3', 'stream')
+    music.score = love.audio.newSource('assets/music/pause-music.mp3', 'stream')
     music.rest = love.audio.newSource('assets/music/rest-music.mp3', 'stream')
     music.post_game = love.audio.newSource('assets/music/post-game-music.mp3', 'stream')
     for k, v in pairs(music) do
-        v:setVolume(0.02)
+        v:setVolume(music_volume)
         v:setLooping(true)
     end 
     current_track = ""
@@ -75,7 +78,7 @@ end
 function music_toggle(on)
     for k, v in pairs(music) do 
         if on then 
-            v:setVolume(0.02)
+            v:setVolume(music_volume)
         else
             v:setVolume(0)
         end
@@ -128,7 +131,7 @@ function love.update(dt)
         secondary:update(dt)
     elseif game:get_state() == "exit" then 
         love.event.quit(0)
-    elseif game:get_state() == "post_game" or game:get_state() == "options" or game:get_state() == "guide" then 
+    elseif game:get_state() == "post_game" or game:get_state() == "options" or game:get_state() == "guide" or game:get_state() == "score" then 
         background = love.graphics.newImage("assets/sprites/background_post.png")  
     end 
     if game:get_state() == "post_game" then 
@@ -178,6 +181,8 @@ function love.draw()
         options_menu:draw()
     elseif game:get_state() == "guide" then 
         guide_menu:draw()
+    elseif game:get_state() == "score" then 
+        score_menu:draw() 
     end 
     -- draw the pointer above everything
     for i, v in ipairs(pointers) do 
@@ -208,6 +213,7 @@ function love.mousepressed(x, y, button)
         post_game_menu:use_menu(x, y, button, game)
         if button == 1 then 
             pointers[1]:play_sound(shoot, "select")
+            score_menu:get_scores() 
         end 
     elseif game:get_state() == "options" then 
         options_menu:use_menu(x, y, button, game)
@@ -219,6 +225,8 @@ function love.mousepressed(x, y, button)
         if button == 1 then 
             pointers[1]:play_sound(shoot, "select")
         end 
+    elseif game:get_state() == "score" then
+        score_menu:use_menu(x, y, button, game)
     end 
    
 end

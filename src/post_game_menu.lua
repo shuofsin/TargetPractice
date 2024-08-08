@@ -6,7 +6,7 @@ function post_game_menu:init(debug, game)
 
     -- buttons
     post_game_menu.buttons = {} 
-    post_game_menu.buttons.play = post_game_menu:create_button("game", gameWidth / 2, gameHeight * 0.75, "assets/sprites/play.png", 1.3)
+    post_game_menu.buttons.play = post_game_menu:create_button("game", gameWidth / 2, gameHeight * 0.75, "assets/sprites/play-again.png", 1.3)
     post_game_menu.buttons.back = post_game_menu:create_button("main", gameWidth / 2, gameHeight * 0.9, "assets/sprites/back.png", 1.3)
 
     -- font
