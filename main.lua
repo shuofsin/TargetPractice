@@ -24,7 +24,7 @@ function love.load()
     
     -- set window and resolution settings
     love.graphics.setDefaultFilter("nearest", "nearest")
-    love.window.setTitle("Target Practice (Pre-Pre-Alpha)")
+    love.window.setTitle("High Flying Rogue")
     background = love.graphics.newImage("assets/sprites/background.png")
 
     -- window bullshit 

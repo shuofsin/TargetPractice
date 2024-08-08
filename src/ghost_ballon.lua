@@ -6,7 +6,7 @@ ghost_ballon = ballon:new(
         speed = 200,
         sprite_path = 'assets/sprites/ghost_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
-        value = 2,
+        value = 3,
         color = "cyan",
         opacity = 100,
     })

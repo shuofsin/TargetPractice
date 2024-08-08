@@ -92,10 +92,10 @@ function sec_explosion:check_effect()
 end 
 
 function sec_explosion:level_up() 
-    self.scale = math.floor(self.scale * 1.5)
+    self.scale = self.scale + 4
 end 
 
 function sec_explosion:reset()
     self.active = false
-    self.scale = 12
+    self.scale = 8
 end 

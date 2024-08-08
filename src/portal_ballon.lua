@@ -44,7 +44,7 @@ end
 function portal_ballon:draw()
     self.animation:draw(self.sprite, self.x, self.y, nil, self.scale)
     if self.effect_sprite then 
-        love.graphics.draw(self.effect_sprite, self.x + self.sprite:getWidth() * 0.5 * (1 / 15) , self.y + self.sprite:getWidth() * 0.5 * (1 / 15), nil, self.scale)
+        love.graphics.draw(self.effect_sprite, self.x, self.y, nil, self.scale * 1.5)
     end 
 end 
 

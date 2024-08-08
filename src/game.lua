@@ -34,7 +34,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.starting_health = 3
     game.health = game.starting_health
     game.playing = true
-    game.wave = 1
+    game.wave = 8
     game.wave_active = true
     game.wave_length = 61
     game.rest_length = 11
@@ -125,6 +125,14 @@ function game:update(dt)
         game.time = game.time + dt
         self.stage = "paused"
     end 
+
+    if self.wave >= 9 and self.health < 5 then 
+        self.spawn_table["health"] = 1
+        self.spawn_table["point"] = 0
+    elseif self.wave >= 9 and self.health >= 5 then 
+        self.spawn_table["point"] = 1
+        self.spawn_table["health"] = 0
+    end
 end
 
 function game:draw() 
@@ -238,7 +246,7 @@ function game:update_chance()
         self.spawn_table["red"] = self.spawn_table["red"] + 1
     end 
     if self.wave == 3 then 
-        self.spawn_table["blue"] = self.spawn_table["blue"] + 1
+        self.spawn_table["child"] = self.spawn_table["child"] + 1
         self.spawn_table["red"] = self.spawn_table["red"] + 1
         self.buff_table["explosion_sec"] = self.buff_table["explosion_sec"] + 1
     end 
@@ -247,9 +255,10 @@ function game:update_chance()
         self.spawn_table["red"] = self.spawn_table["red"] + 1
     end 
     if self.wave == 5 then 
-        self.spawn_table["child"] = self.spawn_table["child"] + 1
         self.spawn_table["red"] = self.spawn_table["red"] + 1
         self.buff_table["timeslow_sec"] = self.buff_table["timeslow_sec"] + 1
+        self.spawn_table["blue"] = self.spawn_table["blue"] + 1
+
     end 
     if self.wave == 6 then 
         self.spawn_table["ghost"] = self.spawn_table["ghost"] + 1
@@ -266,11 +275,10 @@ function game:update_chance()
     end 
     if self.wave == 9 then
         for k,v in pairs(self.spawn_table) do
-            v = v + 10
+            self.spawn_table[k] = self.spawn_table[k] + 50
         end
-        self.spawn_table["health"] = 1
-        self.spawn_table["point"] = 1
         self.buff_table["death_defiance"] = self.buff_table["death_defiance"] + 1
+        self.wave_length = 121
     end 
     if self.wave > 7 then
         self.spawn_chance = self.spawn_chance * 1.1
@@ -310,6 +318,7 @@ function game:reset()
     game.health = self.starting_health
     game.playing = true
     game.wave = 1
+    game.wave_length = 61
     game.wave_active = true
 
     -- get relative game time

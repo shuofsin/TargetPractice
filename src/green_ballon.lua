@@ -6,7 +6,7 @@ green_ballon = ballon:new(
         speed = 200,
         sprite_path = 'assets/sprites/green_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
-        value = 2,
+        value = 1,
         color = "green"
     })
 

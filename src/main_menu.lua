@@ -7,9 +7,16 @@ function main_menu:init(debug)
     -- title
     main_menu.title = {}
     main_menu.title.sprite = love.graphics.newImage("assets/sprites/title.png")
-    main_menu.title.scale = 1.45
+    main_menu.title.scale = 1
     main_menu.title.x = (gameWidth / 2) - (main_menu.title.sprite:getWidth() * main_menu.title.scale / 2)
-    main_menu.title.y = 10
+    main_menu.title.y = gameHeight * 0.06
+
+    main_menu.credits = {}
+    main_menu.credits.sprite = love.graphics.newImage("assets/sprites/bottom_banner.png")
+    main_menu.credits.scale = 1
+    main_menu.credits.x = gameWidth * 0
+    main_menu.credits.y = gameHeight * 0.946667
+
 
     -- buttons
     main_menu.buttons = {}
@@ -27,4 +34,6 @@ function main_menu:draw()
         love.graphics.draw(v.sprite, v.x, v.y, nil, v.scale)
     end 
     love.graphics.draw(self.title.sprite, self.title.x, self.title.y, nil, self.title.scale)
+    love.graphics.draw(self.credits.sprite, self.credits.x, self.credits.y, nil, self.credits.scale)
+
 end 

@@ -6,7 +6,7 @@ child_ballon = ballon:new(
         speed = 300,
         sprite_path = 'assets/sprites/child_ballon.png', 
         sound_path = 'assets/sounds/ballon_pop.wav',
-        value = 1,
+        value = 3,
         color = "cyan",
         dir = 1
     })
@@ -38,5 +38,12 @@ function child_ballon:update(dt)
     self.x = self.x + self.x_speed * self.dir * dt
     if self.x > self.init_x + self.x_speed * 0.25 or self.x < self.init_x - self.x_speed * 0.25 then 
         self.dir = self.dir * -1
+    end 
+end 
+
+function child_ballon:draw()
+    love.graphics.draw(self.sprite, self.x, self.y, nil, self.scale)
+    if self.effect_sprite then 
+        love.graphics.draw(self.effect_sprite, self.x, self.y + 3 * self.scale, nil, self.scale)
     end 
 end 
