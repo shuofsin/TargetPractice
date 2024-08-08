@@ -10,6 +10,7 @@ function options_menu:init(debug, game)
     options_menu.title.scale = 1.45
     options_menu.title.x = (gameWidth / 2) - (options_menu.title.sprite:getWidth() * options_menu.title.scale / 2)
     options_menu.title.y = 10
+    options_menu.control_scheme = love.graphics.newImage("assets/sprites/control_scheme.png")
 
     -- buttons
     options_menu.buttons = {}
@@ -19,11 +20,13 @@ function options_menu:init(debug, game)
     options_menu.options = {}
     options_menu.options.fullscreen = {option = "Fullscreen", value = false, i = 0}
     options_menu.options.sound = {option = "Sound", value = true, i = 1}
+    options_menu.options.music = {option = "Music", true_value = true, value = true, i = 2}
 
     -- font
     options_menu.font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 30)
     options_menu.font_title = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 50)
     options_menu.scores = {}
+
 end 
 
 function options_menu:draw()
@@ -31,12 +34,13 @@ function options_menu:draw()
         love.graphics.draw(v.sprite, v.x, v.y, nil, v.scale)
     end 
     for k, v in pairs(options_menu.options) do 
-        love.graphics.printf(v.option, self.font, 0, gameHeight * 0.2 + v.i * gameHeight * 0.1, gameWidth * 0.5, "right")
+        love.graphics.printf(v.option, self.font, 0, gameHeight * 0.18 + v.i * gameHeight * 0.08, gameWidth * 0.5, "right")
         local r_type
         if v.value then r_type = "fill" else r_type = "line" end 
-        love.graphics.rectangle(r_type, gameWidth * 0.6, gameHeight * 0.2 + v.i * gameHeight * 0.1, gameWidth * 0.035, gameWidth * 0.035)
+        love.graphics.rectangle(r_type, gameWidth * 0.6, gameHeight * 0.18 + v.i * gameHeight * 0.08, gameWidth * 0.035, gameWidth * 0.035)
     end 
     love.graphics.draw(self.title.sprite, self.title.x, self.title.y, nil, self.title.scale)
+    love.graphics.draw(self.control_scheme, 0, gameHeight * 0.4)
 end 
 
 function options_menu:use_menu(x, y, button, game)
@@ -63,7 +67,24 @@ function options_menu:use_menu(x, y, button, game)
                     push:switchFullscreen(gameWidth, gameHeight)
                 end 
                 if v.option == "Sound" then 
-                    if v.value then love.audio.setVolume(1.0) else love.audio.setVolume(0) end
+                    if v.value then 
+                        love.audio.setVolume(1.0) 
+                        options_menu.options.music.value = options_menu.options.music.true_value
+                        music_toggle(options_menu.options.music.true_value)
+                    else 
+                        love.audio.setVolume(0) 
+                        options_menu.options.music.value = false
+                        music_toggle(false)
+                    end
+                end 
+                if v.option == 'Music' then 
+                    if v.value then
+                        music_toggle(true)
+                        v.true_value = true 
+                    else
+                        music_toggle(false)
+                        v.true_value = false
+                    end 
                 end 
             end
         end 

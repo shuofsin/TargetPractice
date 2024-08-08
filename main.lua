@@ -51,9 +51,70 @@ function love.load()
     -- pop-up messages?
     pop_up_message = ""
     pop_up_font = love.graphics.newFont("assets/fonts/PixelOperator8.ttf", 50 )
+
+    -- music
+    music = {}
+    music.main = love.audio.newSource('assets/music/main-menu-music.mp3', 'stream')
+    music.options = love.audio.newSource('assets/music/options-music.mp3', 'stream')
+    music.guide = love.audio.newSource('assets/music/guide-music.mp3', 'stream')
+    music.gameOne = love.audio.newSource('assets/music/game-music-3.mp3', 'stream')
+    music.gameTwo = love.audio.newSource('assets/music/game-music-2.mp3', 'stream')
+    music.gameThree = love.audio.newSource('assets/music/game-music-1.mp3', 'stream')
+    music.pause = love.audio.newSource('assets/music/pause-music.mp3', 'stream')
+    music.rest = love.audio.newSource('assets/music/rest-music.mp3', 'stream')
+    music.post_game = love.audio.newSource('assets/music/post-game-music.mp3', 'stream')
+    for k, v in pairs(music) do
+        v:setVolume(0.02)
+        v:setLooping(true)
+    end 
+    current_track = ""
+    current_game_stage = nil
+    current_step = -1
+end  
+
+function music_toggle(on)
+    for k, v in pairs(music) do 
+        if on then 
+            v:setVolume(0.02)
+        else
+            v:setVolume(0)
+        end
+    end 
+end 
+
+function stop_music() 
+    for k, v in pairs(music) do 
+        v:pause()
+        v:seek(0)
+    end
 end 
 
 function love.update(dt)
+    if current_track ~= game:get_state() and game:get_state() ~= "exit" then 
+        if game:get_state() ~= "game" then
+            stop_music() 
+            current_track = game:get_state()
+            music[current_track]:play()
+        else
+            current_track = "game"
+        end
+    end 
+    if current_track == "game" and game:get_state() ~= "exit" then 
+        if current_game_stage ~= game.stage then 
+            stop_music() 
+            current_game_stage = game.stage 
+            if current_game_stage == 'play' then 
+                if game.step == 0 then music['gameOne']:play() 
+                elseif game.step == 1 then music['gameTwo']:play()
+                elseif game.step == 2 then music['gameThree']:play() end 
+            elseif current_game_stage == 'rest' then 
+                music['rest']:play()
+            elseif current_game_stage == 'paused' then 
+                music['pause']:play()
+            end 
+        end 
+    end 
+
     if game:get_state() == "main" then 
         background = love.graphics.newImage("assets/sprites/background.png")
     end 

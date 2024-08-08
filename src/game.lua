@@ -98,6 +98,8 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.num_pointers = 1
     game.paused = false
 
+    game.step = 0
+    game.stage = "play"
 end 
 
 function game:get_secondary_init(secondary)
@@ -113,11 +115,15 @@ function game:update(dt)
         game:wave_update(dt)
         if game.wave_active then 
             game:spawn_ballons(dt) 
-        end
+            self.stage = 'play'
+        else
+            self.stage = 'rest'
+        end 
         game.buff_ui:update(dt)
     else 
         game.start = game.start + dt
         game.time = game.time + dt
+        self.stage = "paused"
     end 
 end
 
@@ -216,28 +222,13 @@ end
 
 -- spawn bonus 
 function game:spawn_bonus_ballons()
-    if game.wave < 9 then 
-        local b_1 = game:select_random_buff_ballon()
-        local b_2 = game:select_random_buff_ballon()
-        while b_2 == b_1 do
-            b_2 = game:select_random_buff_ballon()
-        end 
-        game.ballons:add_ballon(b_1, true, 0.25)
-        game.ballons:add_ballon(b_2, true, 0.75)
-    else 
-        local b_1 = game:select_random_buff_ballon()
-        local b_2 = game:select_random_buff_ballon()
-        local b_3 = game:select_random_buff_ballon() 
-        while b_2 == b_1 do
-            b_2 = game:select_random_buff_ballon()
-        end 
-        while b_3 == b_1 or b_3 == b_2 do
-            b_3 = game:select_random_buff_ballon()
-        end 
-        game.ballons:add_ballon(b_1, true, 0.2)
-        game.ballons:add_ballon(b_2, true, 0.5)
-        game.ballons:add_ballon(b_3, true, 0.8)
+    local b_1 = game:select_random_buff_ballon()
+    local b_2 = game:select_random_buff_ballon()
+    while b_2 == b_1 do
+        b_2 = game:select_random_buff_ballon()
     end 
+    game.ballons:add_ballon(b_1, true, 0.25)
+    game.ballons:add_ballon(b_2, true, 0.75)
 end 
 
 -- increase spawn chance
@@ -275,14 +266,18 @@ function game:update_chance()
     end 
     if self.wave == 9 then
         for k,v in pairs(self.spawn_table) do
-            self.spawn_table[k] = self.spawn_table[k] + 3
+            v = v + 10
         end
-        self.spawn_table["health"] = self.spawn_table["health"] + 1
-        self.spawn_table["point"] = self.spawn_table["point"] + 1
+        self.spawn_table["health"] = 1
+        self.spawn_table["point"] = 1
         self.buff_table["death_defiance"] = self.buff_table["death_defiance"] + 1
     end 
     if self.wave > 7 then
         self.spawn_chance = self.spawn_chance * 1.1
+    end 
+
+    if self.wave % 4 == 0 then
+        self.step = (self.step + 1) % 3
     end 
 end 
 
@@ -298,6 +293,7 @@ function game:wave_update(dt)
             self.buff_ui:remove_buff("death_defiance")
             pop_up_message = "SAVED!"
         else  
+            love.audio.stop()
             self.sounds.gameover:play()
             game:reset()
             self.ballons:clear()
@@ -363,6 +359,9 @@ function game:reset()
     game.ballons:clear()
     game.buff_ui:clear()
     game.num_pointers = 1
+
+    game.step = 0
+    game.stage = "play"
 end 
 
 -- function control waves
@@ -385,7 +384,7 @@ function game:control_waves(dt)
     elseif self.time >= self.rest_length and not self.wave_active then 
         self.start = love.timer.getTime()
         self.time = self.start
-        game.ballons:clear()
+        self.ballons:clear()
         game:update_chance()
         self.wave_active = true
         self.buff_selected = false

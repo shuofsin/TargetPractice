@@ -19,7 +19,7 @@ buff_ui = {
 function buff_ui:init(debug) 
     self.debug = debug
     self.start_x = gameWidth * 0.91
-    self.start_y = gameHeight * 0.15
+    self.start_y = gameHeight * 0.12
 end 
 
 function buff_ui:update(dt)
