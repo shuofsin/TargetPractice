@@ -60,7 +60,7 @@ function game:init(debug, start_state, _ballons, _buff_ui)
     game.time_remaining = self.time / self.wave_length 
 
     -- spawn table
-    game.spawn_chance = 25
+    game.spawn_chance = 20
     game.spawn_table = {}
     game.spawn_table["red"] = 1
     game.spawn_table["green"] = 0
@@ -100,6 +100,8 @@ function game:init(debug, start_state, _ballons, _buff_ui)
 
     game.step = 0
     game.stage = "play"
+
+    game.spawn_mult = 1.00
 end 
 
 function game:get_secondary_init(secondary)
@@ -276,10 +278,9 @@ function game:update_chance()
         self.buff_table["death_defiance"] = self.buff_table["death_defiance"] + 1
         self.wave_length = 121
     end 
-    if self.wave >= 5 then
-        self.spawn_chance = self.spawn_chance * 1.25
-    end 
-
+    self.spawn_mult = self.spawn_mult + 0.015
+    self.spawn_chance = self.spawn_chance * self.spawn_mult
+    
     if self.wave % 4 == 0 then
         self.step = (self.step + 1) % 3
     end 
@@ -367,6 +368,8 @@ function game:reset()
 
     game.step = 0
     game.stage = "play"
+
+    game.spawn_mult = 1.00
 end 
 
 -- function control waves

@@ -55,7 +55,7 @@ function love.load()
 
     -- music
     music = {}
-    music_volume = 0.02
+    music_volume = 0.1
     music.main = love.audio.newSource('assets/music/main-menu-music.mp3', 'stream')
     music.options = love.audio.newSource('assets/music/options-music.mp3', 'stream')
     music.guide = love.audio.newSource('assets/music/guide-music.mp3', 'stream')
