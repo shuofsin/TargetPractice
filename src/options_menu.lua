@@ -58,7 +58,7 @@ function options_menu:use_menu(x, y, button, game)
         for k,v in pairs(options_menu.options) do 
             local min_x, min_y, max_x, max_y
             min_x = gameWidth * 0.6 
-            min_y = gameHeight * 0.2 + v.i * gameHeight * 0.1
+            min_y =  gameHeight * 0.18 + v.i * gameHeight * 0.08
             max_x = min_x + gameWidth * 0.035 
             max_y = min_y + gameWidth * 0.035
             if x > min_x and x < max_x and y > min_y and y < max_y then 

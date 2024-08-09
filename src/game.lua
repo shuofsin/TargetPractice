@@ -128,10 +128,10 @@ function game:update(dt)
         self.stage = "paused"
     end 
 
-    if self.wave >= 9 and self.health < 5 then 
+    if self.wave >= 9 and self.health < 3 then 
         self.spawn_table["health"] = 1
         self.spawn_table["point"] = 0
-    elseif self.wave >= 9 and self.health >= 5 then 
+    elseif self.wave >= 9 and self.health >= 3 then 
         self.spawn_table["point"] = 1
         self.spawn_table["health"] = 0
     end
