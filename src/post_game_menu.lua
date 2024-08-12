@@ -101,7 +101,7 @@ function love.keypressed(key, scancode)
         end
     end 
     if game:get_state() == "game" then
-        if key == "escape" then 
+        if scancode == "p" then 
             post_game_menu.game.paused = not post_game_menu.game.paused
         end 
     end 
