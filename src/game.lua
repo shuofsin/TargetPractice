@@ -370,6 +370,8 @@ function game:reset()
     game.stage = "play"
 
     game.spawn_mult = 1.00
+
+    game.buff_ui:reset()
 end 
 
 -- function control waves

@@ -22,6 +22,19 @@ function buff_ui:init(debug)
     self.start_y = gameHeight * 0.12
 end 
 
+function buff_ui:reset() 
+    self.buffs = {
+        {buff = "ammo_boost", num = 0, sprite = nil},
+        {buff = "reload_boost", num = 0, sprite = nil},
+        {buff = "multishot", num = 0, sprite = nil},
+        {buff = "score_mult", num = 0, sprite = nil},
+        {buff = "death_defiance", num = 0, sprite = nil},
+        {buff = "explosion_sec", num = 1, sprite = nil, is_sec = true},
+        {buff = "timeslow_sec", num = 0, sprite = nil, is_sec = true},
+        {buff = "blackhole_sec", num = 0, sprite = nil, is_sec = true}
+    }
+end 
+
 function buff_ui:update(dt)
     for i, v in ipairs(self.buffs) do 
         if not v.sprite and v.num > 0 then 
