@@ -2,7 +2,4 @@
 
 Arcade-style game made to get familiar with Love2d engine and learn Lua
 
-## To-Do 
-- Convert to browser 
-
-## Backlog 
+Feel free to download latest release and play for yourself!
